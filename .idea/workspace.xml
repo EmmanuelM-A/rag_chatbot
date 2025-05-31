@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="First commit: project folder set up.">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Installed the main libraries and more setups.">
+      <change afterPath="$PROJECT_DIR$/utils/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/document_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
@@ -68,7 +69,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748666266407</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Installed the main libraries and more setups.">
+      <option name="closed" value="true" />
+      <created>1748668905339</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1748668905339</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -84,6 +93,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit: project folder set up." />
-    <option name="LAST_COMMIT_MESSAGE" value="First commit: project folder set up." />
+    <MESSAGE value="Installed the main libraries and more setups." />
+    <option name="LAST_COMMIT_MESSAGE" value="Installed the main libraries and more setups." />
   </component>
 </project>
