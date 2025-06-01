@@ -1,21 +1,10 @@
 import os
 from utils.constants import ALLOWED_FILE_EXTENSIONS
+from file_document import FileDocument
 
 import docx
 import PyPDF2
-
-
-class FileDocument:
-    def __init__(self, content, metadata):
-        """
-        Represents a document with its content and metadata.
-
-        :param content: The main content of the document (e.g., text from a file).
-        :param metadata: A dictionary or object containing metadata about the document (e.g., filename, file extension,
-        author, etc.).
-        """
-        self.content = content
-        self.metadata = metadata
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
 def load_documents(path_to_directory):
@@ -23,7 +12,8 @@ def load_documents(path_to_directory):
     Reads all files in the directory that match the allowed extensions and converts them into Document objects.
 
     :param path_to_directory: The path to the folder containing the document files.
-    :return: A list of loaded Document objects.
+
+    :returns list[FileDocument]: A list of loaded FileDocument objects
     """
 
     documents = []
@@ -63,7 +53,7 @@ def load_documents(path_to_directory):
                     content = "\n".join([para.text for para in doc.paragraphs])
 
                 else:
-                    continue # Skip unknown file types
+                    continue  # Skip unknown file types
 
                 # Add the document to the list with metadata
                 documents.append(FileDocument(content, {'source': file_path}))
@@ -73,3 +63,15 @@ def load_documents(path_to_directory):
                 print(f"Failed to read {file_path}: {e}")
 
     return documents
+
+
+def chunk_documents(documents, chunk_size=1000, chunk_overlap=20):
+    splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+
+    chunks = []
+
+    for doc in documents:
+        for chunk in splitter.split_text(doc.content):
+            chunks.append(FileDocument(chunk, doc.metadata))
+
+    return chunks

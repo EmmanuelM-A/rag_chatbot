@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Set up a utils folder and a constants for file for global constants.">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/rag_chatbot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/rag_chatbot.iml" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Implemented the document_loader.py and it works.">
+      <change afterPath="$PROJECT_DIR$/components/loader/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/loader/file_document.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/document_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/loader/document_loader.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +46,11 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components\loader" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="document_loader" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
@@ -61,7 +65,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/components/document_loader.py" />
+      <option name="SCRIPT_NAME" value="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components\loader\document_loader.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -124,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748719982034</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Implemented the document_loader.py and it works.">
+      <option name="closed" value="true" />
+      <created>1748753805083</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1748753805083</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -144,6 +156,7 @@
     <MESSAGE value="Installed the main libraries and more setups." />
     <MESSAGE value="Working on the document loader" />
     <MESSAGE value="Set up a utils folder and a constants for file for global constants." />
-    <option name="LAST_COMMIT_MESSAGE" value="Set up a utils folder and a constants for file for global constants." />
+    <MESSAGE value="Implemented the document_loader.py and it works." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented the document_loader.py and it works." />
   </component>
 </project>
