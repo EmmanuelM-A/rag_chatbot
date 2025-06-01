@@ -1,8 +1,7 @@
-
 ALLOWED_FILE_EXTENSIONS = [".pdf", ".docx", ".txt", ".md"]
 
-INDEX_PATH = "vector_index.faiss"
+INDEX_PATH = "data/db/vector_index.faiss"
 
-METADATA_PATH = "metadata.pkl"
+METADATA_PATH = "data/db/metadata.pkl"
 
 RAW_DOCS_DIRECTORY = "data/raw_docs"

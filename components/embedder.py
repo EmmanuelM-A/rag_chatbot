@@ -1,6 +1,5 @@
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from process_documents import load_documents, chunk_documents
-
 
 
 def prepare_document_chunks(directory, chunk_size=1000, chunk_overlap=20):
@@ -23,6 +22,8 @@ def create_embedded_chunks(chunked_documents, model_name="text-embedding-3-small
 
     vectors: List of embedding vectors metadata: Mapping of index -> (text, metadata)
     """
+    if not chunked_documents:
+        raise ValueError("No chunked documents provided.")
 
     embedding_model = OpenAIEmbeddings(model=model_name)
 

@@ -2,11 +2,17 @@ from embedder import prepare_document_chunks, create_embedded_chunks
 from vector_store import load_faiss_index, save_faiss_index
 from query_handler import search
 from utils.constants import RAW_DOCS_DIRECTORY
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def main():
     # Step 1: Load and chunk
     documents = prepare_document_chunks(RAW_DOCS_DIRECTORY)
+
+    print(documents)
 
     # Step 2: Embed
     vectors, metadata = create_embedded_chunks(documents)

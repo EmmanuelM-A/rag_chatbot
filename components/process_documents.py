@@ -2,7 +2,7 @@ import os
 from utils.constants import ALLOWED_FILE_EXTENSIONS
 
 import docx
-import PyPDF2
+import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
@@ -32,6 +32,7 @@ def load_documents(path_to_directory):
 
     # Iterate through all files in the directory and subdirectories
     for root, _, files in os.walk(path_to_directory):
+        print("HERE!")
         for file in files:
             # Get the file extension (in lowercase)
             ext = os.path.splitext(file)[1].lower()
@@ -42,6 +43,8 @@ def load_documents(path_to_directory):
 
             file_path = os.path.join(root, file)
 
+            print(ext)
+
             try:
                 # Handle plain text and markdown files
                 if ext in [".txt", ".md"]:
@@ -51,11 +54,12 @@ def load_documents(path_to_directory):
                 # Handle PDF files using PyPDF2
                 elif ext == ".pdf":
                     content = ""
-                    with open(file_path, 'rb') as f:
-                        reader = PyPDF2.PdfReader(f)
-                        # Extract text from all pages
-                        for page in reader.pages:
-                            content += page.extract_text() or ""
+                    # Extract text from all pages
+                    with fitz.open(file_path) as doc:
+                        for page in doc:
+                            content += page.get_text("text")
+
+                    doc.close()
 
                 # Handles Word (.docx) files using python-docx
                 elif ext == ".docx":
@@ -79,11 +83,12 @@ def load_documents(path_to_directory):
 
 def chunk_documents(documents, chunk_size=1000, chunk_overlap=20):
     splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-
     chunks = []
 
     for doc in documents:
         for chunk in splitter.split_text(doc.content):
-            chunks.append(FileDocument(chunk, doc.metadata))
+            if chunk.strip():  # skip empty or whitespace-only chunks
+                chunks.append(FileDocument(chunk, doc.metadata))
 
     return chunks
+
