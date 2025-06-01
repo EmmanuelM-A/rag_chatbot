@@ -23,7 +23,7 @@ def load_documents(path_to_directory):
     Reads all files in the directory that match the allowed extensions and converts them into Document objects.
 
     :param path_to_directory: The path to the folder containing the document files.
-    :return: A list of load Document objects.
+    :return: A list of loaded Document objects.
     """
 
     documents = []
@@ -57,12 +57,19 @@ def load_documents(path_to_directory):
 
                 # Handles Word (.docx) files using python-docx
                 elif ext == ".docx":
-                    doc = docx.Document(file_path)
+                    doc = docx.Document(str(file_path))
 
                     # Combine all paragraph texts into a single string
                     content = "\n".join([para.text for para in doc.paragraphs])
 
+                else:
+                    continue # Skip unknown file types
 
+                # Add the document to the list with metadata
+                documents.append(FileDocument(content, {'source': file_path}))
 
-        return documents
+            except Exception as e:
+                # Log an error if reading fails
+                print(f"Failed to read {file_path}: {e}")
 
+    return documents
