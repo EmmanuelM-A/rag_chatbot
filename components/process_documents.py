@@ -1,9 +1,12 @@
 import os
 from utils.constants import ALLOWED_FILE_EXTENSIONS
+from utils.logger import get_logger
 
 import docx
 import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+logger = get_logger("process_documents_logger")
 
 
 class FileDocument:
@@ -28,47 +31,59 @@ def load_documents(path_to_directory):
     :returns list[FileDocument]: A list of loaded FileDocument objects
     """
 
+    if not os.path.exists(path_to_directory):
+        logger.error(f"The directory {path_to_directory} does not exist!")
+        return []
+
+    if not os.path.isdir(path_to_directory):
+        logger.error(f"The path {path_to_directory} is not a directory!")
+        return []
+
+    logger.info(f"Loading documents from: {path_to_directory}.")
+
     documents = []
 
     # Iterate through all files in the directory and subdirectories
     for root, _, files in os.walk(path_to_directory):
-        print("HERE!")
         for file in files:
             # Get the file extension (in lowercase)
             ext = os.path.splitext(file)[1].lower()
 
             if ext not in ALLOWED_FILE_EXTENSIONS:
-                print(f"The file: {file} is not allowed!")
+                logger.error(f"Skipping unsupported file: {file}.")
                 continue
 
             file_path = os.path.join(root, file)
 
-            print(ext)
+            logger.info(f"Reading the file: {file_path}")
 
             try:
                 # Handle plain text and markdown files
                 if ext in [".txt", ".md"]:
-                    with open(file_path, 'r', encoding="utf-8") as f:
-                        content = f.read()
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                    except UnicodeDecodeError:
+                        with open(file_path, 'r', encoding='latin-1') as f:
+                            content = f.read()
 
-                # Handle PDF files using PyPDF2
+                # Handles PDF
                 elif ext == ".pdf":
                     content = ""
-                    # Extract text from all pages
                     with fitz.open(file_path) as doc:
                         for page in doc:
                             content += page.get_text("text")
 
                     doc.close()
 
-                # Handles Word (.docx) files using python-docx
+                # Handles DOCX
                 elif ext == ".docx":
                     doc = docx.Document(str(file_path))
-
                     # Combine all paragraph texts into a single string
                     content = "\n".join([para.text for para in doc.paragraphs])
 
                 else:
+                    logger.info(f"Unknown extension: {ext}.")
                     continue  # Skip unknown file types
 
                 # Add the document to the list with metadata
@@ -76,7 +91,7 @@ def load_documents(path_to_directory):
 
             except Exception as e:
                 # Log an error if reading fails
-                print(f"Failed to read {file_path}: {e}")
+                logger.error(f"Failed to read {file_path}: {e}")
 
     return documents
 
@@ -92,3 +107,5 @@ def chunk_documents(documents, chunk_size=1000, chunk_overlap=20):
 
     return chunks
 
+
+print(load_documents("../data/raw_docs")[0].content)

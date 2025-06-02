@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Implemented the core rag_chatbot code.">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Added colour formatting to logs to better classify outputs.">
+      <change afterPath="$PROJECT_DIR$/components/read.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_process_documents.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/embedder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/process_documents.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/process_documents.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/query_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/vector_store.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/constants.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +25,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "EmmanuelM-A"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/EmmanuelM-A/rag_chatbot.git",
+    "accountId": "32a9ca90-f4d7-42bb-aae6-a589116507ba"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -46,7 +52,10 @@
   "keyToString": {
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "Python.document_loader.executor": "Run",
+    "Python.logger.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.process_documents.executor": "Run",
+    "Python.read.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot",
@@ -59,7 +68,7 @@
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components\loader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
@@ -82,32 +91,9 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="process_documents" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="rag_chatbot" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/components" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components\process_documents.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
-        <item itemvalue="Python.process_documents" />
       </list>
     </recent_temporary>
   </component>
@@ -183,7 +169,31 @@
       <option name="project" value="LOCAL" />
       <updated>1748800902373</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Fixing a few issues">
+      <option name="closed" value="true" />
+      <created>1748820472250</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1748820472250</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Setup a logger">
+      <option name="closed" value="true" />
+      <created>1748821606451</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1748821606451</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added colour formatting to logs to better classify outputs.">
+      <option name="closed" value="true" />
+      <created>1748824003061</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1748824003061</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -206,6 +216,9 @@
     <MESSAGE value="Implemented the document_loader.py and it works." />
     <MESSAGE value="optimized some code" />
     <MESSAGE value="Implemented the core rag_chatbot code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implemented the core rag_chatbot code." />
+    <MESSAGE value="Fixing a few issues" />
+    <MESSAGE value="Setup a logger" />
+    <MESSAGE value="Added colour formatting to logs to better classify outputs." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added colour formatting to logs to better classify outputs." />
   </component>
 </project>
