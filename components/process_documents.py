@@ -1,5 +1,5 @@
 import os
-from utils.constants import ALLOWED_FILE_EXTENSIONS
+from utils.constants import ALLOWED_FILE_EXTENSIONS, RAW_DOCS_DIRECTORY
 from utils.logger import get_logger
 
 import docx
@@ -97,6 +97,7 @@ def load_documents(path_to_directory):
 
 
 def chunk_documents(documents, chunk_size=1000, chunk_overlap=20):
+    logger.info(f"Chunking the documents: {documents}.")
     splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
     chunks = []
 
@@ -108,4 +109,8 @@ def chunk_documents(documents, chunk_size=1000, chunk_overlap=20):
     return chunks
 
 
-print(load_documents("../data/raw_docs")[0].content)
+#loaded_documents = load_documents(RAW_DOCS_DIRECTORY)
+
+#chunked_documents = chunk_documents(loaded_documents)
+
+#print(chunked_documents[0].content)

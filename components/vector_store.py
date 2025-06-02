@@ -4,6 +4,9 @@ import faiss
 import numpy as np
 
 from utils.constants import METADATA_PATH, INDEX_PATH
+from utils.logger import get_logger
+
+logger = get_logger("vector_store_logger")
 
 
 def save_faiss_index(vectors, metadata, index_path=INDEX_PATH, metadata_path=METADATA_PATH):
@@ -12,6 +15,7 @@ def save_faiss_index(vectors, metadata, index_path=INDEX_PATH, metadata_path=MET
     """
 
     if not vectors:
+        logger.error("The vectors list is empty. Cannot save FAISS index.")
         raise ValueError("The vectors list is empty. Cannot save FAISS index.")
 
     dimension = len(vectors[0])
@@ -27,20 +31,26 @@ def save_faiss_index(vectors, metadata, index_path=INDEX_PATH, metadata_path=MET
     with open(metadata_path, "wb") as f:
         pickle.dump(metadata, f)
 
+    logger.info("The vectors and metadata have been saved to disk.")
+
 
 def load_faiss_index(index_path=INDEX_PATH, metadata_path=METADATA_PATH):
     """
     Loads FAISS index and metadata from disk.
     """
     if not os.path.exists(index_path):
+        logger.error(f"FAISS index not found at {index_path}")
         raise FileNotFoundError(f"FAISS index not found at {index_path}")
 
     if not os.path.exists(metadata_path):
+        logger.error(f"Metadata file not found at {metadata_path}")
         raise FileNotFoundError(f"Metadata file not found at {metadata_path}")
 
     index = faiss.read_index(index_path)
 
     with open(metadata_path, "rb") as f:
         metadata = pickle.load(f)
+
+    logger.info("The FAISS index and metadata have been loaded from disk.")
 
     return index, metadata
