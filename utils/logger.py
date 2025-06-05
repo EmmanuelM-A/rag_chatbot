@@ -24,7 +24,7 @@ def get_logger(name: str) -> logging.Logger:
         logger.setLevel(logging.DEBUG)
 
         formatter = ColorFormatter(
-            '[%(name)s -> %(asctime)s] %(levelname)s: %(message)s',
+            '%(name)s -> %(asctime)s [%(levelname)s]: %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S'
         )
 

@@ -1,11 +1,12 @@
 from langchain_openai import OpenAIEmbeddings
 from process_documents import load_documents, chunk_documents
 from utils.logger import get_logger
+from config import EMBEDDING_MODEL_NAME
 
 logger = get_logger("embedder_logger")
 
 
-def prepare_document_chunks(directory, chunk_size=1000, chunk_overlap=20):
+def prepare_document_chunks(directory):
     """
     Loads and chunks documents from a directory.
 
@@ -14,12 +15,12 @@ def prepare_document_chunks(directory, chunk_size=1000, chunk_overlap=20):
 
     raw_documents = load_documents(directory)
 
-    chunked_documents = chunk_documents(raw_documents, chunk_size, chunk_overlap)
+    chunked_documents = chunk_documents(raw_documents)
 
     return chunked_documents
 
 
-def create_embedded_chunks(chunked_documents, model_name="text-embedding-3-small"):
+def create_embedded_chunks(chunked_documents):
     """
     Takes FileDocument list, returns (vectors, metadata).
 
@@ -29,7 +30,7 @@ def create_embedded_chunks(chunked_documents, model_name="text-embedding-3-small
         logger.error("No chunked documents provided!")
         raise ValueError("No chunked documents provided!")
 
-    embedding_model = OpenAIEmbeddings(model=model_name)
+    embedding_model = OpenAIEmbeddings(model=EMBEDDING_MODEL_NAME)
 
     texts = [doc.content for doc in chunked_documents]
 

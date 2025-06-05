@@ -3,7 +3,7 @@ import os
 import faiss
 import numpy as np
 
-from utils.constants import METADATA_PATH, INDEX_PATH
+from config import METADATA_PATH, INDEX_PATH
 from utils.logger import get_logger
 
 logger = get_logger("vector_store_logger")

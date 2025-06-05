@@ -1,7 +1,7 @@
 from embedder import prepare_document_chunks, create_embedded_chunks
 from vector_store import load_faiss_index, save_faiss_index
 from query_handler import search
-from utils.constants import RAW_DOCS_DIRECTORY
+from config import RAW_DOCS_DIRECTORY
 
 from dotenv import load_dotenv
 
