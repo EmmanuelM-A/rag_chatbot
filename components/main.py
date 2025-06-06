@@ -4,6 +4,7 @@ from query_handler import search, generate_response
 from config import RAW_DOCS_DIRECTORY, METADATA_PATH, INDEX_PATH
 import os
 from utils.logger import get_logger
+from evaluation import init_db, log_qa_pair
 
 from dotenv import load_dotenv
 
@@ -39,6 +40,9 @@ def terminal_usage(user_query):
 
     if results:
         llm_response_data = generate_response(user_query, results)
+
+        log_qa_pair(user_query, llm_response_data["answer"], llm_response_data["sources"])
+
         print(f"Response: {llm_response_data["answer"]}")
     else:
         print("\nNo relevant information found in the documents.")
@@ -49,6 +53,9 @@ def main():
     Main function to run the chatbot in a terminal interface.
     Initializes the chatbot and enters a loop to accept user input.
     """
+
+    init_db()
+
     print("Hi, I am Junie. Emmanuel's personal assistant chatbot. If you have any question about him, feel free to ask me.")
 
     # Start an infinite loop to continuously accept user queries.

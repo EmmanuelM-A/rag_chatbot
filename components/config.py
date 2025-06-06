@@ -51,6 +51,9 @@ RETRIEVAL_TOP_K = 3
 
 # --------------------- Logging Configuration ----------------------------------
 
+# The path to save and access the QA logs
+QA_SQLITE_DB_PATH = "../data/db/qa_log.db"
+
 # ------------------------------------------------------------------------------
 
 
