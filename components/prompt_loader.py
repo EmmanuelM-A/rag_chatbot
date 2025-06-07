@@ -1,6 +1,9 @@
 import yaml
 from langchain.prompts import ChatPromptTemplate
 from config import DEFAULT_PROMPT_FILEPATH
+from utils.logger import get_logger
+
+logger = get_logger("prompt_logger")
 
 
 def create_prompt_template(prompt_filepath=DEFAULT_PROMPT_FILEPATH):
@@ -26,6 +29,8 @@ def create_prompt_template(prompt_filepath=DEFAULT_PROMPT_FILEPATH):
     # Open and parse the YAML prompt file
     with open(prompt_filepath, "r") as f:
         prompt_data = yaml.safe_load(f)
+
+    logger.info("Prompt loaded and prompt template created.")
 
     # Create a LangChain ChatPromptTemplate using the parsed message templates
     return ChatPromptTemplate.from_messages([

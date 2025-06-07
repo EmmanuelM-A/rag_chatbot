@@ -40,7 +40,7 @@ def load_documents(path_to_directory):
         logger.error(f"The path {path_to_directory} is not a directory!")
         return []
 
-    logger.info(f"Loading documents from: {path_to_directory}.")
+    logger.debug(f"Loading documents from: {path_to_directory}.")
 
     documents = []
 
@@ -51,12 +51,12 @@ def load_documents(path_to_directory):
             ext = os.path.splitext(file)[1].lower()
 
             if ext not in ALLOWED_FILE_EXTENSIONS:
-                logger.error(f"Skipping unsupported file: {file}.")
+                logger.warning(f"Skipping unsupported file: {file}.")
                 continue
 
             file_path = os.path.join(root, file)
 
-            logger.info(f"Reading the file: {file_path}")
+            logger.debug(f"Reading the file: {file_path}")
 
             try:
                 # Handle plain text and markdown files
@@ -84,7 +84,7 @@ def load_documents(path_to_directory):
                     content = "\n".join([para.text for para in doc.paragraphs])
 
                 else:
-                    logger.info(f"Unknown extension: {ext}.")
+                    logger.warning(f"Unknown extension: {ext}.")
                     continue  # Skip unknown file types
 
                 # Add the document to the list with metadata
@@ -94,17 +94,41 @@ def load_documents(path_to_directory):
                 # Log an error if reading fails
                 logger.error(f"Failed to read {file_path}: {e}")
 
+    logger.info("Document ingestion completed successfully.")
+
     return documents
 
 
 def chunk_documents(documents):
-    logger.info(f"Chunking the documents: {documents}.")
+    """
+    Splits a list of FileDocument objects into smaller, manageable chunks using a RecursiveCharacterTextSplitter.
+
+    This method iterates through each FileDocument, extracts its content, and then uses a
+    RecursiveCharacterTextSplitter to break down the content into chunks of a specified size
+    with a defined overlap. Empty or whitespace-only chunks are filtered out.
+    Each generated chunk is then wrapped back into a FileDocument object, inheriting the
+    original document's metadata.
+
+    param:
+        documents (list[FileDocument]): A list of FileDocument objects, each containing
+                                       'content' (str) and 'metadata' (dict).
+
+    Returns:
+        list[FileDocument]: A new list of FileDocument objects, where each object
+                            represents a chunk of the original documents' content.
+    """
+
+    logger.debug(f"Chunking the documents: {documents}.")
+
     splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
+
     chunks = []
 
     for doc in documents:
         for chunk in splitter.split_text(doc.content):
             if chunk.strip():  # skip empty or whitespace-only chunks
                 chunks.append(FileDocument(chunk, doc.metadata))
+
+    logger.info(f"Chunking completed for the documents: {documents}")
 
     return chunks

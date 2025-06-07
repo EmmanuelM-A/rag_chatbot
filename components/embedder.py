@@ -30,6 +30,8 @@ def create_embedded_chunks(chunked_documents):
         logger.error("No chunked documents provided!")
         raise ValueError("No chunked documents provided!")
 
+    logger.debug("Creating vectors and metadata for the documents.")
+
     embedding_model = OpenAIEmbeddings(model=EMBEDDING_MODEL_NAME)
 
     texts = [doc.content for doc in chunked_documents]

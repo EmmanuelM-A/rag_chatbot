@@ -38,12 +38,15 @@ def load_faiss_index(index_path=INDEX_PATH, metadata_path=METADATA_PATH):
     """
     Loads FAISS index and metadata from disk.
     """
+
+    logger.debug("Loading FAISS index and metadata from disk.")
+
     if not os.path.exists(index_path):
-        logger.error(f"FAISS index not found at {index_path}")
+        logger.critical(f"FAISS index not found at {index_path}")
         raise FileNotFoundError(f"FAISS index not found at {index_path}")
 
     if not os.path.exists(metadata_path):
-        logger.error(f"Metadata file not found at {metadata_path}")
+        logger.critical(f"Metadata file not found at {metadata_path}")
         raise FileNotFoundError(f"Metadata file not found at {metadata_path}")
 
     index = faiss.read_index(index_path)

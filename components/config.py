@@ -56,6 +56,8 @@ DEFAULT_PROMPT_FILEPATH = "../prompts/default_prompt.yaml"
 
 # The path to save and access the QA logs
 QA_SQLITE_DB_PATH = "../data/db/qa_log.db"
+
+# The path to the directory that stores the log files
 LOG_DIRECTORY = "../logs"
 
 # ------------------------------------------------------------------------------

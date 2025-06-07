@@ -32,7 +32,10 @@ def search(query, index, metadata, embedding_model=None):
             "metadata": entry["meta"]
         })
 
-    logger.info("Query embedded and results found.")
+    if results:
+        logger.info("Query embedded and results found.")
+    else:
+        logger.error(f"No results found for the query: {query}")
 
     return results
 
@@ -41,6 +44,8 @@ def generate_response(query, retrieved_chunks, llm=None):
     """
     Formats a prompt with the query and retrieved chunks, then passes it to an LLM.
     """
+
+    logger.debug(f"Generating responses for the query: {query}")
 
     if llm is None:
         logger.warning(f"The default LLM: {LLM_MODEL_NAME} has been set!")
