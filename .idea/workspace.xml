@@ -4,13 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Added a dynamic way to define and create prompt templates for the response generation using yaml files, that specify how the LLM should respond.">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Improved the logging in the file.">
+      <change afterPath="$PROJECT_DIR$/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/unit/test_document_chunker.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/unit/test_document_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/rag_chatbot.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/rag_chatbot.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/embedder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/evaluation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/components/process_documents.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/process_documents.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +24,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Python Unit Test" />
         <option value="Python Script" />
       </list>
     </option>
@@ -255,7 +260,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749287854481</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Improved the logging in the file.">
+      <option name="closed" value="true" />
+      <created>1749291442807</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1749291442807</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -288,6 +301,7 @@
     <MESSAGE value="Added Q&amp;A Logging to log query, answer pairs for further testing and future fine-tuning." />
     <MESSAGE value="Upgraded the logger to log to files." />
     <MESSAGE value="Added a dynamic way to define and create prompt templates for the response generation using yaml files, that specify how the LLM should respond." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a dynamic way to define and create prompt templates for the response generation using yaml files, that specify how the LLM should respond." />
+    <MESSAGE value="Improved the logging in the file." />
+    <option name="LAST_COMMIT_MESSAGE" value="Improved the logging in the file." />
   </component>
 </project>

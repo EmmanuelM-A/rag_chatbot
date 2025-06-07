@@ -1,6 +1,6 @@
 import os
 
-from config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, CHUNK_OVERLAP
+from components.config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, CHUNK_OVERLAP
 from utils.logger import get_logger
 
 import docx
