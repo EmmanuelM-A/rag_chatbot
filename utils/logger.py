@@ -1,4 +1,6 @@
 import logging
+import os
+from components.config import LOG_DIRECTORY
 
 
 class ColorFormatter(logging.Formatter):
@@ -17,20 +19,36 @@ class ColorFormatter(logging.Formatter):
         return f"{color}{message}{self.RESET}"
 
 
-def get_logger(name: str) -> logging.Logger:
+def get_logger(name: str, log_dir=LOG_DIRECTORY) -> logging.Logger:
     logger = logging.getLogger(name)
 
-    if not logger.handlers:
-        logger.setLevel(logging.DEBUG)
+    if logger.hasHandlers():
+        return logger  # Prevent duplicate handlers
 
-        formatter = ColorFormatter(
-            '%(name)s -> %(asctime)s [%(levelname)s]: %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
+    logger.setLevel(logging.DEBUG)
 
-        console_handler = logging.StreamHandler()
-        console_handler.setFormatter(formatter)
+    # Ensure log directory exists
+    os.makedirs(log_dir, exist_ok=True)
 
-        logger.addHandler(console_handler)
+    # Formatters
+    formatter = logging.Formatter('%(name)s -> %(asctime)s [%(levelname)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    color_formatter = ColorFormatter('%(name)s -> %(asctime)s [%(levelname)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+    # Console handler (colorized)
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(color_formatter)
+    logger.addHandler(console_handler)
+
+    # File handler for all logs
+    file_handler = logging.FileHandler(os.path.join(log_dir, "app.log"))
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+
+    # File handler for warnings and errors
+    error_handler = logging.FileHandler(os.path.join(log_dir, "error.log"))
+    error_handler.setLevel(logging.WARNING)
+    error_handler.setFormatter(formatter)
+    logger.addHandler(error_handler)
 
     return logger
