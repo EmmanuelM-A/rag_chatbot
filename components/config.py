@@ -46,6 +46,9 @@ LLM_TEMPERATURE = 0.7
 # Top-k value for retrieving similar chunks from the vector store
 RETRIEVAL_TOP_K = 3
 
+# The file path for default prompt used to generate responses based on user query and content
+DEFAULT_PROMPT_FILEPATH = "../prompts/default_prompt.yaml"
+
 # ------------------------------------------------------------------------------
 
 

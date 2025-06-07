@@ -1,8 +1,9 @@
 from langchain_openai import OpenAIEmbeddings
 import numpy as np
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+
+from components.prompt_loader import create_prompt_template
 from utils.logger import get_logger
 from config import EMBEDDING_MODEL_NAME, RETRIEVAL_TOP_K, LLM_MODEL_NAME, LLM_TEMPERATURE
 
@@ -48,14 +49,7 @@ def generate_response(query, retrieved_chunks, llm=None):
     context_text = "\n\n".join([chunk["text"] for chunk in retrieved_chunks])
 
     # Define your prompt template
-    # It's crucial to instruct the LLM to use only the provided context.
-    prompt_template = ChatPromptTemplate.from_messages(
-        [
-            ("system", "You are a helpful AI assistant. Answer the user's question based *only* on the provided context. If you "
-             "cannot find the answer in the context, politely state that you don't have enough information."),
-            ("user", "Context: {context}\n\nQuestion: {query}"),
-        ]
-    )
+    prompt_template = create_prompt_template()
 
     # Create a chain for processing
     rag_chain = prompt_template | llm | StrOutputParser()
