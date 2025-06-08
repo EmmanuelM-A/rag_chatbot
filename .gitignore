@@ -1,3 +1,12 @@
 .env
+logs/
 
-logs/*.log
+__pycache__/
+
+data/db/
+data/raw_docs/
+
+*.faiss
+*.pkl
+
+.idea

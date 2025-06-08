@@ -3,20 +3,6 @@ import datetime
 from utils.logger import get_logger
 from config import QA_SQLITE_DB_PATH
 
-logger = get_logger("eval_logger")
-
-'''
-TODOS
-- SETUP UNIT TESTS FOR CORE COMPONENTS AND E2E FOR RAG PIPELINE
-- LOOK INTO DEPLOYMENT STRATEGIES
-- SORT OUT README AND GITHUB PROJECT REPO + FINAL REVIEW
-
-FUTURE ENHANCEMENTS
-- BUILD A WEBSCRAPER AS AN ALTERNATIVE TO UPLOADED DOCUMENTS TO ALLOW USERS TO QUERY AGAINST THE INTERNET FOR CONTEXT
-- DESIGN API + FRONTEND
-
-'''
-
 def init_db():
     conn = sqlite3.connect(QA_SQLITE_DB_PATH)
 
@@ -50,8 +36,6 @@ def log_qa_pair(query, answer, sources):
     conn.commit()
 
     conn.close()
-
-    logger.info("Q&A pair: logged.")
 
 
 def view_qa_logs(db_path=QA_SQLITE_DB_PATH):

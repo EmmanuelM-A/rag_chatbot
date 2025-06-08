@@ -56,12 +56,12 @@ def main():
 
     init_db()
 
-    print("Hi, I am Junie. Emmanuel's personal assistant chatbot. If you have any question about him, feel free to ask me.")
+    print("Hi, I am Bob. Your personal assistant chatbot. If you have any question, feel free to ask me.")
 
     # Start an infinite loop to continuously accept user queries.
     while True:
         # Prompt the user for input.
-        query = input("")
+        query = input("Ask me: ")
 
         # Check for a 'quit' command to exit the chatbot.
         if query.lower() == "quit":
