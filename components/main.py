@@ -1,12 +1,17 @@
-from embedder import prepare_document_chunks, create_embedded_chunks
+"""
+Entry point to run the RAG Chatbot
+"""
+
+import os
+
+from components.embedder import prepare_document_chunks, create_embedded_chunks
 from vector_store import load_faiss_index, save_faiss_index
 from query_handler import search, generate_response
 from config import RAW_DOCS_DIRECTORY, METADATA_PATH, INDEX_PATH
-import os
+from dotenv import load_dotenv
+
 from utils.logger import get_logger
 from evaluation import init_db, log_qa_pair
-
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -56,7 +61,8 @@ def main():
 
     init_db()
 
-    print("Hi, I am Bob. Your personal assistant chatbot. If you have any question, feel free to ask me.")
+    print("Hi, I am Bob. Your personal assistant chatbot. If you have any "
+          "question, feel free to ask me.")
 
     # Start an infinite loop to continuously accept user queries.
     while True:

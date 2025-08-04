@@ -12,11 +12,11 @@
 ## 🚧 In Progress
 
 - FastAPI backend to expose /upload, /ask and more
+- Usage limits per user
 
 ## 📌 Planned
 
 - User registration/login system
-- Usage limits per user
 - Chat history tracking
-- Next.js frontend (public demo)
+- React.js frontend (public demo)
 - Optional Docker setup

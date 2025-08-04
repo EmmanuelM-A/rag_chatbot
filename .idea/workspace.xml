@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Tidied up some code.">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Updated the README.md and added a future enhancements plan.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FUTURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/FUTURE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/db/qa_log.db" beforeDir="false" afterPath="$PROJECT_DIR$/data/db/qa_log.db" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -278,7 +279,15 @@
       <option name="project" value="LOCAL" />
       <updated>1749370537448</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Updated the README.md and added a future enhancements plan.">
+      <option name="closed" value="true" />
+      <created>1749371791459</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1749371791459</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -314,6 +323,7 @@
     <MESSAGE value="Improved the logging in the file." />
     <MESSAGE value="Made unit tests for the process_documents.py" />
     <MESSAGE value="Tidied up some code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Tidied up some code." />
+    <MESSAGE value="Updated the README.md and added a future enhancements plan." />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated the README.md and added a future enhancements plan." />
   </component>
 </project>
