@@ -3,6 +3,7 @@ import numpy as np
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 
+from components.config import DEFAULT_RESPONSE_PROMPT_FILEPATH
 from components.prompt_loader import create_prompt_template
 from utils.logger import get_logger
 from config import EMBEDDING_MODEL_NAME, RETRIEVAL_TOP_K, LLM_MODEL_NAME, LLM_TEMPERATURE
@@ -54,7 +55,7 @@ def generate_response(query, retrieved_chunks, llm=None):
     context_text = "\n\n".join([chunk["text"] for chunk in retrieved_chunks])
 
     # Define your prompt template
-    prompt_template = create_prompt_template()
+    prompt_template = create_prompt_template(DEFAULT_RESPONSE_PROMPT_FILEPATH)
 
     # Create a chain for processing
     rag_chain = prompt_template | llm | StrOutputParser()

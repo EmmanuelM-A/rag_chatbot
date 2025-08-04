@@ -1,12 +1,15 @@
+"""
+Responsible for loading ChatPromptTemplates from prompt files.
+"""
+
 import yaml
 from langchain.prompts import ChatPromptTemplate
-from config import DEFAULT_PROMPT_FILEPATH
 from utils.logger import get_logger
 
 logger = get_logger("prompt_logger")
 
 
-def create_prompt_template(prompt_filepath=DEFAULT_PROMPT_FILEPATH):
+def create_prompt_template(prompt_filepath):
     """
     This function expects the YAML file to define two keys: 'system' and 'user'.
     - 'system': Instructions for the assistant's behavior (e.g., tone, constraints)
