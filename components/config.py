@@ -1,3 +1,6 @@
+"""
+Contains all the application configurations
+"""
 
 # ------------------------------------ PATHS -----------------------------------
 
@@ -9,6 +12,9 @@ INDEX_PATH = "../data/db/vector_index.faiss"
 
 # Path to save the metadata associated with the vectors
 METADATA_PATH = "../data/db/metadata.pkl"
+
+# Path to save document topics/subjects for relevance checking
+DOCUMENT_TOPICS_PATH = "../data/db/document_topics.pkl"
 
 # ------------------------------------------------------------------------------
 
@@ -48,6 +54,26 @@ RETRIEVAL_TOP_K = 3
 
 # The file path for default prompt used to generate responses based on user query and content
 DEFAULT_PROMPT_FILEPATH = "../prompts/default_prompt.yaml"
+
+# Minimum similarity threshold for considering retrieved chunks relevant
+RELEVANCE_THRESHOLD = 0.7
+
+# ------------------------------------------------------------------------------
+
+
+# --------------------- WEB SEARCH CONFIGURATION -------------------------------
+
+# Enable/disable web search fallback when no relevant documents found
+WEB_SEARCH_ENABLED = True
+
+# Enable/disable relevance checking before web search
+RELEVANCE_CHECK_ENABLED = True
+
+# Similarity threshold for determining if query is relevant to document corpus
+TOPIC_RELEVANCE_THRESHOLD = 0.6
+
+# Maximum number of web search results to retrieve
+MAX_WEB_SEARCH_RESULTS = 5
 
 # ------------------------------------------------------------------------------
 
