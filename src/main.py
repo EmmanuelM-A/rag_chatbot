@@ -8,8 +8,8 @@ import os
 
 from dotenv import load_dotenv
 
-from components.rag_chatbot import RAGChatbotApp
-from components.config import (
+from src.components.chatbot.rag_chatbot import RAGChatbotApp
+from src.components.config.config import (
     VECTOR_METADATA_FILE_PATH,
     FAISS_INDEX_FILE_PATH,
     WEB_SEARCH_ENABLED,

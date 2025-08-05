@@ -8,9 +8,9 @@ import numpy as np
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 
-from components.config import DEFAULT_RESPONSE_PROMPT_FILEPATH
-from components.prompt_loader import create_prompt_template
-from utils.logger import get_logger
+from src.components.config.config import DEFAULT_RESPONSE_PROMPT_FILEPATH
+from src.components.prompts.prompt_loader import create_prompt_template
+from src.utils.logger import get_logger
 from config import (RETRIEVAL_TOP_K, LLM_TEMPERATURE)
 
 logger = get_logger(__name__)

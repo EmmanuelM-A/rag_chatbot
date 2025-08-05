@@ -1,8 +1,8 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock
 
 # Import the actual functions/classes from their new locations
-from components.process_documents import chunk_documents, FileDocument
+from src.components.ingestion.process_documents import chunk_documents, FileDocument
 
 # Mock the logger, now located in utils.logger
 @pytest.fixture(autouse=True)

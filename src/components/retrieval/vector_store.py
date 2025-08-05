@@ -9,7 +9,7 @@ from typing import Dict, Any, Optional
 import faiss
 import numpy as np
 
-from utils.logger import get_logger
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

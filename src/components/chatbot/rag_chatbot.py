@@ -8,16 +8,16 @@ from typing import Optional, List
 
 import numpy as np
 
-from components.config import WEB_SEARCH_ENABLED
-from components.embedder import Embedder
-from components.query_handler import QueryHandler
-from components.relevance_checker import RelevanceChecker
-from components.vector_store import VectorStore
-from components.web_searcher import WebSearcher
+from src.components.config.config import WEB_SEARCH_ENABLED
+from src.components.retrieval.embedder import Embedder
+from src.components.chatbot.query_handler import QueryHandler
+from src.components.retrieval.relevance_checker import RelevanceChecker
+from src.components.retrieval.vector_store import VectorStore
+from src.components.retrieval.web_searcher import WebSearcher
 from config import (RELEVANCE_CHECK_ENABLED)
 from dotenv import load_dotenv
 
-from utils.logger import get_logger
+from src.utils.logger import get_logger
 
 load_dotenv()
 

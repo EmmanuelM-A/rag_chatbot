@@ -5,7 +5,7 @@ output for interactive use.
 
 import logging
 import os
-from components.config import LOG_DIRECTORY
+from src.components.config.config import LOG_DIRECTORY
 
 IS_LOG_TO_FILE_ENABLED = bool(os.getenv("LOG_TO_FILE")) or False
 

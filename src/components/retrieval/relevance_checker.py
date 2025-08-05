@@ -9,14 +9,14 @@ from typing import List, Dict, Any
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 
-from components.prompt_loader import create_prompt_template
+from src.components.prompts.prompt_loader import create_prompt_template
 from config import (
     DOCUMENT_TOPICS_FILE_PATH,
     TOPIC_RELEVANCE_THRESHOLD,
     LLM_TEMPERATURE,
     TOPIC_ANALYSIS_PROMPT_FILEPATH
 )
-from utils.logger import get_logger
+from src.utils.logger import get_logger
 
 class RelevanceChecker:
     """
@@ -263,7 +263,7 @@ class RelevanceChecker:
             return True
 
         relevance_prompt = create_prompt_template(
-            "../prompts/semantic_relevance_checking_prompt.yaml"
+            "../../../data/prompts/semantic_relevance_checking_prompt.yaml"
         )
 
         try:

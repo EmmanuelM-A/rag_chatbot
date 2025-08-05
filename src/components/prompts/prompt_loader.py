@@ -4,7 +4,7 @@ Responsible for loading ChatPromptTemplates from prompt files.
 
 import yaml
 from langchain.prompts import ChatPromptTemplate
-from utils.logger import get_logger
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

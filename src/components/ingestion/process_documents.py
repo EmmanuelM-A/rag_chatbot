@@ -10,11 +10,11 @@ import docx
 import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from components.config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, \
+from src.components.config.config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, \
     CHUNK_OVERLAP
-from utils.exceptions import DocumentDirectoryNotFoundError, \
+from src.utils.exceptions import DocumentDirectoryNotFoundError, \
     InvalidDocumentDirectoryError
-from utils.logger import get_logger
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__)
 

@@ -6,10 +6,10 @@ Contains all the application configurations.
 
 RAW_DOCS_DIRECTORY = "../data/raw_docs"
 
-FAISS_INDEX_FILE_PATH = "../data/db/vector_index.faiss"
+FAISS_INDEX_FILE_PATH = "../../../data/db/vector_index.faiss"
 
 # Path to save the metadata associated with the vectors
-VECTOR_METADATA_FILE_PATH = "../data/db/metadata.pkl"
+VECTOR_METADATA_FILE_PATH = "../../../data/db/metadata.pkl"
 
 # Path to save document topics/subjects for relevance checking
 DOCUMENT_TOPICS_FILE_PATH = "../data/db/document_topics.pkl"
@@ -49,7 +49,7 @@ LLM_TEMPERATURE = 0.7
 RETRIEVAL_TOP_K = 3
 
 # The file path for default prompt used to generate responses based on user query and content
-DEFAULT_RESPONSE_PROMPT_FILEPATH = "../prompts/default_response_prompt.yaml"
+DEFAULT_RESPONSE_PROMPT_FILEPATH = "../../../data/prompts/default_response_prompt.yaml"
 
 # Minimum similarity threshold for considering retrieved chunks relevant
 RELEVANCE_THRESHOLD = 0.7
@@ -72,7 +72,7 @@ TOPIC_RELEVANCE_THRESHOLD = 0.6
 MAX_WEB_SEARCH_RESULTS = 5
 
 # Prompt file for topic analysis (used in relevance checking)
-TOPIC_ANALYSIS_PROMPT_FILEPATH = "../prompts/topic_analysis_prompt.yaml"
+TOPIC_ANALYSIS_PROMPT_FILEPATH = "../../../data/prompts/topic_analysis_prompt.yaml"
 
 # Timeout for web requests (in seconds)
 WEB_REQUEST_TIMEOUT = 15
@@ -113,7 +113,7 @@ MAX_CONTENT_LENGTH_FOR_TOPIC_EXTRACTION = 500
 # --------------------- LOGGING CONFIGURATION ----------------------------------
 
 # The path to save and access the QA logs
-QA_SQLITE_DB_PATH = "../data/db/qa_log.db"
+QA_SQLITE_DB_PATH = "../../../data/db/qa_log.db"
 
 # The path to the directory that stores the log files
 LOG_DIRECTORY = "../logs"

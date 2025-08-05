@@ -1,6 +1,5 @@
 import sqlite3
 import datetime
-from utils.logger import get_logger
 from config import QA_SQLITE_DB_PATH
 
 def init_db():

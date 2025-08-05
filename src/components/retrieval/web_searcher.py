@@ -15,9 +15,9 @@ from config import (
     CHUNK_SIZE,
     CHUNK_OVERLAP
 )
-from process_documents import FileDocument
+from src.components.ingestion.process_documents import FileDocument
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from utils.logger import get_logger
+from src.utils.logger import get_logger
 
 logger = get_logger("web_search_logger")
 
