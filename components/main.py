@@ -1,82 +1,93 @@
 """
-Entry point to run the RAG Chatbot
+Coordinates the overall flow of the RAG Chatbot and starts the interactive CLI
+chatbot loop.
 """
 
 import os
 
-from components.embedder import prepare_document_chunks, create_embedded_chunks
-from vector_store import load_faiss_index, save_faiss_index
+from components.embedder import Embedder
+from components.vector_store import VectorStore
 from query_handler import search, generate_response
 from config import RAW_DOCS_DIRECTORY, METADATA_PATH, INDEX_PATH
 from dotenv import load_dotenv
 
 from utils.logger import get_logger
-from evaluation import init_db, log_qa_pair
 
 load_dotenv()
 
-logger = get_logger("main_logger")
+logger = get_logger(__name__)
 
 
-def terminal_usage(user_query):
+class RAGChatbotApp:
     """
-    Processes a user query by leveraging a RAG (Retrieval Augmented Generation) pipeline.
-    It checks for an existing vector store, builds it if necessary,
+    Processes a user query by leveraging a RAG (Retrieval Augmented Generation)
+    pipeline. It checks for an existing vector store, builds it if necessary,
     retrieves relevant document chunks, and generates an LLM-based response.
-
-    Args:
-        user_query (str): The question or query provided by the user.
     """
 
-    if os.path.exists(INDEX_PATH) and os.path.exists(METADATA_PATH):
+    def __init__(self, index_path: str, metadata_path):
+        self.index_path = index_path
+        self.metadata_path = metadata_path
+        self.vector_store = VectorStore(index_path, metadata_path)
+        self.embedder = Embedder(RAW_DOCS_DIRECTORY)
+
+    def start_interactive(self):
+        """
+        Starts the chatbot in a terminal interface.
+        Initializes the chatbot and enters a loop to accept user input.
+        """
+
+        print("Hi, I am Bob. Your personal assistant chatbot. If you have any "
+              "question, feel free to ask me. If you wish to exit enter quit")
+
+        # Start an infinite loop to continuously accept user queries.
+        while True:
+            # Prompt the user for input.
+            query = input("Ask me: ")
+
+            # Check for a 'quit' command to exit the chatbot.
+            if query.lower() == "quit":
+                print("Happy to be of service! Goodbye for now.")
+
+                self.shutdown()
+
+            # Process the user's query
+            self._terminal_usage(query)
+
+    def _terminal_usage(self, user_query: str):
+        """
+        Runs the RAG pipeline to generate the response from the user query.
+        """
+
+        if not os.path.exists(self.index_path) or not os.path.exists(self.metadata_path):
+            logger.info("FAISS index or metadata not found. Creating new ones...")
+
+            vectors, metadata = self.embedder.create_embedded_chunks()
+
+            self.vector_store.save_faiss_index(vectors, metadata)
+
         logger.info("Existing FAISS index and metadata found. Loading now...")
-    else:
-        logger.info("FAISS index or metadata not found. Creating new ones.")
 
-        documents = prepare_document_chunks(RAW_DOCS_DIRECTORY)
+        index, meta = self.vector_store.load_faiss_index()
 
-        vectors, metadata = create_embedded_chunks(documents)
+        results = search(user_query, index, meta)
 
-        save_faiss_index(vectors, metadata)
+        if results:
+            llm_response_data = generate_response(user_query, results)
 
-    index, meta = load_faiss_index()
+            print(f"Response: {llm_response_data["answer"]}")
+        else:
+            print("\nNo relevant information found in the documents.")
 
-    results = search(user_query, index, meta)
+    def shutdown(self):
+        """
+        Gracefully shutdowns the program.
+        """
 
-    if results:
-        llm_response_data = generate_response(user_query, results)
-
-        log_qa_pair(user_query, llm_response_data["answer"], llm_response_data["sources"])
-
-        print(f"Response: {llm_response_data["answer"]}")
-    else:
-        print("\nNo relevant information found in the documents.")
-
-
-def main():
-    """
-    Main function to run the chatbot in a terminal interface.
-    Initializes the chatbot and enters a loop to accept user input.
-    """
-
-    init_db()
-
-    print("Hi, I am Bob. Your personal assistant chatbot. If you have any "
-          "question, feel free to ask me.")
-
-    # Start an infinite loop to continuously accept user queries.
-    while True:
-        # Prompt the user for input.
-        query = input("Ask me: ")
-
-        # Check for a 'quit' command to exit the chatbot.
-        if query.lower() == "quit":
-            print("Happy to be of service! Goodbye for now.")
-            return
-
-        # Process the user's query
-        terminal_usage(query)
+        return
 
 
 if __name__ == "__main__":
-    main()
+    chatbot = RAGChatbotApp(INDEX_PATH, METADATA_PATH)
+
+    chatbot.start_interactive()
