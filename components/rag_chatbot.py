@@ -30,7 +30,7 @@ class RAGChatbotApp:
         self.index_path = index_path
         self.metadata_path = metadata_path
         self.vector_store = VectorStore(index_path, metadata_path)
-        self.embedder = Embedder(RAW_DOCS_DIRECTORY)
+        self.embedder = Embedder(RAW_DOCS_DIRECTORY, DEFAULT_EMBEDDING_MODEL_NAME)
         self.query_handler = QueryHandler(
             DEFAULT_EMBEDDING_MODEL_NAME, DEFAULT_LLM_MODEL_NAME
         )

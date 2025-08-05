@@ -48,7 +48,7 @@ def _get_log_level(level: str) -> int:
     return level_mappings[level or "DEBUG"]
 
 
-LOG_LEVEL = _get_log_level(os.getenv("LOG_LEVEL").upper())
+LOG_LEVEL = _get_log_level(os.getenv("LOG_LEVEL"))
 
 
 def get_logger(name: str, log_dir: str = LOG_DIRECTORY) -> logging.Logger:

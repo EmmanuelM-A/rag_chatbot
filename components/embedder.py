@@ -6,7 +6,6 @@ vectors.
 from langchain_openai import OpenAIEmbeddings
 from process_documents import DocumentProcessor
 from utils.logger import get_logger
-from config import EMBEDDING_MODEL_NAME
 
 logger = get_logger(__name__)
 
@@ -17,7 +16,7 @@ class Embedder:
     embedding vectors using a specified embedding model.
     """
 
-    def __init__(self, directory: str) -> None:
+    def __init__(self, directory: str, embedding_model_name: str) -> None:
         """
         Initializes the embedder with a document directory.
 
@@ -25,7 +24,7 @@ class Embedder:
             directory (str): Path to the folder containing raw documents.
         """
         self.document_processor = DocumentProcessor(directory)
-        self.embedding_model = OpenAIEmbeddings(model=EMBEDDING_MODEL_NAME)
+        self.embedding_model = OpenAIEmbeddings(model=embedding_model_name)
 
     def create_embedded_chunks(self):
         """

@@ -33,7 +33,7 @@ def create_prompt_template(prompt_filepath):
     with open(prompt_filepath, "r") as f:
         prompt_data = yaml.safe_load(f)
 
-    logger.info("Prompt loaded and prompt template created.")
+    logger.debug("Prompt loaded and prompt template created.")
 
     # Create a LangChain ChatPromptTemplate using the parsed message templates
     return ChatPromptTemplate.from_messages([

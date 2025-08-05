@@ -43,7 +43,7 @@ class VectorStore:
         with open(self.metadata_path, "wb") as f:
             pickle.dump(metadata, f)
 
-        logger.info("The vectors and metadata have been saved to disk.")
+        logger.debug("The vectors and metadata have been saved to disk.")
 
     def load_faiss_index(self):
         """
@@ -65,6 +65,6 @@ class VectorStore:
         with open(self.metadata_path, "rb") as f:
             metadata = pickle.load(f)
 
-        logger.info("The FAISS index and metadata have been loaded from disk.")
+        logger.debug("The FAISS index and metadata have been loaded from disk.")
 
         return index, metadata
