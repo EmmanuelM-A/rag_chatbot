@@ -1,6 +1,5 @@
 """
-Relevance checking module to determine if queries are relevant to the
-document corpus.
+Determine if queries are relevant to the document corpus.
 """
 
 import os
@@ -13,10 +12,8 @@ from langchain.prompts import ChatPromptTemplate
 
 from components.prompt_loader import create_prompt_template
 from config import (
-    EMBEDDING_MODEL_NAME,
-    DOCUMENT_TOPICS_PATH,
+    DOCUMENT_TOPICS_FILE_PATH,
     TOPIC_RELEVANCE_THRESHOLD,
-    LLM_MODEL_NAME,
     LLM_TEMPERATURE,
     TOPIC_ANALYSIS_PROMPT_FILEPATH
 )
@@ -30,17 +27,17 @@ class RelevanceChecker:
     Handles relevance checking for queries against the document corpus.
     """
 
-    def __init__(self):
-        self.embedding_model = OpenAIEmbeddings(model=EMBEDDING_MODEL_NAME)
-        self.llm = ChatOpenAI(model_name=LLM_MODEL_NAME,
+    def __init__(self, embedding_model_name, llm_model_name):
+        self.embedding_model = OpenAIEmbeddings(model=embedding_model_name)
+        self.llm = ChatOpenAI(model=LLM_MODEL_NAME,
                               temperature=LLM_TEMPERATURE)
         self.document_topics = self._load_document_topics()
 
     def _load_document_topics(self) -> Dict[str, Any]:
         """Load document topics from disk if they exist."""
-        if os.path.exists(DOCUMENT_TOPICS_PATH):
+        if os.path.exists(DOCUMENT_TOPICS_FILE_PATH):
             try:
-                with open(DOCUMENT_TOPICS_PATH, "rb") as f:
+                with open(DOCUMENT_TOPICS_FILE_PATH, "rb") as f:
                     topics = pickle.load(f)
                 logger.info("Document topics loaded from disk.")
                 return topics
@@ -52,8 +49,8 @@ class RelevanceChecker:
     def save_document_topics(self, topics: Dict[str, Any]) -> None:
         """Save document topics to disk."""
         try:
-            os.makedirs(os.path.dirname(DOCUMENT_TOPICS_PATH), exist_ok=True)
-            with open(DOCUMENT_TOPICS_PATH, "wb") as f:
+            os.makedirs(os.path.dirname(DOCUMENT_TOPICS_FILE_PATH), exist_ok=True)
+            with open(DOCUMENT_TOPICS_FILE_PATH, "wb") as f:
                 pickle.dump(topics, f)
             logger.info("Document topics saved to disk.")
         except Exception as e:

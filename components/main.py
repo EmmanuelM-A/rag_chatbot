@@ -7,12 +7,12 @@ import signal
 from dotenv import load_dotenv
 
 from components.rag_chatbot import RAGChatbotApp
-from config import (METADATA_PATH, INDEX_PATH)
+from config import (VECTOR_METADATA_FILE_PATH, FAISS_INDEX_FILE_PATH)
 
 load_dotenv()
 
 if __name__ == "__main__":
-    chatbot = RAGChatbotApp(INDEX_PATH, METADATA_PATH)
+    chatbot = RAGChatbotApp(FAISS_INDEX_FILE_PATH, VECTOR_METADATA_FILE_PATH)
 
     def handle_shutdown_signal(signum, frame):
         """Handles program exists via Ctrl+C"""
