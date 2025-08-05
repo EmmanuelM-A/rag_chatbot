@@ -8,7 +8,6 @@ import numpy as np
 from typing import List, Dict, Any
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
-from langchain.prompts import ChatPromptTemplate
 
 from components.prompt_loader import create_prompt_template
 from config import (
