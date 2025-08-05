@@ -4,13 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="working on implementing web search capabilities to the rest of the application">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="tweaking configs and example env file">
       <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/components/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env.exmaple" beforeDir="false" afterPath="$PROJECT_DIR$/.env.exmaple" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/chatbot/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/config/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/evaluation/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ingestion/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/prompts/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/retrieval/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/components/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/logger.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,6 +80,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\data\db" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components\loader" />
@@ -397,7 +403,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754417226505</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="tweaking configs and example env file">
+      <option name="closed" value="true" />
+      <created>1754424359230</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1754424359230</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -425,7 +439,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Added colour formatting to logs to better classify outputs." />
     <MESSAGE value="Fixed the issue with the load_document method not being able to read files. Also added logging to the process_documents.py file." />
     <MESSAGE value="Added logging to the rest of rag_chatbot components." />
     <MESSAGE value="Centralized configurations and put all of them into the config file." />
@@ -450,6 +463,7 @@
     <MESSAGE value="updated configurations" />
     <MESSAGE value="updated the relevance_checker.py and the vector_store.py to accommodate web searches" />
     <MESSAGE value="working on implementing web search capabilities to the rest of the application" />
-    <option name="LAST_COMMIT_MESSAGE" value="working on implementing web search capabilities to the rest of the application" />
+    <MESSAGE value="tweaking configs and example env file" />
+    <option name="LAST_COMMIT_MESSAGE" value="tweaking configs and example env file" />
   </component>
 </project>
