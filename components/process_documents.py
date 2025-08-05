@@ -1,27 +1,94 @@
-import os
+"""
+Handles document ingestion, cleaning, splitting, and preparation of source
+documents before embedding and storage.
+"""
 
-from components.config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, CHUNK_OVERLAP
-from utils.logger import get_logger
+import os
+from dataclasses import dataclass
+from typing import Any
 
 import docx
 import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from sqlalchemy.testing.suite.test_reflection import metadata
 
-logger = get_logger("process_documents_logger")
+from components.config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, CHUNK_OVERLAP
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
+
+from dataclasses import dataclass
+from typing import Optional
+from datetime import datetime
 
 
+@dataclass
+class FileDocumentMetadata:
+    """
+    Represents metadata associated with a file-based document.
+
+    This class is used to capture contextual information about the
+    document, which can help with filtering, tracing source documents,
+    or debugging during document processing in a RAG pipeline.
+
+    Attributes:
+        filename (str): The original name of the file.
+        file_extension (str): The file's extension (e.g., '.pdf', '.txt').
+        author (Optional[str]): The author of the document, if known.
+        created_at (Optional[datetime]): Timestamp when the document was created.
+        modified_at (Optional[datetime]): Timestamp when the document was last modified.
+        source (Optional[str]): Where the file came from (e.g., URL, uploader).
+        document_id (Optional[str]): An internal unique ID, if available.
+    """
+
+    filename: str
+    file_extension: str
+    author: Optional[str] = None
+    created_at: Optional[datetime] = None
+    modified_at: Optional[datetime] = None
+    source: Optional[str] = None
+    document_id: Optional[str] = None
+
+
+@dataclass
 class FileDocument:
-    def __init__(self, content, metadata):
-        """
-        Represents a document with its content and metadata.
+    """
+    Represents a document with its content and metadata.
 
-        :param content: The main content of the document (e.g., text from a file).
-        :param metadata: A dictionary or object containing metadata about the document (e.g., filename, file extension,
-        author, etc.).
-        """
-        self.content = content
-        self.metadata = metadata
+    It contains the main content of the document (e.g., text from a file) and
+    a dictionary or object containing metadata about the document (e.g.,
+    filename, file extension, author, etc.).
+    """
 
+    content: str
+    metadata: FileDocumentMetadata
+
+    def __str__(self):
+        """Returns the name of the document"""
+
+        return self.metadata.filename
+
+
+
+class DocumentProcessor:
+    """
+    Prepares raw documents for indexing into the vector store.
+    """
+
+    def __init__(self, path_to_directory: str) -> None:
+        self.path_to_directory = path_to_directory
+
+    def load_documents(self):
+        pass
+
+    def _clean_documents(self):
+        pass
+
+    def chunk_documents(self):
+        pass
+
+    def process_documents(self):
+        pass
 
 def load_documents(path_to_directory):
     """
