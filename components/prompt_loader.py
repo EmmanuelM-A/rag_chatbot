@@ -6,7 +6,7 @@ import yaml
 from langchain.prompts import ChatPromptTemplate
 from utils.logger import get_logger
 
-logger = get_logger("prompt_logger")
+logger = get_logger(__name__)
 
 
 def create_prompt_template(prompt_filepath):

@@ -36,15 +36,14 @@ CHUNK_OVERLAP = 20
 # --------------------- EMBEDDING MODEL CONFIGURATION --------------------------
 
 # OpenAI embedding model name
-EMBEDDING_MODEL_NAME = "text-embedding-3-small"
+DEFAULT_EMBEDDING_MODEL_NAME = "text-embedding-3-small"
 
 # ------------------------------------------------------------------------------
 
 
 # --------------------- Language Model (LLM) Configuration ---------------------
 
-# Default LLM model name for generating responses
-LLM_MODEL_NAME = "gpt-3.5-turbo"
+DEFAULT_LLM_MODEL_NAME = "gpt-3.5-turbo"
 
 # Temperature setting for the LLM (controls randomness)
 LLM_TEMPERATURE = 0.7
