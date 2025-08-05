@@ -1,48 +1,66 @@
+"""
+Responsible for wrapping the embedding model client to encode text into
+vectors.
+"""
+
 from langchain_openai import OpenAIEmbeddings
-from process_documents import load_documents, chunk_documents
+from process_documents import DocumentProcessor
 from utils.logger import get_logger
 from config import EMBEDDING_MODEL_NAME
 
-logger = get_logger("embedder_logger")
+logger = get_logger(__name__)
 
 
-def prepare_document_chunks(directory):
+class Embedder:
     """
-    Loads and chunks documents from a directory.
-
-    Returns a list of FileDocument objects with chunked content.
+    Handles text embedding by processing documents and converting them into
+    embedding vectors using a specified embedding model.
     """
 
-    raw_documents = load_documents(directory)
+    def __init__(self, directory: str) -> None:
+        """
+        Initializes the embedder with a document directory.
 
-    chunked_documents = chunk_documents(raw_documents)
+        Args:
+            directory (str): Path to the folder containing raw documents.
+        """
+        self.document_processor = DocumentProcessor(directory)
+        self.embedding_model = OpenAIEmbeddings(model=EMBEDDING_MODEL_NAME)
 
-    return chunked_documents
+    def create_embedded_chunks(self):
+        """
+        Processes documents (load, clean, chunk) and returns embedded vectors
+        with associated metadata.
 
+        Returns:
+            tuple:
+                - vectors (List[List[float]]): List of embedding vectors.
+                - metadata (dict): Mapping from index to (text + metadata).
+        """
 
-def create_embedded_chunks(chunked_documents):
-    """
-    Takes FileDocument list, returns (vectors, metadata).
+        logger.debug("Starting full embedding pipeline.")
 
-    vectors: List of embedding vectors metadata: Mapping of index -> (text, metadata)
-    """
-    if not chunked_documents:
-        logger.error("No chunked documents provided!")
-        raise ValueError("No chunked documents provided!")
+        # Step 1: Process the documents into chunks
+        chunked_documents = self.document_processor.process_documents()
 
-    logger.debug("Creating vectors and metadata for the documents.")
+        if not chunked_documents:
+            logger.error("No documents were chunked. Aborting embedding.")
+            raise ValueError("No documents to embed.")
 
-    embedding_model = OpenAIEmbeddings(model=EMBEDDING_MODEL_NAME)
+        logger.debug(f"{len(chunked_documents)} chunks ready for embedding.")
 
-    texts = [doc.content for doc in chunked_documents]
+        # Step 2: Extract content
+        texts = [doc.content for doc in chunked_documents]
 
-    vectors = embedding_model.embed_documents(texts)
+        # Step 3: Embed the text
+        vectors = self.embedding_model.embed_documents(texts)
 
-    metadata = {
-        idx: {"text": doc.content, "meta": doc.metadata}
-        for idx, doc in enumerate(chunked_documents)
-    }
+        # Step 4: Map metadata for reference
+        metadata = {
+            idx: {"text": doc.content, "meta": doc.metadata}
+            for idx, doc in enumerate(chunked_documents)
+        }
 
-    logger.info("Document vectors and metadata have been created successfully!")
+        logger.info("Successfully created document embeddings and metadata.")
 
-    return vectors, metadata
+        return vectors, metadata

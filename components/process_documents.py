@@ -4,15 +4,16 @@ documents before embedding and storage.
 """
 
 import os
-from dataclasses import dataclass
-from typing import Any
+from typing import List
 
 import docx
 import fitz
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from sqlalchemy.testing.suite.test_reflection import metadata
 
-from components.config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, CHUNK_OVERLAP
+from components.config import ALLOWED_FILE_EXTENSIONS, CHUNK_SIZE, \
+    CHUNK_OVERLAP
+from utils.exceptions import DocumentDirectoryNotFoundError, \
+    InvalidDocumentDirectoryError
 from utils.logger import get_logger
 
 logger = get_logger(__name__)
@@ -77,125 +78,127 @@ class DocumentProcessor:
 
     def __init__(self, path_to_directory: str) -> None:
         self.path_to_directory = path_to_directory
+        self.documents: List[FileDocument] = []
 
-    def load_documents(self):
-        pass
+    def load_documents(self)-> List[FileDocument]:
+        """
+        Loads supported documents from the directory into FileDocument objects.
+        """
+
+        if not os.path.exists(self.path_to_directory):
+            raise DocumentDirectoryNotFoundError(self.path_to_directory)
+
+        if not os.path.isdir(self.path_to_directory):
+            raise InvalidDocumentDirectoryError(self.path_to_directory)
+
+        logger.debug(f"Loading documents from: {self.path_to_directory}")
+
+        documents = []
+
+        for root, _, files in os.walk(self.path_to_directory):
+            for file in files:
+                ext = os.path.splitext(file)[1].lower()
+
+                if ext not in ALLOWED_FILE_EXTENSIONS:
+                    logger.warning(f"Skipping unsupported file: {file}")
+                    continue
+
+                file_path = os.path.join(root, file)
+
+                try:
+                    if ext in [".txt", ".md"]: # Handles txt and md
+                        try:
+                            with open(file_path, 'r', encoding='utf-8') as f:
+                                content = f.read()
+                        except UnicodeDecodeError:
+                            with open(file_path, 'r', encoding='latin-1') as f:
+                                content = f.read()
+
+                    elif ext == ".pdf": # Handles PDFs
+                        content = ""
+                        with fitz.open(file_path) as doc:
+                            for page in doc:
+                                content += page.get_text("text")
+
+                    elif ext == ".docx": # Handles DOCX
+                        doc = docx.Document(str(file_path))
+                        content = "\n".join(
+                            [para.text for para in doc.paragraphs])
+
+                    else:
+                        continue
+
+                    file_metadata = FileDocumentMetadata(
+                        filename=file,
+                        file_extension=ext,
+                        author=None,
+                        source=file_path
+                    )
+
+                    documents.append(
+                        FileDocument(
+                            content=content,
+                            metadata=file_metadata
+                        )
+                    )
+
+                except Exception as e: # TODO: CHANGE THIS
+                    logger.error(f"Failed to read {file_path}: {e}")
+
+        logger.info("Document loading completed successfully.")
+
+        return documents
 
     def _clean_documents(self):
-        pass
+        """
+        Cleans loaded documents by stripping whitespace and removing empties.
+        """
 
-    def chunk_documents(self):
-        pass
+        cleaned = []
+
+        for doc in self.documents:
+            cleaned_content = doc.content.strip()
+            if cleaned_content:
+                cleaned.append(FileDocument(content=cleaned_content,
+                                            metadata=doc.metadata))
+
+        logger.debug(f"Cleaned {len(cleaned)} documents "
+                     f"(out of {len(self.documents)}).")
+
+        return cleaned
+
+    def _chunk_documents(self) -> List[FileDocument]:
+        """
+        Splits documents into smaller chunks using a recursive character
+        splitter.
+        """
+
+        logger.debug("Chunking documents...")
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=CHUNK_SIZE,
+            chunk_overlap=CHUNK_OVERLAP
+        )
+
+        chunks = []
+        for doc in self.documents:
+            for chunk in splitter.split_text(doc.content):
+                if chunk.strip():
+                    chunks.append(
+                        FileDocument(content=chunk, metadata=doc.metadata))
+
+        logger.info(f"Chunking produced {len(chunks)} chunks from "
+                    f"{len(self.documents)} documents.")
+
+        return chunks
 
     def process_documents(self):
-        pass
+        """
+        Full processing pipeline: load, clean, chunk.
+        """
 
-def load_documents(path_to_directory):
-    """
-    Reads all files in the directory that match the allowed extensions and converts them into Document objects.
+        self.documents = self.load_documents()
 
-    :param path_to_directory: The path to the folder containing the document files.
+        self.documents = self._clean_documents()
 
-    :returns list[FileDocument]: A list of loaded FileDocument objects
-    """
-
-    if not os.path.exists(path_to_directory):
-        logger.error(f"The directory {path_to_directory} does not exist!")
-        return []
-
-    if not os.path.isdir(path_to_directory):
-        logger.error(f"The path {path_to_directory} is not a directory!")
-        return []
-
-    logger.debug(f"Loading documents from: {path_to_directory}.")
-
-    documents = []
-
-    # Iterate through all files in the directory and subdirectories
-    for root, _, files in os.walk(path_to_directory):
-        for file in files:
-            # Get the file extension (in lowercase)
-            ext = os.path.splitext(file)[1].lower()
-
-            if ext not in ALLOWED_FILE_EXTENSIONS:
-                logger.warning(f"Skipping unsupported file: {file}.")
-                continue
-
-            file_path = os.path.join(root, file)
-
-            logger.debug(f"Reading the file: {file_path}")
-
-            try:
-                # Handle plain text and markdown files
-                if ext in [".txt", ".md"]:
-                    try:
-                        with open(file_path, 'r', encoding='utf-8') as f:
-                            content = f.read()
-                    except UnicodeDecodeError:
-                        with open(file_path, 'r', encoding='latin-1') as f:
-                            content = f.read()
-
-                # Handles PDF
-                elif ext == ".pdf":
-                    content = ""
-                    with fitz.open(file_path) as doc:
-                        for page in doc:
-                            content += page.get_text("text")
-
-                    doc.close()
-
-                # Handles DOCX
-                elif ext == ".docx":
-                    doc = docx.Document(str(file_path))
-                    # Combine all paragraph texts into a single string
-                    content = "\n".join([para.text for para in doc.paragraphs])
-
-                else:
-                    logger.warning(f"Unknown extension: {ext}.")
-                    continue  # Skip unknown file types
-
-                # Add the document to the list with metadata
-                documents.append(FileDocument(content, {'source': file_path}))
-
-            except Exception as e:
-                # Log an error if reading fails
-                logger.error(f"Failed to read {file_path}: {e}")
-
-    logger.info("Document ingestion completed successfully.")
-
-    return documents
-
-
-def chunk_documents(documents):
-    """
-    Splits a list of FileDocument objects into smaller, manageable chunks using a RecursiveCharacterTextSplitter.
-
-    This method iterates through each FileDocument, extracts its content, and then uses a
-    RecursiveCharacterTextSplitter to break down the content into chunks of a specified size
-    with a defined overlap. Empty or whitespace-only chunks are filtered out.
-    Each generated chunk is then wrapped back into a FileDocument object, inheriting the
-    original document's metadata.
-
-    param:
-        documents (list[FileDocument]): A list of FileDocument objects, each containing
-                                       'content' (str) and 'metadata' (dict).
-
-    Returns:
-        list[FileDocument]: A new list of FileDocument objects, where each object
-                            represents a chunk of the original documents' content.
-    """
-
-    logger.debug(f"Chunking the documents: {documents}.")
-
-    splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP)
-
-    chunks = []
-
-    for doc in documents:
-        for chunk in splitter.split_text(doc.content):
-            if chunk.strip():  # skip empty or whitespace-only chunks
-                chunks.append(FileDocument(chunk, doc.metadata))
-
-    logger.info(f"Chunking completed for the documents: {documents}")
-
-    return chunks
+        return self._chunk_documents()
