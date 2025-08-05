@@ -1,5 +1,5 @@
 """
-Contains all the application configurations
+Contains all the application configurations.
 """
 
 # ------------------------------------ PATHS -----------------------------------

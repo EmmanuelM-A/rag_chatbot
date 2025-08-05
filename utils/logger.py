@@ -1,5 +1,6 @@
 """
-The centralized logging mechanism for the application.
+The centralized logging mechanism for the application. Provides clean console
+output for interactive use.
 """
 
 import logging
@@ -45,7 +46,7 @@ def _get_log_level(level: str) -> int:
         "DEBUG": 10
     }
 
-    return level_mappings[level or "DEBUG"]
+    return level_mappings.get(level or "INFO", 20)
 
 
 LOG_LEVEL = _get_log_level(os.getenv("LOG_LEVEL"))
@@ -93,7 +94,7 @@ def get_logger(name: str, log_dir: str = LOG_DIRECTORY) -> logging.Logger:
         os.makedirs(log_dir, exist_ok=True)
 
         file_handler = logging.FileHandler(os.path.join(log_dir, "app.log"))
-        file_handler.setLevel(logging.INFO)
+        file_handler.setLevel(logging.DEBUG)
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
