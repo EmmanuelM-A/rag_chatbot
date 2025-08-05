@@ -19,9 +19,6 @@ from config import (
 )
 from utils.logger import get_logger
 
-logger = get_logger("relevance_checker_logger")
-
-
 class RelevanceChecker:
     """
     Handles relevance checking for queries against the document corpus.
@@ -29,32 +26,39 @@ class RelevanceChecker:
 
     def __init__(self, embedding_model_name, llm_model_name):
         self.embedding_model = OpenAIEmbeddings(model=embedding_model_name)
-        self.llm = ChatOpenAI(model=LLM_MODEL_NAME,
-                              temperature=LLM_TEMPERATURE)
+        self.llm = ChatOpenAI(model=llm_model_name, temperature=LLM_TEMPERATURE)
         self.document_topics = self._load_document_topics()
+        self.logger = get_logger(__name__)
 
     def _load_document_topics(self) -> Dict[str, Any]:
         """Load document topics from disk if they exist."""
-        if os.path.exists(DOCUMENT_TOPICS_FILE_PATH):
-            try:
-                with open(DOCUMENT_TOPICS_FILE_PATH, "rb") as f:
-                    topics = pickle.load(f)
-                logger.info("Document topics loaded from disk.")
-                return topics
-            except Exception as e:
-                logger.error(f"Error loading document topics: {e}")
-                return {}
-        return {}
+
+        if not os.path.exists(DOCUMENT_TOPICS_FILE_PATH):
+            return {}
+
+        try:
+            with open(DOCUMENT_TOPICS_FILE_PATH, "rb") as f:
+                topics = pickle.load(f)
+
+            self.logger.debug("Document topics loaded from disk.")
+
+            return topics
+        except ValueError as e:
+            self.logger.error(f"Error loading document topics: {e}")
+            return {}
 
     def save_document_topics(self, topics: Dict[str, Any]) -> None:
         """Save document topics to disk."""
+
         try:
             os.makedirs(os.path.dirname(DOCUMENT_TOPICS_FILE_PATH), exist_ok=True)
+
             with open(DOCUMENT_TOPICS_FILE_PATH, "wb") as f:
                 pickle.dump(topics, f)
-            logger.info("Document topics saved to disk.")
-        except Exception as e:
-            logger.error(f"Error saving document topics: {e}")
+
+            self.logger.debug("Document topics saved to disk.")
+        except ValueError as e:
+            self.logger.error(f"Error saving document topics: {e}")
 
     def extract_document_topics(self, documents: List[Any]) -> Dict[str, Any]:
         """
@@ -66,14 +70,14 @@ class RelevanceChecker:
         Returns:
             Dictionary containing topics, keywords, and embeddings
         """
-        logger.info("Extracting topics from document corpus...")
+
+        self.logger.debug("Extracting topics from document corpus...")
 
         # Combine all document content for topic extraction
         combined_content = "\n\n".join(
             [doc.content[:500] for doc in documents[:10]]
         )  # Sample first 500 chars of first 10 docs
 
-        # Create prompt for topic extraction
         topic_prompt = create_prompt_template(TOPIC_ANALYSIS_PROMPT_FILEPATH)
 
         # Extract topics using LLM
@@ -104,11 +108,13 @@ class RelevanceChecker:
         self.document_topics = topics_data
         self.save_document_topics(topics_data)
 
-        logger.info(f"Extracted topics: {topics_data.get('main_topics', [])}")
+        self.logger.info(f"Extracted topics: {topics_data.get('main_topics', [])}")
+
         return topics_data
 
     def _parse_topic_analysis(self, analysis: str) -> Dict[str, Any]:
         """Parse the LLM's topic analysis response."""
+
         topics_data = {
             "main_topics": [],
             "keywords": [],
@@ -155,24 +161,28 @@ class RelevanceChecker:
 
         return topics_data
 
-    def is_query_relevant(self, query: str,
-                          similarity_threshold: float = TOPIC_RELEVANCE_THRESHOLD) -> bool:
+    def is_query_relevant(
+            self,
+            query: str,
+            similarity_threshold: float = TOPIC_RELEVANCE_THRESHOLD
+    ) -> bool:
         """
         Determine if a query is relevant to the document corpus.
 
         Args:
-            query: User's query string
-            similarity_threshold: Minimum similarity score for relevance
+            query: User's query string.
+            similarity_threshold: Minimum similarity score for relevance.
 
         Returns:
-            True if query is relevant, False otherwise
+            True if query is relevant, False otherwise.
         """
+
         if not self.document_topics:
-            logger.warning(
+            self.logger.warning(
                 "No document topics available. Assuming query is relevant.")
             return True
 
-        logger.debug(f"Checking relevance for query: {query}")
+        self.logger.debug(f"Checking relevance for query: {query}")
 
         # Get query embedding
         query_embedding = self.embedding_model.embed_query(query)
@@ -185,7 +195,7 @@ class RelevanceChecker:
             )
 
             if domain_similarity >= similarity_threshold:
-                logger.info(
+                self.logger.info(
                     f"Query relevant to domain (similarity: {domain_similarity:.3f})")
                 return True
 
@@ -203,34 +213,41 @@ class RelevanceChecker:
                     best_match = term
 
             if max_similarity >= similarity_threshold:
-                logger.info(
+                self.logger.info(
                     f"Query relevant to '{best_match}' (similarity: {max_similarity:.3f})")
                 return True
 
         # Use LLM as final check for semantic relevance
         semantic_relevance = self._check_semantic_relevance(query)
         if semantic_relevance:
-            logger.info("Query deemed relevant through semantic analysis")
+            self.logger.info("Query deemed relevant through semantic analysis")
             return True
 
-        logger.info(
+        self.logger.info(
             f"Query not relevant to document corpus (max similarity: {max_similarity:.3f})")
         return False
 
-    def _cosine_similarity(self, vec1: List[float],
-                           vec2: List[float]) -> float:
+    def _cosine_similarity(
+            self,
+            vec1: List[float],
+            vec2: List[float]
+    ) -> float:
         """Calculate cosine similarity between two vectors."""
-        vec1 = np.array(vec1)
-        vec2 = np.array(vec2)
+        try:
+            vec1 = np.array(vec1)
+            vec2 = np.array(vec2)
 
-        dot_product = np.dot(vec1, vec2)
-        norm1 = np.linalg.norm(vec1)
-        norm2 = np.linalg.norm(vec2)
+            dot_product = np.dot(vec1, vec2)
+            norm1 = np.linalg.norm(vec1)
+            norm2 = np.linalg.norm(vec2)
 
-        if norm1 == 0 or norm2 == 0:
-            return 0
+            if norm1 == 0 or norm2 == 0:
+                return 0.0
 
-        return dot_product / (norm1 * norm2)
+            return float(dot_product / (norm1 * norm2))
+        except Exception as e:
+            self.logger.error(f"Error calculating cosine similarity: {e}")
+            return 0.0
 
     def _check_semantic_relevance(self, query: str) -> bool:
         """Use LLM to perform semantic relevance checking."""
@@ -240,31 +257,24 @@ class RelevanceChecker:
         topics_str = ", ".join(self.document_topics.get("main_topics", []))
         domain = self.document_topics.get("domain", "")
         keywords_str = ", ".join(
-            self.document_topics.get("keywords", [])[:10])  # Limit keywords
+            self.document_topics.get("keywords", [])[:10])
 
-        relevance_prompt = ChatPromptTemplate.from_messages([
-            ("system", f"""You are an expert at determining if queries are relevant to a document collection.
+        if not topics_str and not domain and not keywords_str:
+            self.logger.warning("No topics available for semantic relevance check")
+            return True
 
-            The document collection covers these topics: {topics_str}
-            Primary domain: {domain}
-            Key concepts: {keywords_str}
-
-            Determine if the given query is semantically related to this document collection.
-            Consider synonyms, related concepts, and broader themes.
-
-            Respond with only "RELEVANT" or "NOT_RELEVANT" followed by a brief explanation."""),
-            ("user",
-             f"Is this query relevant to the document collection: {query}")
-        ])
+        relevance_prompt = create_prompt_template(
+            "../prompts/semantic_relevance_checking_prompt.yaml"
+        )
 
         try:
             chain = relevance_prompt | self.llm | StrOutputParser()
             response = chain.invoke({})
 
             is_relevant = response.strip().upper().startswith("RELEVANT")
-            logger.debug(f"LLM relevance check: {response}")
+            self.logger.debug(f"LLM relevance check: {response}")
             return is_relevant
 
         except Exception as e:
-            logger.error(f"Error in semantic relevance check: {e}")
+            self.logger.error(f"Error in semantic relevance check: {e}")
             return False
