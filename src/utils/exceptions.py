@@ -8,13 +8,24 @@ class RAGPipelineException(Exception):
         super().__init__(message)
 
 
-class DocumentDirectoryNotFoundError(RAGPipelineException):
-    """Raised when the document directory does not exist."""
+class DirectoryNotFoundError(RAGPipelineException):
+    """Raised when the directory does not exist."""
     def __init__(self, path: str) -> None:
         super().__init__(f"The directory '{path}' does not exist.")
 
 
-class InvalidDocumentDirectoryError(RAGPipelineException):
+class InvalidDirectoryError(RAGPipelineException):
     """Raised when the path provided is not a directory."""
     def __init__(self, path: str) -> None:
         super().__init__(f"The path '{path}' is not a directory.")
+
+
+class FileTypeNotSupported(RAGPipelineException):
+    """Raised when a file type is not supported"""
+    def __init__(self, file_type: str) -> None:
+        super().__init__(f"The file type '{file_type}' is not supported.")
+
+
+
+
+

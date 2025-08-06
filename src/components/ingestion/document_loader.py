@@ -7,15 +7,9 @@ from abc import abstractmethod, ABC
 import docx
 import fitz
 
+from src.components.config.settings import settings
 from src.components.ingestion.document import FileDocument, \
     FileDocumentMetadata
-
-
-MD_FILE_EXT = ".md"
-TXT_FILE_EXT = ".txt"
-PDF_FILE_EXT = ".pdf"
-DOCX_FILE_EXT = ".docx"
-
 
 
 class DocumentLoader(ABC):
@@ -63,7 +57,7 @@ class TxTDocumentLoader(DocumentLoader):
 
             file_metadata = FileDocumentMetadata(
                 filename=filename,
-                file_extension=TXT_FILE_EXT,
+                file_extension=settings.TXT_FILE_EXT,
                 author=None,
                 source=file_path
             )
@@ -94,7 +88,7 @@ class MarkdownDocumentLoader(DocumentLoader):
 
             file_metadata = FileDocumentMetadata(
                 filename=filename,
-                file_extension=MD_FILE_EXT,
+                file_extension=settings.MD_FILE_EXT,
                 author=None,
                 source=file_path
             )
@@ -123,7 +117,7 @@ class PDFDocumentLoader(DocumentLoader):
 
             file_metadata = FileDocumentMetadata(
                 filename=filename,
-                file_extension=PDF_FILE_EXT,
+                file_extension=settings.PDF_FILE_EXT,
                 author=None,
                 source=file_path
             )
@@ -152,7 +146,7 @@ class DocxDocumentLoader(DocumentLoader):
 
             file_metadata = FileDocumentMetadata(
                 filename=filename,
-                file_extension=DOCX_FILE_EXT,
+                file_extension=settings.DOCX_FILE_EXT,
                 author=None,
                 source=file_path
             )
