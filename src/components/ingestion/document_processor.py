@@ -67,7 +67,7 @@ class DocumentProcessor(ABC):
                 file_path = os.path.join(root, file)
 
                 try:
-                    file_loader = self.__get_loader(file_extension)
+                    file_loader = self._get_loader(file_extension)
 
                     document = file_loader.load_data(file_path)
 
@@ -79,11 +79,13 @@ class DocumentProcessor(ABC):
 
         self.documents = documents
 
-    def __get_loader(self, file_extension) -> DocumentLoader:
+    def _get_loader(self, file_extension) -> DocumentLoader:
         """
         Gets the correct document loader based on the document's file
         extension.
         """
+
+        file_extension = file_extension.lower()
 
         if file_extension not in settings.ALLOWED_FILE_EXTENSIONS:
             raise FileTypeNotSupported(file_extension)
