@@ -8,10 +8,9 @@ import numpy as np
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 
-from src.components.config.config import DEFAULT_RESPONSE_PROMPT_FILEPATH
+from src.components.config.settings import settings
 from src.components.prompts.prompt_loader import create_prompt_template
 from src.utils.logger import get_logger
-from config import (RETRIEVAL_TOP_K, LLM_TEMPERATURE)
 
 logger = get_logger(__name__)
 
@@ -35,7 +34,7 @@ class QueryHandler:
         query_vector = embedding_model.embed_query(query)
 
         _, I = index.search(np.array([query_vector]).astype("float32"),
-                            RETRIEVAL_TOP_K)
+                            settings.RETRIEVAL_TOP_K)
 
         results = []
 
@@ -64,14 +63,14 @@ class QueryHandler:
 
         llm = ChatOpenAI(
             model=self.llm_model_name,
-            temperature=LLM_TEMPERATURE
+            temperature=settings.LLM_TEMPERATURE
         )
 
         context_text = "\n\n".join(
             [chunk["text"] for chunk in retrieved_chunks])
 
         prompt_template = create_prompt_template(
-            DEFAULT_RESPONSE_PROMPT_FILEPATH)
+            settings.RESPONSE_PROMPT_FILEPATH)
 
         # Create a chain for processing
         rag_chain = prompt_template | llm | StrOutputParser()
