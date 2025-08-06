@@ -9,12 +9,12 @@ from typing import Optional, List
 import numpy as np
 
 from src.components.config.config import WEB_SEARCH_ENABLED
+from src.components.ingestion.document_processor import \
+    DefaultDocumentProcessor
 from src.components.retrieval.embedder import Embedder
 from src.components.chatbot.query_handler import QueryHandler
-from src.components.retrieval.relevance_checker import RelevanceChecker
 from src.components.retrieval.vector_store import VectorStore
 from src.components.retrieval.web_searcher import WebSearcher
-from config import (RELEVANCE_CHECK_ENABLED)
 from dotenv import load_dotenv
 
 from src.utils.logger import get_logger
@@ -43,18 +43,13 @@ class RAGChatbotApp:
 
         # Core components
         self.vector_store = VectorStore(index_path, metadata_path)
-        self.embedder = Embedder(raw_docs_directory, embedding_model_name)
+        self.document_processor = DefaultDocumentProcessor(raw_docs_directory)
+        self.embedder = Embedder(embedding_model_name)
         self.query_handler = QueryHandler(
             embedding_model_name, llm_model_name
         )
 
         # Enhanced components
-        self.relevance_checker = (
-            RelevanceChecker(
-                embedding_model_name,
-                llm_model_name
-            ) if RELEVANCE_CHECK_ENABLED else None
-        )
         self.web_searcher = (
             WebSearcher() if WEB_SEARCH_ENABLED else None
         )
@@ -62,66 +57,6 @@ class RAGChatbotApp:
         # Initialize database for logging
         # init_db()
 
-        # Document topics for relevance checking
-        self.document_topics_initialized = False
-
-    def _initialize_document_topics(self):
-        """Initialize document topics for relevance checking."""
-        if not self.relevance_checker or self.document_topics_initialized:
-            return
-
-        try:
-            # Load existing topics or extract from documents
-            if not self.relevance_checker.document_topics:
-                self.logger.info("Extracting topics from document corpus...")
-                documents = self.embedder.document_processor.load_documents()
-                if documents:
-                    self.relevance_checker.extract_document_topics(documents)
-                    self.document_topics_initialized = True
-                    self.logger.info(
-                        "Document topics initialized successfully")
-                else:
-                    self.logger.warning(
-                        "No documents found for topic extraction")
-            else:
-                self.document_topics_initialized = True
-                self.logger.info("Document topics loaded from existing data")
-
-        except Exception as e:
-            self.logger.error(f"Error initializing document topics: {e}")
-            self.document_topics_initialized = False
-
-    def _is_query_relevant_to_documents(self, query: str) -> bool:
-        """
-        Check if query is relevant to the document corpus.
-
-        Args:
-            query: User's query string
-
-        Returns:
-            True if query is relevant to documents, False otherwise
-        """
-        if not RELEVANCE_CHECK_ENABLED or not self.relevance_checker:
-            self.logger.debug(
-                "Relevance checking disabled, assuming query is relevant")
-            return True
-
-        if not self.document_topics_initialized:
-            self._initialize_document_topics()
-
-        if not self.document_topics_initialized:
-            self.logger.warning(
-                "Document topics not initialized, assuming query is relevant")
-            return True
-
-        try:
-            is_relevant = self.relevance_checker.is_query_relevant(query)
-            self.logger.info(
-                f"Query relevance check: {'RELEVANT' if is_relevant else 'NOT RELEVANT'}")
-            return is_relevant
-        except Exception as e:
-            self.logger.error(f"Error in relevance checking: {e}")
-            return True  # Default to allowing the query
 
     def _search_documents(self, query: str) -> Optional[List[dict]]:
         """
@@ -133,15 +68,25 @@ class RAGChatbotApp:
         Returns:
             List of relevant document chunks or None if no results
         """
+
         try:
-            if not os.path.exists(self.index_path) or not os.path.exists(
-                    self.metadata_path):
+            if (not os.path.exists(self.index_path) or
+                    not os.path.exists(self.metadata_path)
+            ):
                 self.logger.info(
-                    "FAISS index or metadata not found. Creating new ones...")
-                vectors, metadata = self.embedder.create_embedded_chunks()
+                    "FAISS index or metadata not found! Creating new ones..."
+                )
+
+                processed_documents = self.document_processor.process_documents()
+
+                vectors, metadata = self.embedder.create_embedded_chunks(
+                    processed_documents
+                )
+
                 self.vector_store.save_faiss_index(vectors, metadata)
 
             self.logger.info("Loading FAISS index and metadata...")
+
             index, metadata = self.vector_store.load_faiss_index()
 
             results = self.query_handler.search(query, index, metadata)
@@ -165,22 +110,6 @@ class RAGChatbotApp:
         except Exception as e:
             self.logger.error(f"Error searching documents: {e}")
             return None
-
-    def _filter_relevant_results(self, results: List[dict], query: str) -> \
-    List[dict]:
-        """
-        Filter search results based on relevance threshold.
-
-        Args:
-            results: List of search results
-            query: Original query string
-
-        Returns:
-            Filtered list of relevant results
-        """
-        # For now, we'll use a simple approach based on the existing similarity search
-        # In a more sophisticated implementation, you could add additional relevance scoring
-        return results
 
     def _search_web_and_add_to_store(self, query: str) -> Optional[List[dict]]:
         """
