@@ -5,9 +5,8 @@ output for interactive use.
 
 import logging
 import os
-from src.components.config.config import LOG_DIRECTORY
 
-IS_LOG_TO_FILE_ENABLED = bool(os.getenv("LOG_TO_FILE")) or False
+from src.components.config.settings import settings
 
 
 class ColorFormatter(logging.Formatter):
@@ -49,10 +48,7 @@ def _get_log_level(level: str) -> int:
     return level_mappings.get(level or "INFO", 20)
 
 
-LOG_LEVEL = _get_log_level(os.getenv("LOG_LEVEL"))
-
-
-def get_logger(name: str, log_dir: str = LOG_DIRECTORY) -> logging.Logger:
+def get_logger(name: str, log_dir: str = settings.LOG_DIRECTORY) -> logging.Logger:
     """
     Initializes and returns a logger with colorized console output and
     optional file logging.
@@ -73,7 +69,7 @@ def get_logger(name: str, log_dir: str = LOG_DIRECTORY) -> logging.Logger:
     if logger.hasHandlers():
         return logger  # Avoid adding duplicate handlers
 
-    logger.setLevel(LOG_LEVEL)
+    logger.setLevel(settings.LOG_LEVEL)
 
     # Formatters
     formatter = logging.Formatter(
@@ -85,12 +81,7 @@ def get_logger(name: str, log_dir: str = LOG_DIRECTORY) -> logging.Logger:
         datefmt='%Y-%m-%d %H:%M:%S'
     )
 
-    # Always add console handler
-    console_handler = logging.StreamHandler()
-    console_handler.setFormatter(color_formatter)
-    logger.addHandler(console_handler)
-
-    if IS_LOG_TO_FILE_ENABLED:
+    if settings.IS_FILE_LOGGING_ENABLED:
         os.makedirs(log_dir, exist_ok=True)
 
         file_handler = logging.FileHandler(os.path.join(log_dir, "app.log"))
@@ -102,5 +93,9 @@ def get_logger(name: str, log_dir: str = LOG_DIRECTORY) -> logging.Logger:
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(formatter)
         logger.addHandler(error_handler)
+    else:
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(color_formatter)
+        logger.addHandler(console_handler)
 
     return logger

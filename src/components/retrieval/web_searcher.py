@@ -2,7 +2,6 @@
 Web search module for retrieving information from the internet when no
 relevant documents are found.
 """
-import os
 
 import requests
 import time
@@ -10,19 +9,13 @@ from typing import List, Dict, Any, Optional
 from urllib.parse import quote_plus
 from bs4 import BeautifulSoup
 
-from config import (
-    MAX_WEB_SEARCH_RESULTS,
-    CHUNK_SIZE,
-    CHUNK_OVERLAP
-)
-from src.components.ingestion.process_documents import FileDocument
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+from src.components.config.settings import settings
+from src.components.ingestion.document import FileDocument
 from src.utils.logger import get_logger
 
-logger = get_logger("web_search_logger")
-
-SEARCH_API_KEY = os.getenv("SEARCH_API_KEY")
-SEARCH_ENGINE_ID = os.getenv("SEARCH_ENGINE_ID")
+logger = get_logger(__name__)
 
 
 class WebSearcher:
@@ -31,15 +24,15 @@ class WebSearcher:
     """
 
     def __init__(self):
-        self.search_api_key = SEARCH_API_KEY
-        self.search_engine_id = SEARCH_ENGINE_ID
+        self.search_api_key = settings.SEARCH_API_KEY
+        self.search_engine_id = settings.SEARCH_ENGINE_ID
         self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=CHUNK_SIZE,
-            chunk_overlap=CHUNK_OVERLAP
+            chunk_size=settings.CHUNK_SIZE,
+            chunk_overlap=settings.CHUNK_OVERLAP
         )
 
     def search_web(self, query: str,
-                   num_results: int = MAX_WEB_SEARCH_RESULTS) -> List[
+                   num_results: int = settings.MAX_WEB_SEARCH_RESULTS) -> List[
         Dict[str, Any]]:
         """
         Perform web search using Google Custom Search API.
@@ -149,6 +142,7 @@ class WebSearcher:
         Returns:
             Extracted text content or None if failed
         """
+
         try:
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
