@@ -8,7 +8,7 @@ from typing import Optional, List
 
 import numpy as np
 
-from src.components.config.config import WEB_SEARCH_ENABLED
+from src.components.config.settings import settings
 from src.components.ingestion.document_processor import \
     DefaultDocumentProcessor
 from src.components.retrieval.embedder import Embedder
@@ -20,6 +20,8 @@ from dotenv import load_dotenv
 from src.utils.logger import get_logger
 
 load_dotenv()
+
+logger = get_logger(__name__)
 
 
 class RAGChatbotApp:
@@ -37,7 +39,6 @@ class RAGChatbotApp:
             embedding_model_name: str,
             llm_model_name: str
     ) -> None:
-        self.logger = get_logger(__name__)
         self.index_path = index_path
         self.metadata_path = metadata_path
 
@@ -51,7 +52,7 @@ class RAGChatbotApp:
 
         # Enhanced components
         self.web_searcher = (
-            WebSearcher() if WEB_SEARCH_ENABLED else None
+            WebSearcher() if settings.IS_WEB_SEARCH_ENABLED else None
         )
 
         # Initialize database for logging
@@ -73,7 +74,7 @@ class RAGChatbotApp:
             if (not os.path.exists(self.index_path) or
                     not os.path.exists(self.metadata_path)
             ):
-                self.logger.info(
+                logger.info(
                     "FAISS index or metadata not found! Creating new ones..."
                 )
 
@@ -85,30 +86,15 @@ class RAGChatbotApp:
 
                 self.vector_store.save_faiss_index(vectors, metadata)
 
-            self.logger.info("Loading FAISS index and metadata...")
+            logger.info("Loading FAISS index and metadata...")
 
             index, metadata = self.vector_store.load_faiss_index()
 
             results = self.query_handler.search(query, index, metadata)
 
-            if results:
-                # Check if results meet relevance threshold
-                relevant_results = self._filter_relevant_results(results,
-                                                                 query)
-                if relevant_results:
-                    self.logger.info(
-                        f"Found {len(relevant_results)} relevant document chunks")
-                    return relevant_results
-                else:
-                    self.logger.info(
-                        "No document chunks meet relevance threshold")
-                    return None
-            else:
-                self.logger.info("No results found in document search")
-                return None
+            return results
 
         except Exception as e:
-            self.logger.error(f"Error searching documents: {e}")
             return None
 
     def _search_web_and_add_to_store(self, query: str) -> Optional[List[dict]]:
@@ -121,34 +107,34 @@ class RAGChatbotApp:
         Returns:
             List of web search results formatted for response generation
         """
-        if not WEB_SEARCH_ENABLED or not self.web_searcher:
-            self.logger.info("Web search is disabled")
+
+        if not self.web_searcher:
+            logger.info("Web search is disabled!")
             return None
 
         try:
-            self.logger.info(f"Performing web search for: {query}")
+            logger.debug(f"Performing web search for: {query}")
 
-            # Get web documents
             web_documents = self.web_searcher.search_and_retrieve_content(
                 query)
 
             if not web_documents:
-                self.logger.warning("No web content retrieved")
+                logger.warning("No web content retrieved!")
                 return None
 
-            # Chunk web documents
             web_chunks = self.web_searcher.chunk_web_documents(web_documents)
 
             if not web_chunks:
-                self.logger.warning("No web chunks created")
+                logger.warning("No web chunks created!")
                 return None
 
-            self.logger.info(
-                f"Retrieved {len(web_chunks)} chunks from web search")
+            logger.info(
+                f"Retrieved {len(web_chunks)} chunks from web search"
+            )
 
             # Create embeddings for web content
             texts = [doc.content for doc in web_chunks]
-            vectors = self.embedder.embedding_model.embed_documents(texts)
+            web_vectors = self.embedder.embedding_model.embed_documents(texts)
 
             # Create metadata for web chunks
             web_metadata = {
@@ -161,7 +147,7 @@ class RAGChatbotApp:
                 index, existing_metadata = self.vector_store.load_faiss_index()
 
                 # Add new vectors to existing index
-                index.add(np.array(vectors).astype("float32"))
+                index.add(np.array(web_vectors).astype("float32"))
 
                 # Merge metadata (adjust indices for new vectors)
                 offset = len(existing_metadata)
@@ -172,12 +158,16 @@ class RAGChatbotApp:
                 self.vector_store.save_faiss_index(None, existing_metadata,
                                                    existing_index=index)
 
-                self.logger.info("Web content added to vector store")
+                logger.info("Web content added to existing vector stores!")
 
             except FileNotFoundError:
                 # If no existing index, create new one with just web content
-                self.vector_store.save_faiss_index(vectors, web_metadata)
-                self.logger.info("Created new vector store with web content")
+                self.vector_store.save_faiss_index(
+                    vectors=web_vectors,
+                    metadata=web_metadata
+                )
+
+                logger.info("Created new vector store with web content")
 
             # Format results for response generation
             web_results = []
@@ -190,12 +180,12 @@ class RAGChatbotApp:
             return web_results
 
         except Exception as e:
-            self.logger.error(f"Error in web search and storage: {e}")
+            logger.error(f"Error in web search and storage: {e}")
             return None
 
     def process_query(self, user_query: str) -> dict:
         """
-        Process a user query through the enhanced RAG pipeline.
+        Process a user query through the RAG pipeline.
 
         Args:
             user_query: The user's question/query
@@ -203,7 +193,8 @@ class RAGChatbotApp:
         Returns:
             Dictionary containing answer, sources, and metadata
         """
-        self.logger.info(f"Processing query: {user_query}")
+
+        logger.info(f"Processing query: {user_query}")
 
         try:
             # Step 1: Search documents first
@@ -218,25 +209,10 @@ class RAGChatbotApp:
                 # Log the QA pair
                 # log_qa_pair(user_query, response_data["answer"], response_data["sources"])
 
-                self.logger.info("Response generated from documents")
+                logger.info("Response generated from documents")
                 return response_data
 
-            # Step 2: Check if query is relevant to document corpus before web search
-            if not self._is_query_relevant_to_documents(user_query):
-                response_data = {
-                    "answer": "I don't have information about that topic in my knowledge base. This query appears to be outside the scope of the documents I have access to.",
-                    "sources": [],
-                    "source_type": "none"
-                }
-
-                # Log the QA pair
-                # log_qa_pair(user_query, response_data["answer"], response_data["sources"])
-
-                self.logger.info(
-                    "Query deemed not relevant to document corpus")
-                return response_data
-
-            # Step 3: Fall back to web search if query is relevant but no document results
+            # Fall back to web search if query is relevant but no document results
             web_results = self._search_web_and_add_to_store(user_query)
 
             if web_results:
@@ -248,12 +224,15 @@ class RAGChatbotApp:
                 # Log the QA pair
                 # log_qa_pair(user_query, response_data["answer"], response_data["sources"])
 
-                self.logger.info("Response generated from web search")
+                logger.info("Response generated from web search")
                 return response_data
 
             # Step 4: No results found anywhere
             response_data = {
-                "answer": "I couldn't find relevant information to answer your question in my documents or through web search. Please try rephrasing your question or ask about a different topic.",
+                "answer": "I couldn't find relevant information to answer your "
+                          "question in my documents or through web search. Please "
+                          "try rephrasing your question or ask about a different "
+                          "topic.",
                 "sources": [],
                 "source_type": "none"
             }
@@ -261,13 +240,14 @@ class RAGChatbotApp:
             # Log the QA pair
             # log_qa_pair(user_query, response_data["answer"], response_data["sources"])
 
-            self.logger.info("No relevant information found")
+            logger.info("No relevant information found")
             return response_data
 
         except Exception as e:
-            self.logger.error(f"Error processing query: {e}")
+            logger.error(f"Error processing query: {e}")
             error_response = {
-                "answer": "I encountered an error while processing your question. Please try again.",
+                "answer": "I encountered an error while processing your question. "
+                          "Please try again!",
                 "sources": [],
                 "source_type": "error"
             }
@@ -277,22 +257,17 @@ class RAGChatbotApp:
         """
         Start the chatbot in interactive terminal mode.
         """
-        print("🤖 Hi, I am Bob. Your enhanced RAG assistant!")
-        print(
-            "I can answer questions from my documents and search the web when needed.")
-        print("Type 'quit' to exit.\n")
 
-        # Initialize document topics if relevance checking is enabled
-        if RELEVANCE_CHECK_ENABLED:
-            print("📚 Initializing document analysis for relevance checking...")
-            self._initialize_document_topics()
-            print("✅ Ready to answer your questions!\n")
+        print("🤖 Hi, I am Bob. Your enhanced RAG assistant!")
+        print("I can answer questions from my documents and search "
+              "the web when needed.")
+        print("Type 'quit' to exit.\n")
 
         while True:
             try:
-                query = input("🔍 Ask me: ").strip()
+                query = input("🔍 Ask me: ").strip().lower()
 
-                if query.lower() in ['quit', 'exit', 'bye']:
+                if query in ['quit', 'exit', 'bye']:
                     print("👋 Happy to be of service! Goodbye!")
                     self.shutdown()
 
@@ -315,16 +290,19 @@ class RAGChatbotApp:
 
             except KeyboardInterrupt:
                 print("\n👋 Goodbye!")
+
                 self.shutdown()
             except Exception as e:
-                self.logger.error(f"Error in interactive mode: {e}")
+                logger.error(f"Error in interactive mode: {e}")
+
                 print("❌ An error occurred. Please try again.")
 
     def shutdown(self):
         """
         Gracefully shut down the application.
         """
-        self.logger.info("Shutting down enhanced RAG chatbot...")
+
+        logger.info("Shutting down enhanced RAG chatbot...")
 
         try:
             # Clean up resources if needed
@@ -332,9 +310,9 @@ class RAGChatbotApp:
                 # Any cleanup for vector store
                 pass
 
-            self.logger.info("Shutdown completed successfully")
+            logger.info("Shutdown completed successfully")
 
         except Exception as e:
-            self.logger.error(f"Error during shutdown: {e}")
+            logger.error(f"Error during shutdown: {e}")
 
         sys.exit(0)

@@ -4,18 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="tweaking configs and example env file">
-      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/chatbot/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/config/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/evaluation/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ingestion/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/prompts/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/retrieval/__init__.py" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Refactored code so each class/file adheres to SRP">
+      <change afterPath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +41,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/components/process_documents.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/components/config/settings.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -80,10 +75,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components" />
-      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\data\db" />
-      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components" />
-      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\components\loader" />
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\data" />
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src" />
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\config" />
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\retrieval" />
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\chatbot" />
     </key>
   </component>
   <component name="RunManager">
@@ -96,11 +92,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/components" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/components/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -411,7 +407,63 @@
       <option name="project" value="LOCAL" />
       <updated>1754424359230</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="restructuring application">
+      <option name="closed" value="true" />
+      <created>1754426285444</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1754426285444</updated>
+    </task>
+    <task id="LOCAL-00037" summary="restructured the application">
+      <option name="closed" value="true" />
+      <created>1754427104346</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1754427104346</updated>
+    </task>
+    <task id="LOCAL-00038" summary="implemented all document loader for the allowed file extensions">
+      <option name="closed" value="true" />
+      <created>1754429607595</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1754429607595</updated>
+    </task>
+    <task id="LOCAL-00039" summary="upgraded the document_processor.py to follow an OOP design and integrated the document_loader.py classes into it">
+      <option name="closed" value="true" />
+      <created>1754479647721</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1754479647721</updated>
+    </task>
+    <task id="LOCAL-00040" summary="updated documentation">
+      <option name="closed" value="true" />
+      <created>1754480151147</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1754480151147</updated>
+    </task>
+    <task id="LOCAL-00041" summary="deleted this file as its not necessary">
+      <option name="closed" value="true" />
+      <created>1754481048393</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1754481048393</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Refactored code so each class/file adheres to SRP">
+      <option name="closed" value="true" />
+      <created>1754481074463</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1754481074463</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -439,13 +491,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Fixed the issue with the load_document method not being able to read files. Also added logging to the process_documents.py file." />
-    <MESSAGE value="Added logging to the rest of rag_chatbot components." />
-    <MESSAGE value="Centralized configurations and put all of them into the config file." />
-    <MESSAGE value="Created a terminal_usage method to run the script in terminal and have tested that full rag pipeline works." />
-    <MESSAGE value="Added Q&amp;A Logging to log query, answer pairs for further testing and future fine-tuning." />
-    <MESSAGE value="Upgraded the logger to log to files." />
-    <MESSAGE value="Added a dynamic way to define and create prompt templates for the response generation using yaml files, that specify how the LLM should respond." />
     <MESSAGE value="Improved the logging in the file." />
     <MESSAGE value="Made unit tests for the process_documents.py" />
     <MESSAGE value="Tidied up some code." />
@@ -464,6 +509,13 @@
     <MESSAGE value="updated the relevance_checker.py and the vector_store.py to accommodate web searches" />
     <MESSAGE value="working on implementing web search capabilities to the rest of the application" />
     <MESSAGE value="tweaking configs and example env file" />
-    <option name="LAST_COMMIT_MESSAGE" value="tweaking configs and example env file" />
+    <MESSAGE value="restructuring application" />
+    <MESSAGE value="restructured the application" />
+    <MESSAGE value="implemented all document loader for the allowed file extensions" />
+    <MESSAGE value="upgraded the document_processor.py to follow an OOP design and integrated the document_loader.py classes into it" />
+    <MESSAGE value="updated documentation" />
+    <MESSAGE value="deleted this file as its not necessary" />
+    <MESSAGE value="Refactored code so each class/file adheres to SRP" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored code so each class/file adheres to SRP" />
   </component>
 </project>
