@@ -4,7 +4,7 @@ vectors.
 """
 
 from langchain_openai import OpenAIEmbeddings
-from src.utils.logger import get_logger
+from src.components.config.logger import get_logger
 
 logger = get_logger(__name__)
 

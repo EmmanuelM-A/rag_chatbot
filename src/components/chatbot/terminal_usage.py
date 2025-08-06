@@ -7,7 +7,7 @@ import sys
 import os
 
 from src.components.config.settings import settings
-from src.utils.logger import get_logger
+from src.components.config.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -65,7 +65,7 @@ class TerminalUsage:
         Print startup information about the chatbot configuration.
         """
 
-        print("🚀 Starting Enhanced RAG Chatbot")
+        print("🚀 Starting RAG Chatbot")
         print("=" * 50)
         print(f"📊 Web Search: {'✅ Enabled' if settings.IS_WEB_SEARCH_ENABLED else '❌ Disabled'}")
         print(f"📁 Index Path: {settings.VECTOR_DB_FILE_PATH}")

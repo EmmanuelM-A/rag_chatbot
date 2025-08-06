@@ -25,10 +25,10 @@ class AppSettings(BaseSettings):
     DOCX_FILE_EXT: str = Field(default=".docx")
 
     # Logging
-    LOG_LEVEL: str = Field(default="INFO")
+    LOG_LEVEL: str = Field(default="DEBUG")
     LOG_DIRECTORY: str = Field(default="../../../logs")
     LOG_WEB_SEARCHES: bool = Field(default=False)
-    IS_FILE_LOGGING_ENABLED: bool = Field(default=True)
+    IS_FILE_LOGGING_ENABLED: bool = Field(default=False)
 
     # LLM
     EMBEDDING_MODEL_NAME: str = Field(default="text-embedding-3-small")

@@ -17,7 +17,7 @@ from src.components.retrieval.vector_store import VectorStore
 from src.components.retrieval.web_searcher import WebSearcher
 from dotenv import load_dotenv
 
-from src.utils.logger import get_logger
+from src.components.config.logger import get_logger
 
 load_dotenv()
 
@@ -258,7 +258,7 @@ class RAGChatbotApp:
         Start the chatbot in interactive terminal mode.
         """
 
-        print("🤖 Hi, I am Bob. Your enhanced RAG assistant!")
+        print("🤖 Hi, I am Bob. Your RAG assistant!")
         print("I can answer questions from my documents and search "
               "the web when needed.")
         print("Type 'quit' to exit.\n")

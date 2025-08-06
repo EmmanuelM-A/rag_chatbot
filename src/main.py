@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from src.components.chatbot.rag_chatbot import RAGChatbotApp
 from src.components.chatbot.terminal_usage import TerminalUsage
 from src.components.config.settings import settings
-from utils.logger import get_logger
+from src.components.config.logger import get_logger
 
 load_dotenv()
 

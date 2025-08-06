@@ -4,11 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="Moved startup and app running code into its own file">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fixed some issues">
+      <change afterPath="$PROJECT_DIR$/src/components/config/logger.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/unit/test_logger.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/prompts/prompt_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/prompts/prompt_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/logger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/logger.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +28,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Unit Test" />
         <option value="Python Script" />
+        <option value="Python Unit Test" />
       </list>
     </option>
   </component>
@@ -52,30 +62,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.document_loader.executor": "Run",
-    "Python.evaluation.executor": "Run",
-    "Python.logger.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.process_documents.executor": "Run",
-    "Python.read.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python tests.pytest for test_logger.TestLogger.test_log_to_file_if_enabled.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_logger.TestLogger.test_multiple_handlers.executor&quot;: &quot;Run&quot;,
+    &quot;Python.document_loader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.evaluation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.logger.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.process_documents.executor&quot;: &quot;Run&quot;,
+    &quot;Python.read.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\config" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\data" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src" />
-      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\config" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\retrieval" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\chatbot" />
     </key>
@@ -477,7 +489,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754493469868</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="fixed some issues">
+      <option name="closed" value="true" />
+      <created>1754495058870</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1754495058870</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -505,7 +525,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="Tidied up some code." />
     <MESSAGE value="Updated configurations" />
     <MESSAGE value="implemented a query relevancy checker" />
     <MESSAGE value="implementing the web searcher" />
@@ -530,6 +549,7 @@
     <MESSAGE value="Refactored code so each class/file adheres to SRP" />
     <MESSAGE value="Refactored code so it uses the new config settings file" />
     <MESSAGE value="Moved startup and app running code into its own file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Moved startup and app running code into its own file" />
+    <MESSAGE value="fixed some issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed some issues" />
   </component>
 </project>

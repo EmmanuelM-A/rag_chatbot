@@ -16,7 +16,7 @@ from src.components.ingestion.document_loader import PDFDocumentLoader, \
     DocumentLoader
 from src.utils.exceptions import FileTypeNotSupported, DirectoryNotFoundError, \
     InvalidDirectoryError
-from src.utils.logger import get_logger
+from src.components.config.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -118,7 +118,13 @@ class DocumentProcessor(ABC):
 
         cleaned_documents = self._clean_documents()
 
-        return self._chunk_documents(cleaned_documents)
+        chunked_documents = self._chunk_documents(cleaned_documents)
+
+        logger.debug(
+            "Documents have been loaded, processed and chunked successfully!"
+        )
+
+        return chunked_documents
 
 
 class DefaultDocumentProcessor(DocumentProcessor):

@@ -10,7 +10,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 from src.components.config.settings import settings
 from src.components.prompts.prompt_loader import create_prompt_template
-from src.utils.logger import get_logger
+from src.components.config.logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -21,7 +21,7 @@ class QueryHandler:
     """
 
     def __init__(self, embedding_model_name: str, llm_model_name: str) -> None:
-        self.embedding_model_name = embedding_model_name
+        self.embedding_model = OpenAIEmbeddings(model=embedding_model_name)
         self.llm_model_name = llm_model_name
 
     def search(self, query: str, index, metadata):
@@ -29,9 +29,7 @@ class QueryHandler:
         Embeds query, searches vector DB, returns top_k results.
         """
 
-        embedding_model = OpenAIEmbeddings(model=self.embedding_model_name)
-
-        query_vector = embedding_model.embed_query(query)
+        query_vector = self.embedding_model.embed_query(query)
 
         _, I = index.search(np.array([query_vector]).astype("float32"),
                             settings.RETRIEVAL_TOP_K)
