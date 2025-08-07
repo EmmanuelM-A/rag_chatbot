@@ -15,7 +15,7 @@ from src.components.ingestion.document_loader import PDFDocumentLoader, \
     MarkdownDocumentLoader, TxTDocumentLoader, DocxDocumentLoader, \
     DocumentLoader
 from src.utils.exceptions import FileTypeNotSupported, DirectoryNotFoundError, \
-    InvalidDirectoryError
+    InvalidDirectoryError, RAGPipelineException
 from src.components.config.logger import get_logger
 
 logger = get_logger(__name__)
@@ -72,7 +72,7 @@ class DocumentProcessor(ABC):
                     document = file_loader.load_data(file_path)
 
                     documents.append(document)
-                except ValueError as e:
+                except (ValueError, OSError, RAGPipelineException) as e:
                     logger.error(f"Failed to read {file_path}: {e}")
 
         logger.debug("Document loading completed successfully.")

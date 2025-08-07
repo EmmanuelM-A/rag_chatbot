@@ -3,7 +3,7 @@ Contains all the tests for the DocumentProcessor.
 """
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 from src.components.ingestion.document import FileDocument, \
     FileDocumentMetadata
@@ -11,7 +11,8 @@ from src.components.ingestion.document_loader import PDFDocumentLoader, \
     MarkdownDocumentLoader, TxTDocumentLoader, DocxDocumentLoader
 from src.components.ingestion.document_processor import \
     DefaultDocumentProcessor
-from src.utils.exceptions import FileTypeNotSupported
+from src.utils.exceptions import FileTypeNotSupported, DirectoryNotFoundError, \
+    InvalidDirectoryError
 
 TEST_DIRECTORY = "tests/data/raw_docs"
 
@@ -29,7 +30,8 @@ class TestGetLoader(unittest.TestCase):
     def setUp(self):
         self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
 
-    def test_should_raise_a_file_not_supported_error_for_invalid_extensions(self):
+    def test_should_raise_file_not_supported_error_for_invalid_extensions(self):
+        """Should fail if the file type is not supported"""
         with self.assertRaises(FileTypeNotSupported):
             self.processor._get_loader(".xyz")
 
@@ -99,17 +101,71 @@ class TestLoadDocuments(unittest.TestCase):
                 self.processor.load_documents()
                 self.assertEqual(len(self.processor.documents), 2)
 
-    def test_should_raise_directory_not_found_error(self):
-        pass
+    @patch('os.path.exists')
+    def test_should_raise_directory_not_found_error(self, mock_exists):
+        mock_exists.return_value = False
+        with self.assertRaises(DirectoryNotFoundError):
+            self.processor.load_documents()
 
-    def test_should_raise_invalid_directory_error(self):
-        pass
+    @patch('os.path.exists')
+    @patch('os.path.isdir')
+    def test_should_raise_invalid_directory_error(self, mock_isdir,
+                                                  mock_exists):
+        mock_exists.return_value = True
+        mock_isdir.return_value = False
+        with self.assertRaises(InvalidDirectoryError):
+            self.processor.load_documents()
 
-    def test_should_skip_unsupported_files(self):
-        pass
+    @patch('src.components.ingestion.document_processor.logger')
+    @patch('os.path.exists')
+    @patch('os.path.isdir')
+    @patch('os.walk')
+    @patch('os.path.splitext')
+    @patch('src.components.config.settings.settings')
+    def test_should_skip_unsupported_files(self, mock_settings, mock_splitext,
+                                           mock_walk, mock_isdir, mock_exists,
+                                           mock_logger):
+        mock_exists.return_value = True
+        mock_isdir.return_value = True
+        mock_walk.return_value = [(TEST_DIRECTORY, [], ["IT CV.docx", "file2.xyz"])]
+        mock_splitext.side_effect = [("IT CV", ".docx"), ("file2", ".xyz")]
+        mock_settings.ALLOWED_FILE_EXTENSIONS = [".txt", ".pdf", ".md",
+                                                 ".docx"]
 
-    def test_should_get_correct_document_loader_for_file_extension(self):
-        pass
+        self.processor.load_documents()
+
+        # Verify the warning was logged
+        mock_logger.warning.assert_called_with(
+            "Skipping unsupported file: file2.xyz")
+        self.assertEqual(len(self.processor.documents), 0)
+
+    @patch('os.path.exists')
+    @patch('os.path.isdir')
+    @patch('os.walk')
+    @patch('os.path.splitext')
+    @patch('os.path.join')
+    def test_should_get_correct_document_loader_for_file_extension(
+            self, mock_join, mock_splitext, mock_walk, mock_isdir, mock_exists
+    ):
+        mock_exists.return_value = True
+        mock_isdir.return_value = True
+        mock_walk.return_value = [("/test", [], ["file1.pdf"])]
+        mock_splitext.return_value = ("file1", ".pdf")
+        mock_join.return_value = "/test/file1.pdf"
+
+        with patch.object(
+                self.processor,
+        '_get_loader'
+        ) as mock_get_loader:
+            mock_loader = Mock()
+            mock_loader.load_data.return_value = FileDocument(
+                "content",
+                FileDocumentMetadata("test", ".pdf")
+            )
+            mock_get_loader.return_value = mock_loader
+
+            self.processor.load_documents()
+            mock_get_loader.assert_called_with(".pdf")
 
     def test_should_continue_processing_after_individual_file_errors(self):
         pass

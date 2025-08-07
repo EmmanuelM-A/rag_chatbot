@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="written all the boilerplate code for the tests for the document_processor">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="implementing some tests for the document_processor.py">
       <change afterPath="$PROJECT_DIR$/tests/unit/test_document_laoder_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/exceptions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/integeration/test_document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integeration/test_document_processor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,6 +65,11 @@
     "Python tests.pytest for test_document_processor.TestGetLoader.executor": "Run",
     "Python tests.pytest for test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions.executor": "Run",
     "Python tests.pytest for test_document_processor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_load_documents_from_directory_successfully.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files.executor": "Run",
     "Python tests.pytest for test_logger.TestLogger.test_log_to_file_if_enabled.executor": "Run",
     "Python tests.pytest for test_logger.TestLogger.test_multiple_handlers.executor": "Run",
     "Python.document_loader.executor": "Run",
@@ -75,11 +82,14 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot",
+    "last_opened_file_path": "C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot/tests/test_data/raw_docs",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\tests\test_data\raw_docs" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\config" />
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\data" />
@@ -88,41 +98,7 @@
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\chatbot" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions">
-    <configuration name="pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_get_pdf_loader_for_pdf_files" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="rag_chatbot" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/integeration" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_get_pdf_loader_for_pdf_files&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
-    <configuration name="pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="rag_chatbot" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/integeration" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files">
     <configuration name="pytest for test_document_processor.TestGetLoader" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
@@ -140,7 +116,7 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -153,11 +129,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_document_processor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -170,17 +146,51 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="rag_chatbot" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/integeration" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="rag_chatbot" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/integeration" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_parameters" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error" />
         <item itemvalue="Python tests.pytest for test_document_processor.TestGetLoader" />
-        <item itemvalue="Python tests.pytest for test_document_processor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions" />
-        <item itemvalue="Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions" />
-        <item itemvalue="Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_get_pdf_loader_for_pdf_files" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error" />
       </list>
     </recent_temporary>
   </component>
@@ -576,7 +586,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754516723310</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="implementing some tests for the document_processor.py">
+      <option name="closed" value="true" />
+      <created>1754518496901</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1754518496901</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -604,7 +622,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="implementing the web searcher" />
     <MESSAGE value="updated/improved the logger" />
     <MESSAGE value="updating and improving the process_documents.py" />
     <MESSAGE value="updated the main with the improved components" />
@@ -629,6 +646,7 @@
     <MESSAGE value="fixed some issues" />
     <MESSAGE value="attempting to fix application wide issues" />
     <MESSAGE value="written all the boilerplate code for the tests for the document_processor" />
-    <option name="LAST_COMMIT_MESSAGE" value="written all the boilerplate code for the tests for the document_processor" />
+    <MESSAGE value="implementing some tests for the document_processor.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="implementing some tests for the document_processor.py" />
   </component>
 </project>

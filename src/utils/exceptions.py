@@ -26,6 +26,43 @@ class FileTypeNotSupported(RAGPipelineException):
         super().__init__(f"The file type '{file_type}' is not supported.")
 
 
+class FileDoesNotExist(RAGPipelineException):
+    """Raised when a file cannot be found or does not exist"""
+    def __init__(
+            self,
+            message: str = "The file does not exist or cannot be found."
+    ) -> None:
+        super().__init__(message)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
