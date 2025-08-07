@@ -58,6 +58,7 @@ class DocumentProcessor(ABC):
 
         for root, _, files in os.walk(self.path_to_directory):
             for file in files:
+
                 file_extension = os.path.splitext(file)[1].lower()
 
                 if file_extension not in settings.ALLOWED_FILE_EXTENSIONS:

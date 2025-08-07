@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="implementing some tests for the document_processor.py">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="implemented more tests and fixed test related issues and bugs">
       <change afterPath="$PROJECT_DIR$/tests/unit/test_document_laoder_2.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/exceptions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/integeration/test_document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/integeration/test_document_processor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -59,17 +57,28 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python tests.pytest for test_document_processor.TestChunkDocuments.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_apply_chunk_overlap_correctly.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_create_chunks_with_specified_size_limits.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_filter_out_empty_chunks.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_preserve_metadata_in_all_chunks.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_use_recursive_character_text_splitter.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestCleanDocuments.executor": "Run",
     "Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_get_pdf_loader_for_pdf_files.executor": "Run",
     "Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions.executor": "Run",
     "Python tests.pytest for test_document_processor.TestDocumentProcessor.executor": "Run",
     "Python tests.pytest for test_document_processor.TestGetLoader.executor": "Run",
     "Python tests.pytest for test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions.executor": "Run",
     "Python tests.pytest for test_document_processor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_continue_processing_after_individual_file_errors.executor": "Run",
     "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension.executor": "Run",
     "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_load_documents_from_directory_successfully.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_load_multiple_file_types_from_directory.executor": "Run",
     "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error.executor": "Run",
     "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error.executor": "Run",
     "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files.executor": "Run",
+    "Python tests.pytest for test_document_processor.TestProcessDocuments.executor": "Run",
     "Python tests.pytest for test_logger.TestLogger.test_log_to_file_if_enabled.executor": "Run",
     "Python tests.pytest for test_logger.TestLogger.test_multiple_handlers.executor": "Run",
     "Python.document_loader.executor": "Run",
@@ -98,8 +107,8 @@
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\chatbot" />
     </key>
   </component>
-  <component name="RunManager" selected="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files">
-    <configuration name="pytest for test_document_processor.TestGetLoader" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_create_chunks_with_specified_size_limits">
+    <configuration name="pytest for test_document_processor.TestChunkDocuments" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -112,11 +121,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestGetLoader&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestChunkDocuments&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_document_processor.TestChunkDocuments.test_should_create_chunks_with_specified_size_limits" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -129,11 +138,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestChunkDocuments.test_should_create_chunks_with_specified_size_limits&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_document_processor.TestChunkDocuments.test_should_preserve_metadata_in_all_chunks" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -146,11 +155,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestChunkDocuments.test_should_preserve_metadata_in_all_chunks&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_document_processor.TestChunkDocuments.test_should_use_recursive_character_text_splitter" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -163,11 +172,11 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestChunkDocuments.test_should_use_recursive_character_text_splitter&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+    <configuration name="pytest for test_document_processor.TestProcessDocuments" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -180,17 +189,17 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_parameters" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files&quot;" />
+      <option name="_new_target" value="&quot;test_document_processor.TestProcessDocuments&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files" />
-        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension" />
-        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error" />
-        <item itemvalue="Python tests.pytest for test_document_processor.TestGetLoader" />
-        <item itemvalue="Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_create_chunks_with_specified_size_limits" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestChunkDocuments" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_use_recursive_character_text_splitter" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_preserve_metadata_in_all_chunks" />
+        <item itemvalue="Python tests.pytest for test_document_processor.TestProcessDocuments" />
       </list>
     </recent_temporary>
   </component>
@@ -594,7 +603,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754518496901</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="implemented more tests and fixed test related issues and bugs">
+      <option name="closed" value="true" />
+      <created>1754556886907</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1754556886907</updated>
+    </task>
+    <option name="localTasksCounter" value="50" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -622,7 +639,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated/improved the logger" />
     <MESSAGE value="updating and improving the process_documents.py" />
     <MESSAGE value="updated the main with the improved components" />
     <MESSAGE value="upgraded these components to follow a more OOP design and approach" />
@@ -647,6 +663,7 @@
     <MESSAGE value="attempting to fix application wide issues" />
     <MESSAGE value="written all the boilerplate code for the tests for the document_processor" />
     <MESSAGE value="implementing some tests for the document_processor.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="implementing some tests for the document_processor.py" />
+    <MESSAGE value="implemented more tests and fixed test related issues and bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="implemented more tests and fixed test related issues and bugs" />
   </component>
 </project>

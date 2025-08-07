@@ -36,10 +36,12 @@ class TestGetLoader(unittest.TestCase):
             self.processor._get_loader(".xyz")
 
     def test_should_get_pdf_loader_for_pdf_files(self):
+        """Should return a pdf loader if a pdf file"""
         loader = self.processor._get_loader(".pdf")
         self.assertIsInstance(loader, PDFDocumentLoader)
 
     def test_should_get_markdown_loader_for_markdown_files(self):
+        """Should return a markdown loader if a markdown file """
         loader = self.processor._get_loader(".md")
         self.assertIsInstance(loader, MarkdownDocumentLoader)
 
@@ -167,54 +169,184 @@ class TestLoadDocuments(unittest.TestCase):
             self.processor.load_documents()
             mock_get_loader.assert_called_with(".pdf")
 
-    def test_should_continue_processing_after_individual_file_errors(self):
-        pass
+    @patch('os.path.exists')
+    @patch('os.path.isdir')
+    @patch('os.walk')
+    @patch('os.path.splitext')
+    @patch('os.path.join')
+    def test_should_load_multiple_file_types_from_directory(
+            self, mock_join, mock_splitext, mock_walk, mock_isdir, mock_exists
+    ):
+        mock_exists.return_value = True
+        mock_isdir.return_value = True
+        mock_walk.return_value = [
+            ("/test", [], ["file1.txt", "file2.pdf", "file3.md"])]
+        mock_splitext.side_effect = [("file1", ".txt"), ("file2", ".pdf"),
+                                     ("file3", ".md")]
+        mock_join.side_effect = ["/test/file1.txt", "/test/file2.pdf",
+                                 "/test/file3.md"]
 
-    def test_should_load_multiple_file_types_from_directory(self):
-        pass
+        mock_document = FileDocument("content",
+                                     FileDocumentMetadata("test", ".txt"))
+
+        with patch.object(
+            self.processor,
+            '_get_loader'
+        ) as mock_get_loader:
+            mock_loader = Mock()
+            mock_loader.load_data.return_value = mock_document
+            mock_get_loader.return_value = mock_loader
+
+            self.processor.load_documents()
+            self.assertEqual(len(self.processor.documents), 3)
 
 
-class TestCleanDocuments:
+class TestCleanDocuments(unittest.TestCase):
     """Test suite to test the clean_documents functionality"""
 
-    def test_should_remove_empty_documents_from_list(
-            self):  # Not raise error
-        pass
+    def setUp(self):
+        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
+
+    def test_should_remove_empty_documents_from_list(self):
+        self.processor.documents = [
+            FileDocument("  ", FileDocumentMetadata("empty", ".txt")),
+            FileDocument("content", FileDocumentMetadata("valid", ".txt"))
+        ]
+        cleaned = self.processor._clean_documents()
+        self.assertEqual(len(cleaned), 1)
 
     def test_should_strip_leading_and_trailing_whitespace(self):
-        pass
+        self.processor.documents = [
+            FileDocument("  content  ", FileDocumentMetadata("test", ".txt"))
+        ]
+        cleaned = self.processor._clean_documents()
+        self.assertEqual(cleaned[0].content, "content")
 
     def test_should_preserve_internal_whitespace(self):
-        pass
+        content_with_spaces = "word1 word2  word3"
+        self.processor.documents = [
+            FileDocument(f"  {content_with_spaces}  ",
+                         FileDocumentMetadata("test", ".txt"))
+        ]
+        cleaned = self.processor._clean_documents()
+        self.assertEqual(cleaned[0].content, content_with_spaces)
 
     def test_should_preserve_document_metadata_during_cleaning(self):
-        pass
+        metadata = FileDocumentMetadata("test", ".txt", author="Test Author")
+        self.processor.documents = [
+            FileDocument("  content  ", metadata)
+        ]
+        cleaned = self.processor._clean_documents()
+        self.assertEqual(cleaned[0].metadata, metadata)
 
 
-class TestChunkDocuments:
+class TestChunkDocuments(unittest.TestCase):
     """Test suite to test the chunk_documents functionality"""
 
-    def test_should_create_chunks_with_specified_size_limits(self):
-        pass
+    def setUp(self):
+        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
 
-    def test_should_apply_chunk_overlap_correctly(self):
-        pass
+    @patch('src.components.ingestion.document_processor.RecursiveCharacterTextSplitter')
+    @patch('src.components.config.settings.settings')
+    def test_should_create_chunks_with_specified_size_limits(
+        self, mock_settings, mock_splitter_class
+    ): # FIXME
+        mock_settings.CHUNK_SIZE = 100
+        mock_settings.CHUNK_OVERLAP = 20
 
-    def test_should_filter_out_empty_chunks(self):
-        pass
+        mock_splitter = Mock()
+        mock_splitter.split_text.return_value = ["chunk1", "chunk2"]
+        mock_splitter_class.return_value = mock_splitter
 
-    def test_should_preserve_metadata_in_all_chunks(self):
-        pass
+        self.processor.documents = [
+            FileDocument("long content", FileDocumentMetadata("test", ".txt"))]
+        chunks = self.processor._chunk_documents([])
 
-    def test_should_use_recursive_character_text_splitter(self):
-        pass
+        mock_splitter_class.assert_called_with(chunk_size=100,
+                                               chunk_overlap=20)
+
+    @patch('src.components.ingestion.document_processor.RecursiveCharacterTextSplitter')
+    def test_should_apply_chunk_overlap_correctly(self, mock_splitter_class):
+        mock_splitter = Mock()
+        mock_splitter.split_text.return_value = ["chunk1", "chunk2"]
+        mock_splitter_class.return_value = mock_splitter
+
+        self.processor.documents = [
+            FileDocument("content", FileDocumentMetadata("test", ".txt"))]
+        self.processor._chunk_documents([])
+
+        mock_splitter_class.assert_called()
+
+    @patch('src.components.ingestion.document_processor.RecursiveCharacterTextSplitter')
+    def test_should_filter_out_empty_chunks(self, mock_splitter_class):
+        mock_splitter = Mock()
+        mock_splitter.split_text.return_value = ["chunk1", "  ", "chunk2", ""]
+        mock_splitter_class.return_value = mock_splitter
+
+        self.processor.documents = [
+            FileDocument("content", FileDocumentMetadata("test", ".txt"))]
+        chunks = self.processor._chunk_documents([])
+
+        self.assertEqual(len(chunks), 2)
+
+    @patch('src.components.ingestion.document_processor.RecursiveCharacterTextSplitter')
+    def test_should_preserve_metadata_in_all_chunks(self, mock_splitter_class):
+        mock_splitter = Mock()
+        mock_splitter.split_text.return_value = ["chunk1", "chunk2"]
+        mock_splitter_class.return_value = mock_splitter
+
+        metadata = FileDocumentMetadata("test", ".txt", author="Test Author")
+        self.processor.documents = [FileDocument("content", metadata)]
+        chunks = self.processor._chunk_documents([])
+
+        for chunk in chunks:
+            self.assertEqual(chunk.metadata, metadata)
+
+    @patch('src.components.ingestion.document_processor.RecursiveCharacterTextSplitter')
+    def test_should_use_recursive_character_text_splitter(
+        self, mock_splitter_class
+    ):
+        mock_splitter = Mock()
+        mock_splitter.split_text.return_value = ["chunk1"]
+        mock_splitter_class.return_value = mock_splitter
+
+        self.processor.documents = [
+            FileDocument("content", FileDocumentMetadata("test", ".txt"))]
+        self.processor._chunk_documents([])
+
+        mock_splitter_class.assert_called()
 
 
-class TestProcessDocuments:
+class TestProcessDocuments(unittest.TestCase):
     """Test suite to test the process_documents functionality"""
 
-    def test_should_succeed_in_processing_documents_with_no_errors(self):
-        pass
+    def setUp(self):
+        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
 
-    def test_should_fail_in_processing_documents_with_errors(self):
-        pass
+    @patch.object(DefaultDocumentProcessor, 'load_documents')
+    @patch.object(DefaultDocumentProcessor, '_clean_documents')
+    @patch.object(DefaultDocumentProcessor, '_chunk_documents')
+    def test_should_succeed_in_processing_documents_with_no_errors(
+        self, mock_chunk, mock_clean, mock_load
+    ):
+        mock_load.return_value = None
+        mock_clean.return_value = []
+        mock_chunk.return_value = []
+
+        result = self.processor.process_documents()
+
+        mock_load.assert_called_once()
+        mock_clean.assert_called_once()
+        mock_chunk.assert_called_once()
+        self.assertEqual(result, [])
+
+    @patch.object(DefaultDocumentProcessor, 'load_documents')
+    def test_should_fail_in_processing_documents_with_errors(self, mock_load):
+        mock_load.side_effect = DirectoryNotFoundError("Directory not found")
+
+        with self.assertRaises(DirectoryNotFoundError):
+            self.processor.process_documents()
+
+
+if __name__ == '__main__':
+    unittest.main()
