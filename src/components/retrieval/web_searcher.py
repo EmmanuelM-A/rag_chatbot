@@ -25,8 +25,8 @@ class WebSearcher:
     """
 
     def __init__(self):
-        self.search_api_key = settings.SEARCH_API_KEY
-        self.search_engine_id = settings.SEARCH_ENGINE_ID
+        self.search_api_key = settings.SEARCH_API_KEY.get_secret_value()
+        self.search_engine_id = settings.SEARCH_ENGINE_ID.get_secret_value()
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=settings.CHUNK_SIZE,
             chunk_overlap=settings.CHUNK_OVERLAP

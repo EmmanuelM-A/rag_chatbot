@@ -75,6 +75,9 @@ class QueryHandler:
 
         response = rag_chain.invoke({"context": context_text, "query": query})
 
+        if response.strip() == "NEED_WEB_SEARCH":
+            return None
+
         # Extract unique sources with error handling
         sources = []
         for chunk in retrieved_chunks:

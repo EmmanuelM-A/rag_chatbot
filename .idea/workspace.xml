@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="feat: integrated the web searcher into the rag_chatbot">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix: settings now loads env variables">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/prompts/default_response_prompt.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/data/prompts/default_response_prompt.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +114,7 @@
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\retrieval" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
@@ -248,14 +250,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Fixing a few issues">
-      <option name="closed" value="true" />
-      <created>1748820472250</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1748820472250</updated>
     </task>
     <task id="LOCAL-00009" summary="Setup a logger">
       <option name="closed" value="true" />
@@ -641,7 +635,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754856052950</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="fix: settings now loads env variables">
+      <option name="closed" value="true" />
+      <created>1754857543870</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1754857543870</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -669,7 +671,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated configurations" />
     <MESSAGE value="updated the relevance_checker.py and the vector_store.py to accommodate web searches" />
     <MESSAGE value="working on implementing web search capabilities to the rest of the application" />
     <MESSAGE value="tweaking configs and example env file" />
@@ -694,6 +695,7 @@
     <MESSAGE value="fix: adding better exception handling" />
     <MESSAGE value="improvement: added more exception handling to the core chatbot functionality" />
     <MESSAGE value="feat: integrated the web searcher into the rag_chatbot" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: integrated the web searcher into the rag_chatbot" />
+    <MESSAGE value="fix: settings now loads env variables" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: settings now loads env variables" />
   </component>
 </project>

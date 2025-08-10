@@ -247,9 +247,11 @@ class RAGChatbotApp:
                 try:
                     response_data = self.query_handler.generate_responses(
                         user_query, document_results)
-                    response_data["source_type"] = "documents"
-                    logger.info("Response generated from documents")
-                    return response_data
+
+                    if response_data:
+                        response_data["source_type"] = "documents"
+                        logger.info("Response generated from documents")
+                        return response_data
                 except Exception as e:
                     logger.error(
                         f"Response generation failed: {e}",
