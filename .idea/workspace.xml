@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="improvement: added more exception handling to the core chatbot functionality">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="feat: integrated the web searcher into the rag_chatbot">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +112,7 @@
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\retrieval" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
@@ -250,14 +248,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Implemented the core rag_chatbot code.">
-      <option name="closed" value="true" />
-      <created>1748800902373</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1748800902373</updated>
     </task>
     <task id="LOCAL-00008" summary="Fixing a few issues">
       <option name="closed" value="true" />
@@ -643,7 +633,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754854506130</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="feat: integrated the web searcher into the rag_chatbot">
+      <option name="closed" value="true" />
+      <created>1754856052950</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1754856052950</updated>
+    </task>
+    <option name="localTasksCounter" value="57" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -671,7 +669,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed logging issue and reassigned log levels in component" />
     <MESSAGE value="updated configurations" />
     <MESSAGE value="updated the relevance_checker.py and the vector_store.py to accommodate web searches" />
     <MESSAGE value="working on implementing web search capabilities to the rest of the application" />
@@ -696,6 +693,7 @@
     <MESSAGE value="cleaned up some code" />
     <MESSAGE value="fix: adding better exception handling" />
     <MESSAGE value="improvement: added more exception handling to the core chatbot functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="improvement: added more exception handling to the core chatbot functionality" />
+    <MESSAGE value="feat: integrated the web searcher into the rag_chatbot" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: integrated the web searcher into the rag_chatbot" />
   </component>
 </project>

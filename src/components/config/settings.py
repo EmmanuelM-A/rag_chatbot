@@ -2,11 +2,14 @@
 Contains all the settings needed to run the application as well as
 environment variables.
 """
-
+import os
+from pathlib import Path
 from typing import List, Optional
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, SecretStr
+
+DOTENV = Path(__file__).resolve().parent.parent.parent.parent / ".env"
 
 
 class AppSettings(BaseSettings):
@@ -53,12 +56,7 @@ class AppSettings(BaseSettings):
     # Evaluation
     QA_SQLITE_DB_PATH: str = Field(default="../data/db/qa_log.db")
 
-    class Config:
-        """Configurations for AppSettings"""
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        # Allow extra fields and don't validate assignment
-        extra = "ignore"
+    model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
 
     def __init__(self, **kwargs):
         """Initialize settings with validation for web search dependencies."""
