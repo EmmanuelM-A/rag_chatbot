@@ -8,6 +8,7 @@ import os
 
 from src.components.config.settings import settings
 from src.components.config.logger import get_logger
+from src.utils.exceptions import RAGChatbotError
 
 logger = get_logger(__name__)
 
@@ -100,7 +101,21 @@ class TerminalUsage:
             logger.info("Interrupted by user")
             print("\n👋 Goodbye!")
             sys.exit(0)
-
+        except RAGChatbotError as e:
+            # Critical RAG error occurred - exit gracefully
+            logger.error(f"Critical RAG chatbot error: {e}", exc_info=True)
+            print(f"\n❌ Critical Error: {e}")
+            print("The application cannot continue and will now exit.")
+            print("Please check the logs for more details.")
+            sys.exit(1)
         except ValueError as e:
-            logger.error(f"Fatal error during startup: {e}", exc_info=True)
+            logger.error(f"Configuration error during startup: {e}",
+                         exc_info=True)
+            print(f"\n❌ Configuration Error: {e}")
+            sys.exit(1)
+        except Exception as e:
+            logger.error(f"Unexpected fatal error during startup: {e}",
+                         exc_info=True)
+            print(f"\n❌ Fatal Error: {e}")
+            print("An unexpected error occurred. Please check the logs.")
             sys.exit(1)

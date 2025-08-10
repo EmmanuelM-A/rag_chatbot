@@ -18,6 +18,8 @@ from src.components.retrieval.web_searcher import WebSearcher
 from dotenv import load_dotenv
 
 from src.components.config.logger import get_logger
+from src.utils.exceptions import DocumentProcessingError, EmbeddingError, \
+    VectorStoreError, QueryProcessingError, RAGChatbotError
 
 load_dotenv()
 
@@ -70,14 +72,14 @@ class RAGChatbotApp:
             List of relevant document chunks or None if no results
         """
 
-        try:
-            if (not os.path.exists(self.index_path) or
-                    not os.path.exists(self.metadata_path)
-            ):
-                logger.info(
-                    "FAISS index or metadata not found! Creating new ones..."
-                )
+        if (not os.path.exists(self.index_path) or
+            not os.path.exists(self.metadata_path)
+        ):
+            logger.info(
+                "FAISS index or metadata not found! Creating new ones..."
+            )
 
+            try:
                 processed_documents = self.document_processor.process_documents()
 
                 logger.debug(f"Processed {len(processed_documents)} documents")
@@ -85,23 +87,47 @@ class RAGChatbotApp:
                 if not processed_documents:
                     logger.warning("No documents were processed!")
                     return None
+            except Exception as e:
+                logger.error(
+                    f"Document processing failed: {e}",
+                    exc_info=True
+                )
+                raise DocumentProcessingError(f"Failed to process documents: {e}")
 
+            try:
                 vectors, metadata = self.embedder.create_embedded_chunks(
                     processed_documents
                 )
 
                 logger.debug(f"Created {len(vectors)} embeddings")
+            except Exception as e:
+                logger.error(
+                    f"Embedding creation failed: {e}",
+                    exc_info=True
+                )
+                raise EmbeddingError(f"Failed to create embeddings: {e}")
 
+            try:
                 self.vector_store.save_faiss_index(vectors, metadata)
 
-                logger.info("Saved FAISS index and metadata!")
+                logger.info("Saved FAISS index and metadata")
+            except Exception as e:
+                logger.error(f"Vector store save failed: {e}",
+                             exc_info=True)
+                raise VectorStoreError(f"Failed to save vector store: {e}")
 
+        try:
             logger.info("Loading FAISS index and metadata...")
 
             index, metadata = self.vector_store.load_faiss_index()
 
             logger.debug(f"Loaded index with {index.ntotal} vectors")
+        except Exception as e:
+            logger.error(f"Vector store load failed: {e}", exc_info=True)
 
+            raise VectorStoreError(f"Failed to load vector store: {e}")
+
+        try:
             results = self.query_handler.search(query, index, metadata)
 
             logger.debug(
@@ -109,13 +135,10 @@ class RAGChatbotApp:
             )
 
             return results
-
         except Exception as e:
-            logger.error(
-                f"Error in _search_documents: {str(e)}",
-            exc_info=True)
+            logger.error(f"Query search failed: {e}", exc_info=True)
 
-            return None
+            raise QueryProcessingError(f"Failed to search query: {e}")
 
     def _search_web_and_add_to_store(self, query: str) -> Optional[List[dict]]:
         """
@@ -221,16 +244,19 @@ class RAGChatbotApp:
             document_results = self._search_documents(user_query)
 
             if document_results:
-                # Generate response from documents
-                response_data = self.query_handler.generate_responses(
-                    user_query, document_results)
-                response_data["source_type"] = "documents"
-
-                # Log the QA pair
-                # log_qa_pair(user_query, response_data["answer"], response_data["sources"])
-
-                logger.info("Response generated from documents")
-                return response_data
+                try:
+                    response_data = self.query_handler.generate_responses(
+                        user_query, document_results)
+                    response_data["source_type"] = "documents"
+                    logger.info("Response generated from documents")
+                    return response_data
+                except Exception as e:
+                    logger.error(
+                        f"Response generation failed: {e}",
+                        exc_info=True
+                    )
+                    raise QueryProcessingError(
+                        f"Failed to generate response: {e}")
 
             # Fall back to web search if query is relevant but no document results
             web_results = self._search_web_and_add_to_store(user_query)
@@ -247,7 +273,7 @@ class RAGChatbotApp:
                 logger.info("Response generated from web search")
                 return response_data
 
-            # Step 4: No results found anywhere
+            # No results found anywhere
             response_data = {
                 "answer": "I couldn't find relevant information to answer your "
                           "question in my documents or through web search. Please "
@@ -262,16 +288,15 @@ class RAGChatbotApp:
 
             logger.info("No relevant information found")
             return response_data
-
+        except RAGChatbotError:
+            # Re-raise critical RAG errors to be handled by terminal_usage
+            raise
         except Exception as e:
-            logger.error(f"Error processing query: {e}")
-            error_response = {
-                "answer": "I encountered an error while processing your question. "
-                          "Please try again!",
-                "sources": [],
-                "source_type": "error"
-            }
-            return error_response
+            logger.error(
+                f"Unexpected error processing query: {e}",
+                exc_info=True
+            )
+            raise RAGChatbotError(f"Unexpected error in query processing: {e}")
 
     def start_interactive(self):
         """
@@ -312,6 +337,10 @@ class RAGChatbotApp:
                 print("\n👋 Goodbye!")
 
                 self.shutdown()
+            except RAGChatbotError as e:
+                # Critical error - propagate to terminal_usage to exit
+                logger.error(f"Critical RAG error: {e}")
+                raise
             except Exception as e:
                 logger.error(f"Error in interactive mode: {e}")
 

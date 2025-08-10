@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="implemented tests for the document loader and fixed any issues discovered through the tests">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix: adding better exception handling">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/integeration/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/unit/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/exceptions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,55 +52,55 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python tests.pytest for test_document_loader.TestDocumentLoader.executor": "Run",
-    "Python tests.pytest for test_document_loader.TestDocumentLoader.test_should_raise_an_error_whilst_reading_data.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestChunkDocuments.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_apply_chunk_overlap_correctly.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_create_chunks_with_specified_size_limits.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_filter_out_empty_chunks.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_preserve_metadata_in_all_chunks.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_use_recursive_character_text_splitter.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestCleanDocuments.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_get_pdf_loader_for_pdf_files.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestDocumentProcessor.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestGetLoader.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_continue_processing_after_individual_file_errors.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_load_documents_from_directory_successfully.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_load_multiple_file_types_from_directory.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files.executor": "Run",
-    "Python tests.pytest for test_document_processor.TestProcessDocuments.executor": "Run",
-    "Python tests.pytest for test_logger.TestLogger.executor": "Run",
-    "Python tests.pytest for test_logger.TestLogger.test_log_to_file_if_enabled.executor": "Run",
-    "Python tests.pytest for test_logger.TestLogger.test_multiple_handlers.executor": "Run",
-    "Python tests.pytest in test_document_processor.py.executor": "Run",
-    "Python.document_loader.executor": "Run",
-    "Python.document_processor.executor": "Run",
-    "Python.evaluation.executor": "Run",
-    "Python.logger.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.process_documents.executor": "Run",
-    "Python.read.executor": "Run",
-    "Python.settings.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot/tests/test_data/raw_docs",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python tests.pytest for test_document_loader.TestDocumentLoader.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_loader.TestDocumentLoader.test_should_raise_an_error_whilst_reading_data.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestChunkDocuments.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_apply_chunk_overlap_correctly.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_create_chunks_with_specified_size_limits.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_filter_out_empty_chunks.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_preserve_metadata_in_all_chunks.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestChunkDocuments.test_should_use_recursive_character_text_splitter.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestCleanDocuments.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_get_pdf_loader_for_pdf_files.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestDocumentProcessor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestDocumentProcessor.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestGetLoader.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestGetLoader.test_should_handle_case_insensitive_extensions.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestGetLoader.test_should_raise_a_file_not_supported_error_for_invalid_extensions.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_continue_processing_after_individual_file_errors.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_get_correct_document_loader_for_file_extension.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_load_documents_from_directory_successfully.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_load_multiple_file_types_from_directory.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_directory_not_found_error.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_raise_invalid_directory_error.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestLoadDocuments.test_should_skip_unsupported_files.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_document_processor.TestProcessDocuments.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_logger.TestLogger.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_logger.TestLogger.test_log_to_file_if_enabled.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest for test_logger.TestLogger.test_multiple_handlers.executor&quot;: &quot;Run&quot;,
+    &quot;Python tests.pytest in test_document_processor.py.executor&quot;: &quot;Run&quot;,
+    &quot;Python.document_loader.executor&quot;: &quot;Run&quot;,
+    &quot;Python.document_processor.executor&quot;: &quot;Run&quot;,
+    &quot;Python.evaluation.executor&quot;: &quot;Run&quot;,
+    &quot;Python.logger.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.process_documents.executor&quot;: &quot;Run&quot;,
+    &quot;Python.read.executor&quot;: &quot;Run&quot;,
+    &quot;Python.settings.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot/tests/test_data/raw_docs&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\tests\test_data\raw_docs" />
@@ -160,6 +156,21 @@
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
+      <option name="SCRIPT_PATH" value="" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="false" />
+      <option name="INTERPRETER_PATH" value="$PROJECT_DIR$/../../../../../../Program Files/Git/bin/bash.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
       <method v="2" />
     </configuration>
     <configuration name="pytest for test_document_loader.TestDocumentLoader" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
@@ -238,30 +249,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Working on the document loader">
-      <option name="closed" value="true" />
-      <created>1748719949732</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1748719949732</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Set up a utils folder and a constants for file for global constants.">
-      <option name="closed" value="true" />
-      <created>1748719982034</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1748719982034</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Implemented the document_loader.py and it works.">
-      <option name="closed" value="true" />
-      <created>1748753805083</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1748753805083</updated>
     </task>
     <task id="LOCAL-00006" summary="optimized some code">
       <option name="closed" value="true" />
@@ -631,7 +618,31 @@
       <option name="project" value="LOCAL" />
       <updated>1754809917692</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="fix: the chatbot pipeline now works again">
+      <option name="closed" value="true" />
+      <created>1754812463620</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1754812463620</updated>
+    </task>
+    <task id="LOCAL-00053" summary="cleaned up some code">
+      <option name="closed" value="true" />
+      <created>1754812517817</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1754812517817</updated>
+    </task>
+    <task id="LOCAL-00054" summary="fix: adding better exception handling">
+      <option name="closed" value="true" />
+      <created>1754852940675</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1754852940676</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -659,9 +670,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="upgraded these components to follow a more OOP design and approach" />
-    <MESSAGE value="Added custom exceptions" />
-    <MESSAGE value="can now specify log level and allow logs to be logged to files" />
     <MESSAGE value="reworking files so the program is more OOP and sorted issues and bugs" />
     <MESSAGE value="fixed logging issue and reassigned log levels in component" />
     <MESSAGE value="updated configurations" />
@@ -684,6 +692,9 @@
     <MESSAGE value="implemented more tests and fixed test related issues and bugs" />
     <MESSAGE value="implemented most of the tests for the document_processor.py" />
     <MESSAGE value="implemented tests for the document loader and fixed any issues discovered through the tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="implemented tests for the document loader and fixed any issues discovered through the tests" />
+    <MESSAGE value="fix: the chatbot pipeline now works again" />
+    <MESSAGE value="cleaned up some code" />
+    <MESSAGE value="fix: adding better exception handling" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: adding better exception handling" />
   </component>
 </project>
