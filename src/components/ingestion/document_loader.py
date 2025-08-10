@@ -7,6 +7,9 @@ from pathlib import Path
 
 import docx
 import fitz
+import zipfile
+
+from docx.opc.exceptions import PackageNotFoundError, OpcError
 
 from src.components.ingestion.document import FileDocument, \
     FileDocumentMetadata
@@ -109,6 +112,8 @@ class MarkdownDocumentLoader(DocumentLoader):
         except UnicodeDecodeError:
             with open(file_path, 'r', encoding='latin-1') as file:
                 content = file.read()
+        except (FileNotFoundError, PermissionError, IsADirectoryError, OSError) as e:
+            raise e
 
         return content
 
@@ -119,12 +124,31 @@ class PDFDocumentLoader(DocumentLoader):
     """
 
     def read_data(self, file_path: str) -> str:
-        content = ""
-        with fitz.open(file_path) as doc:
-            for page in doc:
-                content += page.get_text("text")
+        try:
+            content = ""
+            with fitz.open(file_path) as doc:
+                for page in doc:
+                    content += page.get_text("text")
 
-        return content
+            return content
+        except fitz.FileNotFoundError as e:
+            # PDF file doesn't exist
+            raise e
+        except fitz.EmptyFileError as e:
+            # PDF file is empty
+            raise e
+        except fitz.FileDataError as e:
+            # PDF file is corrupted or invalid format
+            raise e
+        except PermissionError as e:
+            # No permission to read the file
+            raise e
+        except MemoryError as e:
+            # PDF file is too large to process
+            raise e
+        except Exception as e:
+            # Any other unexpected errors
+            raise e
 
 
 class DocxDocumentLoader(DocumentLoader):
@@ -133,9 +157,31 @@ class DocxDocumentLoader(DocumentLoader):
     """
 
     def read_data(self, file_path: str) -> str:
-        doc = docx.Document(str(file_path))
-        content = "\n".join(
-            [para.text for para in doc.paragraphs]
-        )
+        try:
+            doc = docx.Document(str(file_path))
+            content = "\n".join(
+                [para.text for para in doc.paragraphs]
+            )
+            return content
+        except FileNotFoundError as e:
+            # DOCX file doesn't exist
+            raise e
+        except PackageNotFoundError as e:
+            # Invalid DOCX file or wrong format
+            raise e
+        except OpcError as e:
+            # DOCX file is corrupted
+            raise e
+        except PermissionError as e:
+            # No permission to read the file
+            raise e
+        except zipfile.BadZipFile as e:
+            # DOCX is essentially a ZIP file, this catches ZIP-related errors
+            raise e
+        except MemoryError as e:
+            # DOCX file is too large to process
+            raise e
+        except Exception as e:
+            # Any other unexpected errors
+            raise e
 
-        return content
