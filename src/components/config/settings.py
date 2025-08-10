@@ -17,7 +17,7 @@ class AppSettings(BaseSettings):
     APP_NAME: str = Field(default="RAG Chatbot")
 
     # Application
-    RAW_DOCS_DIRECTORY: str = Field(default="../../../data/raw_docs")
+    RAW_DOCS_DIRECTORY: str = Field(default="../data/raw_docs")
     ALLOWED_FILE_EXTENSIONS: List[str] = Field(default=[".pdf", ".docx", ".txt", ".md"])
     MD_FILE_EXT: str = Field(default=".md")
     TXT_FILE_EXT: str = Field(default=".txt")
@@ -26,7 +26,7 @@ class AppSettings(BaseSettings):
 
     # Logging
     LOG_LEVEL: str = Field(default="DEBUG")
-    LOG_DIRECTORY: str = Field(default="../../../logs")
+    LOG_DIRECTORY: str = Field(default="../logs")
     LOG_WEB_SEARCHES: bool = Field(default=False)
     IS_FILE_LOGGING_ENABLED: bool = Field(default=False)
 
@@ -36,7 +36,7 @@ class AppSettings(BaseSettings):
     LLM_TEMPERATURE: float = Field(default=0.7)  # Changed from int to float
     RETRIEVAL_TOP_K: int = Field(default=3)
     RESPONSE_PROMPT_FILEPATH: str = Field(  # Removed SecretStr - not sensitive
-        default="../../../data/prompts/default_response_prompt.yaml")
+        default="../data/prompts/default_response_prompt.yaml")
 
     # Vector DB & Processing
     VECTOR_DB_FILE_PATH: str = Field(default="../../../data/db/vector_index.faiss")
@@ -51,7 +51,7 @@ class AppSettings(BaseSettings):
     SEARCH_ENGINE_ID: Optional[SecretStr] = Field(default=None, env="SEARCH_ENGINE_ID")
 
     # Evaluation
-    QA_SQLITE_DB_PATH: str = Field(default="../../../data/db/qa_log.db")
+    QA_SQLITE_DB_PATH: str = Field(default="../data/db/qa_log.db")
 
     class Config:
         """Configurations for AppSettings"""

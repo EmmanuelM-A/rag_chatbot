@@ -31,7 +31,8 @@ class Embedder:
         associated metadata.
 
         Args:
-            chunked_documents (List[FileDocument]): The processed and chunked documents to be embedded.
+            chunked_documents (List[FileDocument]): The processed and
+            chunked documents to be embedded.
 
         Returns:
             tuple:

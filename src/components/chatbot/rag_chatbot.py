@@ -80,21 +80,41 @@ class RAGChatbotApp:
 
                 processed_documents = self.document_processor.process_documents()
 
+                logger.debug(f"Processed {len(processed_documents)} documents")
+
+                if not processed_documents:
+                    logger.warning("No documents were processed!")
+                    return None
+
                 vectors, metadata = self.embedder.create_embedded_chunks(
                     processed_documents
                 )
 
+                logger.debug(f"Created {len(vectors)} embeddings")
+
                 self.vector_store.save_faiss_index(vectors, metadata)
+
+                logger.info("Saved FAISS index and metadata!")
 
             logger.info("Loading FAISS index and metadata...")
 
             index, metadata = self.vector_store.load_faiss_index()
 
+            logger.debug(f"Loaded index with {index.ntotal} vectors")
+
             results = self.query_handler.search(query, index, metadata)
+
+            logger.debug(
+                f"Search returned {len(results) if results else 0} results"
+            )
 
             return results
 
         except Exception as e:
+            logger.error(
+                f"Error in _search_documents: {str(e)}",
+            exc_info=True)
+
             return None
 
     def _search_web_and_add_to_store(self, query: str) -> Optional[List[dict]]:
