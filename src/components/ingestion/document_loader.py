@@ -91,6 +91,8 @@ class TxTDocumentLoader(DocumentLoader):
         except UnicodeDecodeError:
             with open(file_path, 'r', encoding='latin-1') as file:
                 content = file.read()
+        except (FileNotFoundError, PermissionError, IsADirectoryError, OSError) as e:
+            raise e
 
         return content
 
