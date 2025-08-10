@@ -96,32 +96,6 @@ class TxTDocumentLoader(DocumentLoader):
 
         return content
 
-    """
-    def load_data(self, file_path: str) -> FileDocument:
-        try:
-            try:
-                with open(file_path, "r", encoding="utf-8") as file:
-                    content = file.read()
-            except UnicodeDecodeError:
-                with open(file_path, 'r', encoding='latin-1') as file:
-                    content = file.read()
-
-            filename = os.path.splitext(file_path)[0].lower()
-
-            file_metadata = FileDocumentMetadata(
-                filename=filename,
-                file_extension=settings.TXT_FILE_EXT,
-                author=None,
-                source=file_path
-            )
-
-            return FileDocument(
-                content=content,
-                metadata=file_metadata
-            )
-        except ValueError as e:
-            raise e"""
-
 
 class MarkdownDocumentLoader(DocumentLoader):
     """
@@ -138,31 +112,6 @@ class MarkdownDocumentLoader(DocumentLoader):
 
         return content
 
-    """def load_data(self, file_path: str) -> FileDocument:
-        try:
-            try:
-                with open(file_path, "r", encoding="utf-8") as file:
-                    content = file.read()
-            except UnicodeDecodeError:
-                with open(file_path, 'r', encoding='latin-1') as file:
-                    content = file.read()
-
-            filename = os.path.splitext(file_path)[0].lower()
-
-            file_metadata = FileDocumentMetadata(
-                filename=filename,
-                file_extension=settings.MD_FILE_EXT,
-                author=None,
-                source=file_path
-            )
-
-            return FileDocument(
-                content=content,
-                metadata=file_metadata
-            )
-        except ValueError as e:
-            raise e"""
-
 
 class PDFDocumentLoader(DocumentLoader):
     """
@@ -177,29 +126,6 @@ class PDFDocumentLoader(DocumentLoader):
 
         return content
 
-    """def load_data(self, file_path: str) -> FileDocument:
-        try:
-            content = ""
-            with fitz.open(file_path) as doc:
-                for page in doc:
-                    content += page.get_text("text")
-
-            filename = os.path.splitext(file_path)[0].lower()
-
-            file_metadata = FileDocumentMetadata(
-                filename=filename,
-                file_extension=settings.PDF_FILE_EXT,
-                author=None,
-                source=file_path
-            )
-
-            return FileDocument(
-                content=content,
-                metadata=file_metadata
-            )
-        except ValueError as e:
-            raise e"""
-
 
 class DocxDocumentLoader(DocumentLoader):
     """
@@ -213,26 +139,3 @@ class DocxDocumentLoader(DocumentLoader):
         )
 
         return content
-
-    """def load_data(self, file_path: str) -> FileDocument:
-        try:
-            doc = docx.Document(str(file_path))
-            content = "\n".join(
-                [para.text for para in doc.paragraphs]
-            )
-
-            filename = os.path.splitext(file_path)[0].lower()
-
-            file_metadata = FileDocumentMetadata(
-                filename=filename,
-                file_extension=settings.DOCX_FILE_EXT,
-                author=None,
-                source=file_path
-            )
-
-            return FileDocument(
-                content=content,
-                metadata=file_metadata
-            )
-        except ValueError as e:
-            raise e"""
