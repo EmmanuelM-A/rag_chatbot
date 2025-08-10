@@ -54,16 +54,16 @@ class VectorStore:
             index = faiss.IndexFlatL2(dimension)
             index.add(np.array(vectors).astype("float32"))
 
-            # Save index to disk
-            os.makedirs(os.path.dirname(self.index_path), exist_ok=True)
-            faiss.write_index(index, self.index_path)
+        # Save index to disk
+        os.makedirs(os.path.dirname(self.index_path), exist_ok=True)
+        faiss.write_index(index, self.index_path)
 
-            # Save metadata using pickle
-            os.makedirs(os.path.dirname(self.metadata_path), exist_ok=True)
-            with open(self.metadata_path, "wb") as f:
-                pickle.dump(metadata, f)
+        # Save metadata using pickle
+        os.makedirs(os.path.dirname(self.metadata_path), exist_ok=True)
+        with open(self.metadata_path, "wb") as f:
+            pickle.dump(metadata, f)
 
-            logger.debug("The vectors and metadata have been saved to disk.")
+        logger.debug("The vectors and metadata have been saved to disk.")
 
     def load_faiss_index(self):
         """

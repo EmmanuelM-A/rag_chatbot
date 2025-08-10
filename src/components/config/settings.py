@@ -45,7 +45,7 @@ class AppSettings(BaseSettings):
     CHUNK_OVERLAP: int = Field(default=20)
 
     # Web Search (Optional - only required if web search is enabled)
-    IS_WEB_SEARCH_ENABLED: bool = Field(default=False)
+    IS_WEB_SEARCH_ENABLED: bool = Field(default=True)
     MAX_WEB_SEARCH_RESULTS: int = Field(default=5)
     SEARCH_API_KEY: Optional[SecretStr] = Field(default=None, env="SEARCH_API_KEY")
     SEARCH_ENGINE_ID: Optional[SecretStr] = Field(default=None, env="SEARCH_ENGINE_ID")

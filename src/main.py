@@ -8,8 +8,9 @@ from src.components.chatbot.rag_chatbot import RAGChatbotApp
 from src.components.chatbot.terminal_usage import TerminalUsage
 from src.components.config.settings import settings
 from src.components.config.logger import get_logger
+from src.utils.helper import does_file_exist
 
-load_dotenv()
+load_dotenv("../.env")
 
 logger = get_logger(__name__)
 

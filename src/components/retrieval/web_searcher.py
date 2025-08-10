@@ -12,7 +12,8 @@ from bs4 import BeautifulSoup
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from src.components.config.settings import settings
-from src.components.ingestion.document import FileDocument
+from src.components.ingestion.document import FileDocument, \
+    FileDocumentMetadata
 from src.components.config.logger import get_logger
 
 logger = get_logger(__name__)
@@ -180,13 +181,10 @@ class WebSearcher:
             # Clean up the text
             content_text = " ".join(content_text.split())
 
-            if len(content_text) > 100:  # Minimum viable content length
-                logger.debug(
-                    f"Successfully extracted {len(content_text)} characters from {url}")
-                return content_text
-            else:
-                logger.warning(f"Insufficient content extracted from {url}")
-                return None
+            logger.debug(
+                f"Successfully extracted {len(content_text)} characters from {url}")
+            return content_text
+
 
         except Exception as e:
             logger.error(f"Error fetching content from {url}: {e}")
@@ -195,12 +193,6 @@ class WebSearcher:
     def search_and_retrieve_content(self, query: str) -> List[FileDocument]:
         """
         Perform web search and retrieve full content from result URLs.
-
-        Args:
-            query: Search query
-
-        Returns:
-            List of FileDocument objects with web content
         """
         logger.info(f"Searching web and retrieving content for: {query}")
 
@@ -233,14 +225,13 @@ class WebSearcher:
                     # Combine title, snippet, and content
                     full_content = f"Title: {title}\n\nSummary: {snippet}\n\nContent: {content}"
 
-                    # Create document with metadata
-                    metadata = {
-                        'source': url,
-                        'title': title,
-                        'type': 'web_search',
-                        'query': query,
-                        'search_source': result.get('source', 'unknown')
-                    }
+                    # CHANGED: Create FileDocumentMetadata object instead of dict
+                    metadata = FileDocumentMetadata(
+                        filename=title or "web_content",
+                        file_extension=".html",
+                        author=None,
+                        source=url
+                    )
 
                     document = FileDocument(full_content, metadata)
                     documents.append(document)
@@ -249,13 +240,14 @@ class WebSearcher:
                 else:
                     # If we can't get full content, use just the snippet
                     snippet_content = f"Title: {title}\n\nSummary: {snippet}"
-                    metadata = {
-                        'source': url,
-                        'title': title,
-                        'type': 'web_search_snippet',
-                        'query': query,
-                        'search_source': result.get('source', 'unknown')
-                    }
+
+                    # CHANGED: Create FileDocumentMetadata object instead of dict
+                    metadata = FileDocumentMetadata(
+                        filename=title or "web_snippet",
+                        file_extension=".html",
+                        author=None,
+                        source=url
+                    )
 
                     document = FileDocument(snippet_content, metadata)
                     documents.append(document)
@@ -273,12 +265,6 @@ class WebSearcher:
         FileDocument]:
         """
         Chunk web documents for embedding.
-
-        Args:
-            documents: List of FileDocument objects from web search
-
-        Returns:
-            List of chunked FileDocument objects
         """
         logger.debug("Chunking web documents")
 
@@ -290,9 +276,13 @@ class WebSearcher:
 
                 for chunk_text in doc_chunks:
                     if chunk_text.strip():  # Skip empty chunks
-                        # Create new metadata for each chunk
-                        chunk_metadata = doc.metadata.copy()
-                        chunk_metadata['chunk_type'] = 'web_content'
+                        # CHANGED: Create new FileDocumentMetadata object for each chunk
+                        chunk_metadata = FileDocumentMetadata(
+                            filename=doc.metadata.filename,
+                            file_extension=doc.metadata.file_extension,
+                            author=doc.metadata.author,
+                            source=doc.metadata.source
+                        )
 
                         chunk_doc = FileDocument(chunk_text, chunk_metadata)
                         chunks.append(chunk_doc)
