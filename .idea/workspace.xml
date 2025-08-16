@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix: settings now loads env variables">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix-attempt: working on the web search feature">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/prompts/default_response_prompt.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/data/prompts/default_response_prompt.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -250,14 +247,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Setup a logger">
-      <option name="closed" value="true" />
-      <created>1748821606451</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1748821606451</updated>
     </task>
     <task id="LOCAL-00010" summary="Added colour formatting to logs to better classify outputs.">
       <option name="closed" value="true" />
@@ -643,7 +632,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754857543870</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="fix-attempt: working on the web search feature">
+      <option name="closed" value="true" />
+      <created>1754859395123</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1754859395123</updated>
+    </task>
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -671,7 +668,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated the relevance_checker.py and the vector_store.py to accommodate web searches" />
     <MESSAGE value="working on implementing web search capabilities to the rest of the application" />
     <MESSAGE value="tweaking configs and example env file" />
     <MESSAGE value="restructuring application" />
@@ -696,6 +692,7 @@
     <MESSAGE value="improvement: added more exception handling to the core chatbot functionality" />
     <MESSAGE value="feat: integrated the web searcher into the rag_chatbot" />
     <MESSAGE value="fix: settings now loads env variables" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: settings now loads env variables" />
+    <MESSAGE value="fix-attempt: working on the web search feature" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix-attempt: working on the web search feature" />
   </component>
 </project>

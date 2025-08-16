@@ -50,7 +50,7 @@ class WebSearcher:
             logger.error("Search API credentials not configured")
             return self._fallback_search(query, num_results)
 
-        logger.info(f"Performing web search for: {query}")
+        logger.debug(f"Performing web search for: {query}")
 
         try:
             # Google Custom Search API endpoint
