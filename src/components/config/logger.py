@@ -49,38 +49,38 @@ def __get_log_level(level: str) -> int:
     return level_mappings.get(level.upper(), 20)
 
 
-def get_logger(name: str, log_dir: str = None) -> logging.Logger:
+def __get_logger(name: str, log_dir: str = None) -> logging.Logger:
     """
-    Initializes and returns a logger that logs either to console OR files (not both).
+    Initializes and returns a default_logger that logs either to console OR files (not both).
 
     Args:
-        name (str): The logger name, usually __name__.
+        name (str): The default_logger name, usually __name__.
         log_dir (str): Directory where log files should be stored (uses settings default if None).
 
     Returns:
-        logging.Logger: Configured logger instance.
+        logging.Logger: Configured default_logger instance.
     """
 
     if log_dir is None:
         log_dir = settings.LOG_DIRECTORY
 
-    logger = logging.getLogger(name)
+    default_logger = logging.getLogger(name)
 
-    if logger.hasHandlers():
-        return logger  # Avoid adding duplicate handlers
+    if default_logger.hasHandlers():
+        return default_logger  # Avoid adding duplicate handlers
 
     # Set log level from settings
     log_level = __get_log_level(settings.LOG_LEVEL)
-    logger.setLevel(log_level)
+    default_logger.setLevel(log_level)
 
     # Create formatters
     file_formatter = logging.Formatter(
-        '%(name)s -> %(asctime)s [%(levelname)s]: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        fmt=settings.logging.LOG_FORMAT,
+        datefmt=settings.logging.LOG_DATE_FORMAT
     )
     console_formatter = ColorFormatter(
-        '%(name)s -> %(asctime)s [%(levelname)s]: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        fmt=settings.logging.LOG_FORMAT,
+        datefmt=settings.logging.LOG_DATE_FORMAT
     )
 
     if settings.IS_FILE_LOGGING_ENABLED:
@@ -94,24 +94,26 @@ def get_logger(name: str, log_dir: str = None) -> logging.Logger:
             file_handler = logging.FileHandler(app_log_path, encoding='utf-8')
             file_handler.setLevel(log_level)
             file_handler.setFormatter(file_formatter)
-            logger.addHandler(file_handler)
+            default_logger.addHandler(file_handler)
 
             # Error log file (errors only)
             error_log_path = os.path.join(log_dir, "error.log")
             error_handler = logging.FileHandler(error_log_path, encoding='utf-8')
             error_handler.setLevel(logging.ERROR)
             error_handler.setFormatter(file_formatter)
-            logger.addHandler(error_handler)
+            default_logger.addHandler(error_handler)
         except ValueError:
             # Fallback to console if file logging fails
             console_handler = logging.StreamHandler(sys.stdout)
             console_handler.setFormatter(console_formatter)
-            logger.addHandler(console_handler)
+            default_logger.addHandler(console_handler)
     else:
         # CONSOLE LOGGING MODE
         console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(log_level)
         console_handler.setFormatter(console_formatter)
-        logger.addHandler(console_handler)
+        default_logger.addHandler(console_handler)
 
-    return logger
+    return default_logger
+
+logger = __get_logger(__name__)
