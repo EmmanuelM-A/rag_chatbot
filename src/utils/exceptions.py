@@ -53,36 +53,3 @@ class FileDoesNotExist(RAGChatbotError, OSError):
             message: str = "The file does not exist or cannot be found."
     ) -> None:
         super().__init__(message)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
