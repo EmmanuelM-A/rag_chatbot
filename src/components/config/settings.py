@@ -46,9 +46,6 @@ class AppSettings(BaseSettings):
     METADATA_DB_FILE_PATH: str = Field(default="../../../data/db/metadata.pkl")
     CHUNK_SIZE: int = Field(default=1000)
     CHUNK_OVERLAP: int = Field(default=20)
-    EMBEDDING_CACHE_DIR: str = Field(default="../../../data/cache/embeddings")
-    MAX_CACHE_SIZE_MB: int = Field(default=500)
-    EMBEDDING_CACHE_ENABLED: bool = Field(default=True)
 
     # API Configuration
     OPENAI_API_RATE_LIMIT: int = Field(default=60)

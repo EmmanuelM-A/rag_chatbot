@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 from src.components.config.logger import get_logger
 from src.utils.exceptions import DocumentProcessingError, EmbeddingError, \
     VectorStoreError, QueryProcessingError, RAGChatbotError
+from src.utils.helper import does_file_exist
 
 load_dotenv()
 
@@ -72,9 +73,7 @@ class RAGChatbotApp:
             List of relevant document chunks or None if no results
         """
 
-        if (not os.path.exists(self.index_path) or
-            not os.path.exists(self.metadata_path)
-        ):
+        if not does_file_exist(self.index_path) or not does_file_exist(self.metadata_path):
             logger.info(
                 "FAISS index or metadata not found! Creating new ones..."
             )
@@ -92,7 +91,7 @@ class RAGChatbotApp:
                     f"Document processing failed: {e}",
                     exc_info=True
                 )
-                raise DocumentProcessingError(f"Failed to process documents: {e}")
+                raise DocumentProcessingError(f"Failed to process documents: {e}") from e
 
             try:
                 vectors, metadata = self.embedder.create_embedded_chunks(

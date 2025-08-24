@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="feat: add the rest of the setting configs">
-      <change afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="perf: improved the helper methods">
+      <change afterPath="$PROJECT_DIR$/data/cache/embeddings/cache_metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/exceptions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,22 +251,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Added logging to the rest of rag_chatbot components.">
-      <option name="closed" value="true" />
-      <created>1748826384344</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1748826384344</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Centralized configurations and put all of them into the config file.">
-      <option name="closed" value="true" />
-      <created>1749166982957</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1749166982957</updated>
     </task>
     <task id="LOCAL-00014" summary="Created a terminal_usage method to run the script in terminal and have tested that full rag pipeline works.">
       <option name="closed" value="true" />
@@ -644,7 +628,23 @@
       <option name="project" value="LOCAL" />
       <updated>1755356788853</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="feat(cache): implemented a cache for the document embeddings">
+      <option name="closed" value="true" />
+      <created>1756038305302</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1756038305303</updated>
+    </task>
+    <task id="LOCAL-00062" summary="perf: improved the helper methods">
+      <option name="closed" value="true" />
+      <created>1756038842158</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1756038842158</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -672,8 +672,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="restructuring application" />
-    <MESSAGE value="restructured the application" />
     <MESSAGE value="implemented all document loader for the allowed file extensions" />
     <MESSAGE value="upgraded the document_processor.py to follow an OOP design and integrated the document_loader.py classes into it" />
     <MESSAGE value="updated documentation" />
@@ -697,6 +695,8 @@
     <MESSAGE value="fix-attempt: working on the web search feature" />
     <MESSAGE value="fix: reconfigured web search settings and it now works" />
     <MESSAGE value="feat: add the rest of the setting configs" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add the rest of the setting configs" />
+    <MESSAGE value="feat(cache): implemented a cache for the document embeddings" />
+    <MESSAGE value="perf: improved the helper methods" />
+    <option name="LAST_COMMIT_MESSAGE" value="perf: improved the helper methods" />
   </component>
 </project>
