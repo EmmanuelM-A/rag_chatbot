@@ -16,9 +16,7 @@ from src.components.ingestion.document_loader import PDFDocumentLoader, \
     DocumentLoader
 from src.utils.exceptions import FileTypeNotSupported, DirectoryNotFoundError, \
     InvalidDirectoryError, RAGChatbotError
-from src.components.config.logger import get_logger
-
-logger = get_logger(__name__)
+from src.components.config.logger import logger
 
 
 class DocumentProcessor(ABC):

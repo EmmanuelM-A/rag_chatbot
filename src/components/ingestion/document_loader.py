@@ -184,4 +184,3 @@ class DocxDocumentLoader(DocumentLoader):
         except Exception as e:
             # Any other unexpected errors
             raise e
-

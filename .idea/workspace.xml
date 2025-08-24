@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="perf: improved the helper methods">
-      <change afterPath="$PROJECT_DIR$/data/cache/embeddings/cache_metadata.json" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/helper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,30 +250,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Created a terminal_usage method to run the script in terminal and have tested that full rag pipeline works.">
-      <option name="closed" value="true" />
-      <created>1749170927404</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1749170927404</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Added Q&amp;A Logging to log query, answer pairs for further testing and future fine-tuning.">
-      <option name="closed" value="true" />
-      <created>1749177797210</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1749177797210</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Upgraded the logger to log to files.">
-      <option name="closed" value="true" />
-      <created>1749285847141</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1749285847141</updated>
     </task>
     <task id="LOCAL-00017" summary="Added a dynamic way to define and create prompt templates for the response generation using yaml files, that specify how the LLM should respond.">
       <option name="closed" value="true" />
@@ -644,7 +619,31 @@
       <option name="project" value="LOCAL" />
       <updated>1756038842158</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="fix-attempt: trying to fix caching issues">
+      <option name="closed" value="true" />
+      <created>1756048157753</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1756048157755</updated>
+    </task>
+    <task id="LOCAL-00064" summary="perf(settings): grouped settings and configs into separate setting classes">
+      <option name="closed" value="true" />
+      <created>1756051975922</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1756051975922</updated>
+    </task>
+    <task id="LOCAL-00065" summary="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger">
+      <option name="closed" value="true" />
+      <created>1756052056274</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1756052056274</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -672,9 +671,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="implemented all document loader for the allowed file extensions" />
-    <MESSAGE value="upgraded the document_processor.py to follow an OOP design and integrated the document_loader.py classes into it" />
-    <MESSAGE value="updated documentation" />
     <MESSAGE value="deleted this file as its not necessary" />
     <MESSAGE value="Refactored code so each class/file adheres to SRP" />
     <MESSAGE value="Refactored code so it uses the new config settings file" />
@@ -697,6 +693,9 @@
     <MESSAGE value="feat: add the rest of the setting configs" />
     <MESSAGE value="feat(cache): implemented a cache for the document embeddings" />
     <MESSAGE value="perf: improved the helper methods" />
-    <option name="LAST_COMMIT_MESSAGE" value="perf: improved the helper methods" />
+    <MESSAGE value="fix-attempt: trying to fix caching issues" />
+    <MESSAGE value="perf(settings): grouped settings and configs into separate setting classes" />
+    <MESSAGE value="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger" />
+    <option name="LAST_COMMIT_MESSAGE" value="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger" />
   </component>
 </project>

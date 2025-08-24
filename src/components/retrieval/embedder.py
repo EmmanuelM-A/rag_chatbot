@@ -5,10 +5,8 @@ vectors.
 from typing import Dict, Any
 
 from langchain_openai import OpenAIEmbeddings
-from src.components.config.logger import get_logger
+from src.components.config.logger import logger
 from src.components.retrieval.embedding_cache import EmbeddingCache
-
-logger = get_logger(__name__)
 
 
 class Embedder:
@@ -44,7 +42,7 @@ class Embedder:
         """
 
         if not chunked_documents:
-            logger.error("No documents were chunked. Aborting embedding.")
+            logger.error("No documents were chunked. Aborting embedding...")
             raise ValueError("No documents to embed.")
 
         logger.debug(f"{len(chunked_documents)} chunks ready for embedding.")
