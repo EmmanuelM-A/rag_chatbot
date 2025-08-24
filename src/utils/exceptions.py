@@ -2,10 +2,9 @@
 Custom exceptions for the RAG chatbot application. Provides comprehensive
 error handling for all components.
 """
+
 import json
-from typing import Optional, Any, Dict, List
-import traceback
-from pathlib import Path
+from typing import Any, Dict, List
 
 
 class RAGChatbotError(Exception):
@@ -174,15 +173,18 @@ class InvalidDirectoryError(FileSystemError):
 
 
 class FileDoesNotExist(FileSystemError):
-    """Raised when a file cannot be found or does not exist."""
-    def __init__(self, path: str, context_info: str = None):
-        reason = "file does not exist"
-        if context_info:
-            reason += f" ({context_info})"
+    """
+    Raised when a file cannot be found or does not exist.
+    """
 
+    def __init__(
+        self,
+        path: str,
+        reason: str = "The file does not exist or cannot be found."
+    ) -> None:
         super().__init__(
             path=path,
-            operation="access file",
+            operation="access/read file",
             reason=reason
         )
 
@@ -248,8 +250,16 @@ class DocumentProcessingError(RAGChatbotError):
 
 
 class DocumentLoadError(DocumentProcessingError):
-    """Raised when a document cannot be loaded."""
-    def __init__(self, document_path: str, reason: str, original_error: Exception = None):
+    """
+    Raised when a document cannot be loaded.
+    """
+
+    def __init__(
+        self,
+        document_path: str,
+        reason: str = "An error occurred during the document loading",
+        original_error: Exception = None
+    ) -> None:
         super().__init__(
             document_path=document_path,
             stage="loading",

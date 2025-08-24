@@ -10,7 +10,7 @@ from src.components.ingestion.document import FileDocument, \
 from src.components.ingestion.document_loader import PDFDocumentLoader, \
     MarkdownDocumentLoader, TxTDocumentLoader, DocxDocumentLoader
 from src.components.ingestion.document_processor import \
-    DefaultDocumentProcessor
+    DocumentProcessor
 from src.utils.exceptions import FileTypeNotSupported, DirectoryNotFoundError, \
     InvalidDirectoryError
 
@@ -21,14 +21,14 @@ class TestDocumentProcessor(unittest.TestCase):
     """Test suite for the document processor"""
 
     def setUp(self):
-        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
+        self.processor = DocumentProcessor(TEST_DIRECTORY)
 
 
 class TestGetLoader(unittest.TestCase):
     """Test suite to test the get_loader functionality"""
 
     def setUp(self):
-        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
+        self.processor = DocumentProcessor(TEST_DIRECTORY)
 
     def test_should_raise_file_not_supported_error_for_invalid_extensions(self):
         """Should fail if the file type is not supported"""
@@ -69,7 +69,7 @@ class TestLoadDocuments(unittest.TestCase):
     """Test suite to test the load_documents functionality"""
 
     def setUp(self):
-        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
+        self.processor = DocumentProcessor(TEST_DIRECTORY)
 
     @patch('os.path.exists')
     @patch('os.path.isdir')
@@ -205,7 +205,7 @@ class TestCleanDocuments(unittest.TestCase):
     """Test suite to test the clean_documents functionality"""
 
     def setUp(self):
-        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
+        self.processor = DocumentProcessor(TEST_DIRECTORY)
 
     def test_should_remove_empty_documents_from_list(self):
         self.processor.documents = [
@@ -244,7 +244,7 @@ class TestChunkDocuments(unittest.TestCase):
     """Test suite to test the chunk_documents functionality"""
 
     def setUp(self):
-        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
+        self.processor = DocumentProcessor(TEST_DIRECTORY)
 
     @patch('src.components.ingestion.document_processor.RecursiveCharacterTextSplitter')
     @patch('src.components.config.settings.settings')
@@ -321,11 +321,11 @@ class TestProcessDocuments(unittest.TestCase):
     """Test suite to test the process_documents functionality"""
 
     def setUp(self):
-        self.processor = DefaultDocumentProcessor(TEST_DIRECTORY)
+        self.processor = DocumentProcessor(TEST_DIRECTORY)
 
-    @patch.object(DefaultDocumentProcessor, 'load_documents')
-    @patch.object(DefaultDocumentProcessor, '_clean_documents')
-    @patch.object(DefaultDocumentProcessor, '_chunk_documents')
+    @patch.object(DocumentProcessor, 'load_documents')
+    @patch.object(DocumentProcessor, '_clean_documents')
+    @patch.object(DocumentProcessor, '_chunk_documents')
     def test_should_succeed_in_processing_documents_with_no_errors(
         self, mock_chunk, mock_clean, mock_load
     ):
@@ -340,7 +340,7 @@ class TestProcessDocuments(unittest.TestCase):
         mock_chunk.assert_called_once()
         self.assertEqual(result, [])
 
-    @patch.object(DefaultDocumentProcessor, 'load_documents')
+    @patch.object(DocumentProcessor, 'load_documents')
     def test_should_fail_in_processing_documents_with_errors(self, mock_load):
         mock_load.side_effect = DirectoryNotFoundError("Directory not found")
 

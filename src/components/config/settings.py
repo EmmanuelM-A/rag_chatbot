@@ -158,11 +158,17 @@ class Settings(BaseSettings):
             (not self.web.SEARCH_API_KEY or not self.web.SEARCH_ENGINE_ID)
         ):
             logger.warn("Web search is enabled but API keys are missing.")
-            raise SettingConfigError("Missing API keys detected!")
+            raise SettingConfigError(
+                setting_name="WEB_SEARCH_SETTINGS",
+                issue="Missing API keys detected!"
+            )
 
         if not self.llm.OPEN_API_KEY:
             logger.warn("OPEN_API_KEY is missing in your '.env' file")
-            raise SettingConfigError("Missing API keys detected!")
+            raise SettingConfigError(
+                setting_name="LLM_SETTINGS",
+                issue="Missing API keys detected!"
+            )
 
 
 settings = Settings()

@@ -13,7 +13,7 @@ from docx.opc.exceptions import PackageNotFoundError, OpcError
 
 from src.components.ingestion.document import FileDocument, \
     FileDocumentMetadata
-from src.utils.exceptions import FileDoesNotExist
+from src.utils import exceptions
 
 
 class DocumentLoader(ABC):
@@ -42,36 +42,42 @@ class DocumentLoader(ABC):
         :return: The FileDocument representation of the file.
         """
 
+        path = Path(file_path)
+
+        if not path.exists():
+            raise exceptions.FileDoesNotExist(
+                path=file_path
+            )
+
+        if not path.is_file():
+            raise exceptions.FileDoesNotExist(
+                path=file_path,
+                reason="The file path is not a file."
+            )
+
         try:
-            path = Path(file_path)
-
-            if not path.exists():
-                raise FileDoesNotExist(
-                    f"The file '{file_path}' does not exist or cannot be found."
-                )
-
-            if not path.is_file():
-                raise FileDoesNotExist(f"Path is not a file: {file_path}")
-
             content = self.read_data(file_path)
-
-            filename = os.path.splitext(file_path)[0].lower()
-
-            file_extension = os.path.splitext(file_path)[1].lower()
-
-            file_metadata = FileDocumentMetadata(
-                filename=filename,
-                file_extension=file_extension,
-                author=None,
-                source=file_path
+        except (OSError, ValueError, Exception) as e:
+            raise exceptions.DocumentLoadError(
+                document_path=file_path,
+                original_error=e
             )
 
-            return FileDocument(
-                content=content,
-                metadata=file_metadata
-            )
-        except OSError as e:
-            raise e
+        filename = os.path.splitext(file_path)[0].lower()
+
+        file_extension = os.path.splitext(file_path)[1].lower()
+
+        file_metadata = FileDocumentMetadata(
+            filename=filename,
+            file_extension=file_extension,
+            author=None,
+            source=file_path
+        )
+
+        return FileDocument(
+            content=content,
+            metadata=file_metadata
+        )
 
     def __str__(self):
         """

@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="chore: updating some code">
       <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -250,22 +247,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Added a dynamic way to define and create prompt templates for the response generation using yaml files, that specify how the LLM should respond.">
-      <option name="closed" value="true" />
-      <created>1749287854481</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1749287854481</updated>
-    </task>
-    <task id="LOCAL-00018" summary="Improved the logging in the file.">
-      <option name="closed" value="true" />
-      <created>1749291442807</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1749291442807</updated>
     </task>
     <task id="LOCAL-00019" summary="Made unit tests for the process_documents.py">
       <option name="closed" value="true" />
@@ -643,7 +624,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756052056274</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="chore: updating some code">
+      <option name="closed" value="true" />
+      <created>1756053478277</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1756053478277</updated>
+    </task>
+    <task id="LOCAL-00067" summary="chore: updating some code">
+      <option name="closed" value="true" />
+      <created>1756053511679</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1756053511679</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -671,7 +668,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="deleted this file as its not necessary" />
     <MESSAGE value="Refactored code so each class/file adheres to SRP" />
     <MESSAGE value="Refactored code so it uses the new config settings file" />
     <MESSAGE value="Moved startup and app running code into its own file" />
@@ -696,6 +692,7 @@
     <MESSAGE value="fix-attempt: trying to fix caching issues" />
     <MESSAGE value="perf(settings): grouped settings and configs into separate setting classes" />
     <MESSAGE value="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger" />
-    <option name="LAST_COMMIT_MESSAGE" value="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger" />
+    <MESSAGE value="chore: updating some code" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: updating some code" />
   </component>
 </project>
