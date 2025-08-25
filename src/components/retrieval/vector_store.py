@@ -4,7 +4,7 @@ Responsible for loading and storing vectors.
 
 import pickle
 import os
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Tuple
 
 import faiss
 import numpy as np
@@ -77,12 +77,15 @@ class VectorStore:
 
         logger.debug("The vectors and metadata have been saved to disk.")
 
-    def load_faiss_index(self):
+    def load_faiss_index(self) -> Tuple[Optional[Any], Optional[Dict]]:
         """
         Loads FAISS index and metadata from disk.
 
         Returns:
             Tuple of (index, metadata)
+
+        Raises:
+            FileDoesNotExist: File related errors like
         """
 
         logger.debug("Loading FAISS index and metadata from disk.")
@@ -95,10 +98,18 @@ class VectorStore:
             logger.critical(f"Metadata file not found at {self.metadata_path}")
             raise FileDoesNotExist(path=self.metadata_path)
 
-        index = faiss.read_index(self.index_path)
+        try:
+            index = faiss.read_index(self.index_path)
+        except OSError as e:
+            logger.error(f"Failed to read FAISS index: {e}")
+            return None, None
 
-        with open(self.metadata_path, "rb") as f:
-            metadata = pickle.load(f)
+        try:
+            with open(self.metadata_path, "rb") as f:
+                metadata = pickle.load(f)
+        except (OSError, pickle.UnpicklingError, EOFError) as e:
+            logger.error(f"Failed to load metadata: {e}")
+            return None, None
 
         logger.debug(
             "The FAISS index and metadata have been loaded from disk.")
