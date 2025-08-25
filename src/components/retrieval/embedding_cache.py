@@ -4,17 +4,14 @@ Fixed version with proper error handling for corrupted cache files.
 """
 
 import json
-import hashlib
 import pickle
 from typing import List, Dict, Optional, Any, Tuple
 from pathlib import Path
 import time
 
 from src.components.config.settings import settings
-from src.components.config.logger import get_logger
+from src.components.config.logger import logger
 from src.utils.helper import generate_content_hash
-
-logger = get_logger(__name__)
 
 
 class EmbeddingCache:
@@ -25,8 +22,8 @@ class EmbeddingCache:
 
     def __init__(
         self,
-        cache_dir: str = settings.EMBEDDING_CACHE_DIR,
-        max_cache_size_mb: int = settings.MAX_CACHE_SIZE_MB
+        cache_dir: str = settings.vector.EMBEDDING_CACHE_DIR,
+        max_cache_size_mb: int = settings.vector.MAX_CACHE_SIZE_MB
     ) -> None:
         """
         Initialize the embedding cache.
@@ -35,6 +32,7 @@ class EmbeddingCache:
             cache_dir: Directory to store cache files
             max_cache_size_mb: Maximum cache size in MB
         """
+
         self.cache_dir = Path(cache_dir)
         self.max_cache_size_mb = max_cache_size_mb
 
@@ -47,8 +45,12 @@ class EmbeddingCache:
         # Load existing metadata
         self.metadata = self._load_metadata()
 
-    def _get_default_metadata(self) -> Dict[str, Any]:
-        """Get default metadata structure."""
+    @staticmethod
+    def _get_default_metadata() -> Dict[str, Any]:
+        """
+        Get default metadata structure.
+        """
+
         return {
             "entries": {},
             # hash -> {source, size, timestamp, embedding_file, last_accessed}
@@ -60,8 +62,9 @@ class EmbeddingCache:
         """
         Load cache metadata from disk with proper error handling.
         """
+
         if not self.metadata_file.exists():
-            logger.debug("Cache metadata file doesn't exist, creating new one")
+            logger.debug("Cache metadata file doesn't exist! Creating new one...")
             return self._get_default_metadata()
 
         try:
