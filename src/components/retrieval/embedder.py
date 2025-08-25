@@ -2,11 +2,13 @@
 Responsible for wrapping the embedding model client to encode text into
 vectors.
 """
+
 from typing import Dict, Any
 
 from langchain_openai import OpenAIEmbeddings
 from src.components.config.logger import logger
 from src.components.retrieval.embedding_cache import EmbeddingCache
+from src.utils.exceptions import EmptyDocumentError
 
 
 class Embedder:
@@ -26,14 +28,14 @@ class Embedder:
         self.embedding_model = OpenAIEmbeddings(model=embedding_model_name)
         self.cache = EmbeddingCache()
 
-    def create_embedded_chunks(self, chunked_documents):
+    def create_embedded_chunks(self, processed_documents):
         """
         Embeds the document chunks and returns embedded vectors with the
         associated metadata.
 
         Args:
-            chunked_documents (List[FileDocument]): The processed and
-            chunked documents to be embedded.
+            processed_documents (List[FileDocument]): The processed and
+                chunked documents to be embedded.
 
         Returns:
             tuple:
@@ -41,15 +43,15 @@ class Embedder:
                 - metadata (dict): Mapping from index to (text + metadata).
         """
 
-        if not chunked_documents:
-            logger.error("No documents were chunked. Aborting embedding...")
-            raise ValueError("No documents to embed.")
+        if not processed_documents:
+            logger.error("No documents were provided. Aborting embedding...")
+            raise EmptyDocumentError(document_path="Embedder")
 
-        logger.debug(f"{len(chunked_documents)} chunks ready for embedding.")
+        logger.debug(f"{len(processed_documents)} chunks ready for embedding.")
 
         # Step 1: Extract content and sources for caching
-        texts = [doc.content for doc in chunked_documents]
-        sources = [doc.metadata.source for doc in chunked_documents]
+        texts = [doc.content for doc in processed_documents]
+        sources = [doc.metadata.source for doc in processed_documents]
 
         # Step 2: Try to get embeddings from cache
         cached_embeddings = []
@@ -95,7 +97,7 @@ class Embedder:
         # Step 5: Create metadata mapping (same as your original)
         metadata = {
             idx: {"text": doc.content, "meta": doc.metadata}
-            for idx, doc in enumerate(chunked_documents)
+            for idx, doc in enumerate(processed_documents)
         }
 
         logger.info("Successfully created document embeddings and metadata.")

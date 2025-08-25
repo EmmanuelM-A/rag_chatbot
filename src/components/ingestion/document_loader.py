@@ -13,7 +13,7 @@ from docx.opc.exceptions import PackageNotFoundError, OpcError
 
 from src.components.ingestion.document import FileDocument, \
     FileDocumentMetadata
-from src.utils import exceptions
+from src.utils.exceptions import FileDoesNotExist, DocumentLoadError
 
 
 class DocumentLoader(ABC):
@@ -45,12 +45,12 @@ class DocumentLoader(ABC):
         path = Path(file_path)
 
         if not path.exists():
-            raise exceptions.FileDoesNotExist(
+            raise FileDoesNotExist(
                 path=file_path
             )
 
         if not path.is_file():
-            raise exceptions.FileDoesNotExist(
+            raise FileDoesNotExist(
                 path=file_path,
                 reason="The file path is not a file."
             )
@@ -58,7 +58,7 @@ class DocumentLoader(ABC):
         try:
             content = self.read_data(file_path)
         except (OSError, ValueError, Exception) as e:
-            raise exceptions.DocumentLoadError(
+            raise DocumentLoadError(
                 document_path=file_path,
                 original_error=e
             )

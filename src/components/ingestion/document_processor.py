@@ -5,7 +5,7 @@ documents before embedding and storage.
 
 import os
 from abc import ABC
-from typing import List, override
+from typing import List
 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
@@ -101,7 +101,8 @@ class DocumentProcessor(ABC):
 
         return self.document_loader_mappings.get(file_extension, None)
 
-    def __chunk_documents(self, documents):
+    @staticmethod
+    def __chunk_documents(documents):
         """
         Splits documents into smaller chunks using a recursive character
         splitter and returns a list of chunked documents.
@@ -126,7 +127,8 @@ class DocumentProcessor(ABC):
 
         return chunks
 
-    def __clean_documents(self, documents) -> List[FileDocument]:
+    @staticmethod
+    def __clean_documents(documents) -> List[FileDocument]:
         """
         Cleans the loaded documents by stripping whitespace and removing
         empties and returns a list of cleaned file documents.

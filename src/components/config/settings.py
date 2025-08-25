@@ -77,10 +77,15 @@ class VectorSettings(BaseSettings):
     METADATA_DB_FILE_PATH: str = Field(default="../../../data/db/metadata.pkl")
     CHUNK_SIZE: int = Field(default=1000)
     CHUNK_OVERLAP: int = Field(default=20)
+
     MAX_VECTORS_IN_MEMORY: int = Field(default=10000)
     VECTOR_BATCH_SIZE: int = Field(default=100)
+
     EMBEDDING_CACHE_ENABLED: bool = Field(default=True)
     EMBEDDING_CACHE_DIR: str = Field(default="../data/cache/embeddings")
+    EMBEDDING_CACHE_FILE_PATH: str = Field(
+        default="../data/cache/embeddings/vector_index_cache.faiss"
+    )
     MAX_CACHE_SIZE_MB: int = Field(default=500)
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
