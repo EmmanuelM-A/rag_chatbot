@@ -9,9 +9,13 @@ from typing import Dict, Any, Optional
 import faiss
 import numpy as np
 
-from src.components.config.logger import get_logger
+from src.components.config.logger import logger
+from src.utils.exceptions import VectorIndexError, FileDoesNotExist, \
+    VectorStoreError, FileSystemError
+from src.utils.helper import does_file_exist
 
-logger = get_logger(__name__)
+
+# TODO: INCORPORATE EMBEDDER INTO CLASS
 
 
 class VectorStore:
@@ -19,15 +23,22 @@ class VectorStore:
     Represents the communication service to access and store vectors.
     """
 
-    def __init__(self, index_path, metadata_path):
+    def __init__(self, index_path: str, metadata_path: str) -> None:
+        """
+        Initializes the VectorStore instance.
+
+        Args:
+            index_path: The file path to the vector index file.
+            metadata_path: The file path to the metadata file.
+        """
         self.index_path = index_path
         self.metadata_path = metadata_path
 
     def save_faiss_index(
-            self,
-            vectors,
-            metadata,
-            existing_index: Optional[faiss.Index] = None
+        self,
+        vectors,
+        metadata,
+        existing_index: Optional[faiss.Index] = None
     ) -> None:
         """
         Saves vectors and metadata to disk using FAISS + Pickle.
@@ -45,10 +56,11 @@ class VectorStore:
         else:
             # Create new index from vectors
             if not vectors:
-                logger.error(
-                    "The vectors list is empty. Cannot save FAISS index.")
-                raise ValueError(
-                    "The vectors list is empty. Cannot save FAISS index.")
+                raise VectorIndexError(
+                    operation="index creation",
+                    index_path=self.index_path,
+                    reason="No vectors provided! Cannot create new indexes."
+                )
 
             dimension = len(vectors[0])
             index = faiss.IndexFlatL2(dimension)
@@ -75,15 +87,13 @@ class VectorStore:
 
         logger.debug("Loading FAISS index and metadata from disk.")
 
-        if not os.path.exists(self.index_path):
+        if not does_file_exist(self.index_path):
             logger.critical(f"FAISS index not found at {self.index_path}")
-            raise FileNotFoundError(
-                f"FAISS index not found at {self.index_path}")
+            raise FileDoesNotExist(path=self.index_path)
 
-        if not os.path.exists(self.metadata_path):
+        if not does_file_exist(self.metadata_path):
             logger.critical(f"Metadata file not found at {self.metadata_path}")
-            raise FileNotFoundError(
-                f"Metadata file not found at {self.metadata_path}")
+            raise FileDoesNotExist(path=self.metadata_path)
 
         index = faiss.read_index(self.index_path)
 
@@ -95,8 +105,11 @@ class VectorStore:
 
         return index, metadata
 
-    def add_vectors_to_index(self, new_vectors,
-                             new_metadata: Dict[int, Dict[str, Any]]) -> None:
+    def add_vectors_to_index(
+        self,
+        new_vectors,
+        new_metadata: Dict[int, Dict[str, Any]]
+    ) -> None:
         """
         Add new vectors to existing index and update metadata.
 
@@ -106,8 +119,10 @@ class VectorStore:
         """
 
         if not new_vectors:
-            logger.warning("No new vectors to add")
-            return
+            raise VectorStoreError(
+                operation="vector storage",
+                reason="No new vectors to store!"
+            )
 
         try:
             # Load existing index and metadata
@@ -122,16 +137,20 @@ class VectorStore:
                 existing_metadata[offset + idx] = data
 
             # Save updated index and metadata
-            self.save_faiss_index(None, existing_metadata,
-                                  existing_index=index)
+            self.save_faiss_index(
+                vectors=None,
+                metadata=existing_metadata,
+                existing_index=index
+            )
 
             logger.info(
                 f"Added {len(new_vectors)} new vectors to existing index")
 
-        except FileNotFoundError:
+        except (FileSystemError, OSError, Exception):
             # If no existing index, create new one
             logger.info(
-                "No existing index found, creating new one with new vectors")
+                "No existing index found! Creating one with the new vectors..."
+            )
             self.save_faiss_index(new_vectors, new_metadata)
 
     def index_exists(self) -> bool:
@@ -141,8 +160,9 @@ class VectorStore:
         Returns:
             True if both files exist, False otherwise
         """
-        return (os.path.exists(self.index_path) and
-                os.path.exists(self.metadata_path))
+
+        return (does_file_exist(self.index_path) and
+                does_file_exist(self.metadata_path))
 
     def get_index_stats(self) -> Dict[str, Any]:
         """
@@ -151,6 +171,7 @@ class VectorStore:
         Returns:
             Dictionary with index statistics
         """
+
         try:
             if not self.index_exists():
                 return {"exists": False, "total_vectors": 0}
@@ -164,6 +185,6 @@ class VectorStore:
                 "metadata_entries": len(metadata)
             }
 
-        except Exception as e:
+        except (FileSystemError, OSError, Exception) as e:
             logger.error(f"Error getting index stats: {e}")
             return {"exists": False, "total_vectors": 0, "error": str(e)}
