@@ -10,7 +10,7 @@ import numpy as np
 
 from src.components.config.settings import settings
 from src.components.ingestion.document_processor import \
-    DefaultDocumentProcessor
+    DocumentProcessor
 from src.components.retrieval.embedder import Embedder
 from src.components.chatbot.query_handler import QueryHandler
 from src.components.retrieval.vector_store import VectorStore
@@ -19,7 +19,7 @@ from dotenv import load_dotenv
 
 from src.components.config.logger import get_logger
 from src.utils.exceptions import DocumentProcessingError, EmbeddingError, \
-    VectorStoreError, QueryProcessingError, RAGChatbotError
+    VectorStoreError, QueryProcessingError, RAGChatbotError, FileDoesNotExist
 from src.utils.helper import does_file_exist
 
 load_dotenv()
@@ -35,21 +35,21 @@ class RAGChatbotApp:
     """
 
     def __init__(
-            self,
-            raw_docs_directory: str,
-            index_path: str,
-            metadata_path: str,
-            embedding_model_name: str,
-            llm_model_name: str
+        self, # TODO: INCORPORATE DEPENDENCY INJECTION HERE
+        raw_docs_directory: str,
+        index_path: str,
+        metadata_path: str,
+        embedding_model_name: str,
+        llm_model_name: str
     ) -> None:
         self.index_path = index_path
         self.metadata_path = metadata_path
 
         # Core components
         self.vector_store = VectorStore(index_path, metadata_path)
-        self.document_processor = DefaultDocumentProcessor(raw_docs_directory)
+        self.document_processor = DocumentProcessor(raw_docs_directory)
         self.embedder = Embedder(embedding_model_name)
-        self.query_handler = QueryHandler(
+        self.query_handler = QueryHandler( # TODO: INCORPORATE EMBEDDER INTO CLASS
             embedding_model_name, llm_model_name
         )
 
@@ -57,10 +57,6 @@ class RAGChatbotApp:
         self.web_searcher = (
             WebSearcher() if settings.IS_WEB_SEARCH_ENABLED else None
         )
-
-        # Initialize database for logging
-        # init_db()
-
 
     def _search_documents(self, query: str) -> Optional[List[dict]]:
         """
@@ -73,58 +69,46 @@ class RAGChatbotApp:
             List of relevant document chunks or None if no results
         """
 
-        if not does_file_exist(self.index_path) or not does_file_exist(self.metadata_path):
+        if self.vector_store.index_exists():
             logger.info(
                 "FAISS index or metadata not found! Creating new ones..."
             )
 
             try:
+                # Process documents
                 processed_documents = self.document_processor.process_documents()
-
-                logger.debug(f"Processed {len(processed_documents)} documents")
 
                 if not processed_documents:
                     logger.warning("No documents were processed!")
                     return None
-            except Exception as e:
-                logger.error(
-                    f"Document processing failed: {e}",
-                    exc_info=True
-                )
-                raise DocumentProcessingError(f"Failed to process documents: {e}") from e
 
-            try:
+                logger.debug(f"Processed {len(processed_documents)} documents")
+
+                # Embedd documents
                 vectors, metadata = self.embedder.create_embedded_chunks(
                     processed_documents
                 )
 
                 logger.debug(f"Created {len(vectors)} embeddings")
-            except Exception as e:
-                logger.error(
-                    f"Embedding creation failed: {e}",
-                    exc_info=True
-                )
-                raise EmbeddingError(f"Failed to create embeddings: {e}")
 
-            try:
+                # Save vectors and metadata
                 self.vector_store.save_faiss_index(vectors, metadata)
 
                 logger.info("Saved FAISS index and metadata")
-            except Exception as e:
-                logger.error(f"Vector store save failed: {e}",
-                             exc_info=True)
-                raise VectorStoreError(f"Failed to save vector store: {e}")
+            except RAGChatbotError as e:
+                logger.error(e.as_log())
+                return None
+
+        logger.info("Loading existing FAISS index and metadata...")
 
         try:
-            logger.info("Loading FAISS index and metadata...")
-
+            # Load index and metadata
             index, metadata = self.vector_store.load_faiss_index()
 
             logger.debug(f"Loaded index with {index.ntotal} vectors")
-        except Exception as e:
+        except FileDoesNotExist as e:
             logger.error(f"Vector store load failed: {e}", exc_info=True)
-
-            raise VectorStoreError(f"Failed to load vector store: {e}")
+            return None
 
         try:
             results = self.query_handler.search(query, index, metadata)
@@ -136,8 +120,7 @@ class RAGChatbotApp:
             return results
         except Exception as e:
             logger.error(f"Query search failed: {e}", exc_info=True)
-
-            raise QueryProcessingError(f"Failed to search query: {e}")
+            return None
 
     def _search_web_and_add_to_store(self, query: str) -> Optional[List[dict]]:
         """
@@ -298,71 +281,3 @@ class RAGChatbotApp:
                 exc_info=True
             )
             raise RAGChatbotError(f"Unexpected error in query processing: {e}")
-
-    def start_interactive(self):
-        """
-        Start the chatbot in interactive terminal mode.
-        """
-
-        print("🤖 Hi, I am Bob. Your RAG assistant!")
-        print("I can answer questions from my documents and search "
-              "the web when needed.")
-        print("Type 'quit' to exit.\n")
-
-        while True:
-            try:
-                query = input("🔍 Ask me: ").strip().lower()
-
-                if query in ['quit', 'exit', 'bye']:
-                    print("👋 Happy to be of service! Goodbye!")
-                    self.shutdown()
-
-                if not query:
-                    print("Please enter a question.")
-                    continue
-
-                # Process the query
-                response_data = self.process_query(query)
-
-                # Display response
-                print(f"\n📝 Response: {response_data['answer']}")
-
-                if response_data['sources']:
-                    print(f"\n📚 Sources ({response_data['source_type']}):")
-                    for i, source in enumerate(response_data['sources'], 1):
-                        print(f"  {i}. {source}")
-
-                print("\n" + "=" * 50 + "\n")
-
-            except KeyboardInterrupt:
-                print("\n👋 Goodbye!")
-
-                self.shutdown()
-            except RAGChatbotError as e:
-                # Critical error - propagate to terminal_usage to exit
-                logger.error(f"Critical RAG error: {e}")
-                raise
-            except Exception as e:
-                logger.error(f"Error in interactive mode: {e}")
-
-                print("❌ An error occurred. Please try again.")
-
-    def shutdown(self):
-        """
-        Gracefully shut down the application.
-        """
-
-        logger.info("Shutting down enhanced RAG chatbot...")
-
-        try:
-            # Clean up resources if needed
-            if hasattr(self, 'vector_store'):
-                # Any cleanup for vector store
-                pass
-
-            logger.info("Shutdown completed successfully")
-
-        except Exception as e:
-            logger.error(f"Error during shutdown: {e}")
-
-        sys.exit(0)

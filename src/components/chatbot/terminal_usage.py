@@ -119,3 +119,71 @@ class TerminalUsage:
             print(f"\n❌ Fatal Error: {e}")
             print("An unexpected error occurred. Please check the logs.")
             sys.exit(1)
+
+    def start_interactive(self):
+        """
+        Start the chatbot in interactive terminal mode.
+        """
+
+        print("🤖 Hi, I am Bob. Your RAG assistant!")
+        print("I can answer questions from my documents and search "
+              "the web when needed.")
+        print("Type 'quit' to exit.\n")
+
+        while True:
+            try:
+                query = input("🔍 Ask me: ").strip().lower()
+
+                if query in ['quit', 'exit', 'bye']:
+                    print("👋 Happy to be of service! Goodbye!")
+                    self.shutdown()
+
+                if not query:
+                    print("Please enter a question.")
+                    continue
+
+                # Process the query
+                response_data = self.process_query(query)
+
+                # Display response
+                print(f"\n📝 Response: {response_data['answer']}")
+
+                if response_data['sources']:
+                    print(f"\n📚 Sources ({response_data['source_type']}):")
+                    for i, source in enumerate(response_data['sources'], 1):
+                        print(f"  {i}. {source}")
+
+                print("\n" + "=" * 50 + "\n")
+
+            except KeyboardInterrupt:
+                print("\n👋 Goodbye!")
+
+                self.shutdown()
+            except RAGChatbotError as e:
+                # Critical error - propagate to terminal_usage to exit
+                logger.error(f"Critical RAG error: {e}")
+                raise
+            except Exception as e:
+                logger.error(f"Error in interactive mode: {e}")
+
+                print("❌ An error occurred. Please try again.")
+
+    def shutdown(self):
+        """
+        Gracefully shut down the application.
+        """
+
+        logger.info("Shutting down enhanced RAG chatbot...")
+
+        try:
+            # Clean up resources if needed
+            if hasattr(self, 'vector_store'):
+                # Any cleanup for vector store
+                pass
+
+            logger.info("Shutdown completed successfully")
+
+        except Exception as e:
+            logger.error(f"Error during shutdown: {e}")
+
+        sys.exit(0)
