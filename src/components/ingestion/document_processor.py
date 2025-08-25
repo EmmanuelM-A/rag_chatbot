@@ -16,7 +16,7 @@ from src.components.ingestion.document_loader import PDFDocumentLoader, \
     DocumentLoader
 from src.components.config.logger import logger
 from src.utils.exceptions import InvalidDirectoryError, FileSystemError, \
-    DocumentLoadError, FileTypeNotSupported
+    DocumentLoadError, FileTypeNotSupported, FileDoesNotExist
 
 
 class DocumentProcessor(ABC):
@@ -38,6 +38,7 @@ class DocumentProcessor(ABC):
 
         self.path_to_directory = path_to_directory
         self.documents = []
+        self.documents_skipped = []
         self.document_loader_mappings = {
             settings.app.PDF_FILE_EXT: PDFDocumentLoader(),
             settings.app.MD_FILE_EXT: MarkdownDocumentLoader(),
@@ -49,6 +50,10 @@ class DocumentProcessor(ABC):
         """
         Loads supported documents from the directory into FileDocument objects
         and stores it in the self.documents list.
+
+        Raises:
+            InvalidDirectoryError:
+
         """
 
         if not os.path.exists(self.path_to_directory):
@@ -68,6 +73,7 @@ class DocumentProcessor(ABC):
 
                 if file_extension not in settings.app.ALLOWED_FILE_EXTENSIONS:
                     logger.warning(f"Skipping unsupported file: {file}")
+                    self.documents_skipped.append(file)
                     continue
 
                 file_path = os.path.join(root, file)
@@ -78,28 +84,24 @@ class DocumentProcessor(ABC):
                     document = file_loader.load_data(file_path)
 
                     documents.append(document)
-                except (FileSystemError, DocumentLoadError) as e:
-                    logger.error(f"Failed to read {file_path}: {e}")
-                    raise e
+                except (FileDoesNotExist, DocumentLoadError) as e:
+                    self.documents_skipped.append(file)
+                    logger.error(e.as_log())
 
-        logger.debug("Document loading completed successfully.")
+        logger.debug(
+            "Report: %d documents loaded and %d documents skipped.",
+            len(documents), len(self.documents_skipped)
+        )
 
         self.documents = documents
 
-    def __get_loader(self, file_extension) -> DocumentLoader:
+    def __get_loader(self, file_extension) -> DocumentLoader | None:
         """
         Gets the correct document loader based on the document's file
         extension.
         """
 
-        file_extension = file_extension.lower()
-
-        if file_extension not in settings.app.ALLOWED_FILE_EXTENSIONS:
-            raise FileTypeNotSupported(
-                file_type=file_extension
-            )
-
-        return self.document_loader_mappings.get(file_extension, None)
+        return self.document_loader_mappings.get(file_extension.lower(), None)
 
     @staticmethod
     def __chunk_documents(documents):
@@ -159,6 +161,10 @@ class DocumentProcessor(ABC):
         cleaned_documents = self.__clean_documents(self.documents)
 
         chunked_documents = self.__chunk_documents(cleaned_documents)
+
+        if not chunked_documents:
+            logger.error("No documents have been processed!")
+            return None
 
         logger.debug(
             "Documents have been loaded, processed and chunked successfully!"

@@ -38,8 +38,17 @@ class DocumentLoader(ABC):
         """
         Load data from the specified file path and convert it to a FileDocument.
 
-        :param file_path: The file path from which to load data (e.g., file path, URL).
-        :return: The FileDocument representation of the file.
+        Args:
+            file_path: The file path from which to load data (e.g.,
+                file path, URL).
+
+        Returns:
+            The FileDocument representation of the file.
+
+        Raises:
+            FileDoesNotExist:
+            DocumentLoadError:
+
         """
 
         path = Path(file_path)
@@ -61,7 +70,7 @@ class DocumentLoader(ABC):
             raise DocumentLoadError(
                 document_path=file_path,
                 original_error=e
-            )
+            ) from e
 
         filename = os.path.splitext(file_path)[0].lower()
 
