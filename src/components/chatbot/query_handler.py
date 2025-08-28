@@ -13,8 +13,6 @@ from src.components.config.logger import logger
 from src.components.retrieval.embedder import Embedder
 
 
-# TODO: INCORPORATE EMBEDDER INTO CLASS
-
 class QueryHandler:
     """
     Handles the query processing and the response generation.
@@ -40,10 +38,10 @@ class QueryHandler:
         Embeds query, searches vector DB, returns top_k results.
         """
 
-        query_vector = self.embedding_model.embed_query(query) # Use embedder here
+        query_vector = self.embedder.embed_query(query)
 
         _, I = index.search(np.array([query_vector]).astype("float32"),
-                            settings.RETRIEVAL_TOP_K) # TODO: REVIEW THIS
+                            settings.vector.RETRIEVAL_TOP_K)
 
         results = []
 
@@ -51,7 +49,7 @@ class QueryHandler:
             entry = metadata[i]
             results.append({
                 "text": entry["text"],
-                "metadata": entry["meta"]
+                "metadata": entry["metadata"]
             })
 
         if not results:
@@ -72,14 +70,14 @@ class QueryHandler:
 
         llm = ChatOpenAI(
             model=self.llm_model_name,
-            temperature=settings.LLM_TEMPERATURE
+            temperature=settings.llm.LLM_TEMPERATURE
         )
 
         context_text = "\n\n".join(
             [chunk["text"] for chunk in retrieved_chunks])
 
         prompt_template = create_prompt_template(
-            settings.RESPONSE_PROMPT_FILEPATH)
+            settings.llm.RESPONSE_PROMPT_FILEPATH)
 
         # Create a chain for processing
         rag_chain = prompt_template | llm | StrOutputParser()

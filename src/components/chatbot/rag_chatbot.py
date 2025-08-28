@@ -17,14 +17,12 @@ from src.components.retrieval.vector_store import VectorStore
 from src.components.retrieval.web_searcher import WebSearcher
 from dotenv import load_dotenv
 
-from src.components.config.logger import get_logger
+from src.components.config.logger import logger
 from src.utils.exceptions import DocumentProcessingError, EmbeddingError, \
     VectorStoreError, QueryProcessingError, RAGChatbotError, FileDoesNotExist
 from src.utils.helper import does_file_exist
 
 load_dotenv()
-
-logger = get_logger(__name__)
 
 
 class RAGChatbotApp:
@@ -47,7 +45,7 @@ class RAGChatbotApp:
         self.embedder = embedder
         self.query_handler = query_handler
         self.web_searcher = (
-            web_searcher if settings.IS_WEB_SEARCH_ENABLED else None
+            web_searcher if settings.web.IS_WEB_SEARCH_ENABLED else None
         )
 
     def _search_documents(self, query: str) -> Optional[List[dict]]:

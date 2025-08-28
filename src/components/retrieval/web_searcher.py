@@ -14,9 +14,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.components.config.settings import settings
 from src.components.ingestion.document import FileDocument, \
     FileDocumentMetadata
-from src.components.config.logger import get_logger
-
-logger = get_logger(__name__)
+from src.components.config.logger import logger
 
 
 class WebSearcher:
@@ -25,15 +23,15 @@ class WebSearcher:
     """
 
     def __init__(self):
-        self.search_api_key = settings.SEARCH_API_KEY.get_secret_value()
-        self.search_engine_id = settings.SEARCH_ENGINE_ID.get_secret_value()
+        self.search_api_key = settings.web.SEARCH_API_KEY.get_secret_value()
+        self.search_engine_id = settings.web.SEARCH_ENGINE_ID.get_secret_value()
         self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=settings.CHUNK_SIZE,
-            chunk_overlap=settings.CHUNK_OVERLAP
+            chunk_size=settings.vector.CHUNK_SIZE,
+            chunk_overlap=settings.vector.CHUNK_OVERLAP
         )
 
     def search_web(self, query: str,
-                   num_results: int = settings.MAX_WEB_SEARCH_RESULTS) -> List[
+                   num_results: int = settings.web.MAX_WEB_SEARCH_RESULTS) -> List[
         Dict[str, Any]]:
         """
         Perform web search using Google Custom Search API.

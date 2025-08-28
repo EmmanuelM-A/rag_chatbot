@@ -8,12 +8,9 @@ from typing import List, Optional
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, SecretStr
-
-from src.components.config.logger import logger
-from src.utils.exceptions import SettingConfigError
+from src.utils.exceptions import SettingsConfigError
 
 ENV_FILE = Path(__file__).resolve().parent.parent.parent.parent / ".env"
-
 
 class AppSettings(BaseSettings):
     """
@@ -53,8 +50,8 @@ class LLMSettings(BaseSettings):
     Settings and configurations for using the LLM and OPENAI models.
     """
 
-    OPEN_API_KEY: SecretStr = Field(
-        default=..., env="OPEN_API_KEY"
+    OPENAI_API_KEY: SecretStr = Field(
+        default=..., env="OPENAI_API_KEY"
     )
     EMBEDDING_MODEL_NAME: str = Field(default="text-embedding-3-small")
     LLM_MODEL_NAME: str = Field(default="gpt-3.5-turbo")
@@ -164,18 +161,17 @@ class Settings(BaseSettings):
         if (self.web.IS_WEB_SEARCH_ENABLED and
             (not self.web.SEARCH_API_KEY or not self.web.SEARCH_ENGINE_ID)
         ):
-            logger.warn("Web search is enabled but API keys are missing.")
-            raise SettingConfigError(
+            print("Web search is enabled but API keys are missing.")
+            raise SettingsConfigError(
                 setting_name="WEB_SEARCH_SETTINGS",
                 issue="Missing API keys detected!"
             )
 
-        if not self.llm.OPEN_API_KEY:
-            logger.warn("OPEN_API_KEY is missing in your '.env' file")
-            raise SettingConfigError(
+        if not self.llm.OPENAI_API_KEY:
+            print("OPENAI_API_KEY is missing in your '.env' file")
+            raise SettingsConfigError(
                 setting_name="LLM_SETTINGS",
                 issue="Missing API keys detected!"
             )
-
 
 settings = Settings()

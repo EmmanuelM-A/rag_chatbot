@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="perf + refactor: added more error handling">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/exceptions.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/exceptions.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +97,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/maduk/Documents/Programming/Personal Projects/rag_chatbot/tests/test_data/raw_docs&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -253,22 +248,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00029" summary="can now specify log level and allow logs to be logged to files">
-      <option name="closed" value="true" />
-      <created>1754396952118</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1754396952118</updated>
-    </task>
-    <task id="LOCAL-00030" summary="reworking files so the program is more OOP and sorted issues and bugs">
-      <option name="closed" value="true" />
-      <created>1754399857182</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1754399857182</updated>
     </task>
     <task id="LOCAL-00031" summary="fixed logging issue and reassigned log levels in component">
       <option name="closed" value="true" />
@@ -646,7 +625,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756118953290</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="refactor: made a bunch of changes">
+      <option name="closed" value="true" />
+      <created>1756403244389</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1756403244389</updated>
+    </task>
+    <task id="LOCAL-00079" summary="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use">
+      <option name="closed" value="true" />
+      <created>1756404631479</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1756404631479</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -674,8 +669,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="implemented more tests and fixed test related issues and bugs" />
-    <MESSAGE value="implemented most of the tests for the document_processor.py" />
     <MESSAGE value="implemented tests for the document loader and fixed any issues discovered through the tests" />
     <MESSAGE value="fix: the chatbot pipeline now works again" />
     <MESSAGE value="cleaned up some code" />
@@ -699,6 +692,8 @@
     <MESSAGE value="refactor: adding more error handling and moved unrelated functions outside to other files" />
     <MESSAGE value="refactor: tweaked code" />
     <MESSAGE value="perf + refactor: added more error handling" />
-    <option name="LAST_COMMIT_MESSAGE" value="perf + refactor: added more error handling" />
+    <MESSAGE value="refactor: made a bunch of changes" />
+    <MESSAGE value="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use" />
   </component>
 </project>

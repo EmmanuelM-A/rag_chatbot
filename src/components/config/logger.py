@@ -62,7 +62,7 @@ def __get_logger(name: str, log_dir: str = None) -> logging.Logger:
     """
 
     if log_dir is None:
-        log_dir = settings.LOG_DIRECTORY
+        log_dir = settings.logging.LOG_DIRECTORY
 
     default_logger = logging.getLogger(name)
 
@@ -70,7 +70,7 @@ def __get_logger(name: str, log_dir: str = None) -> logging.Logger:
         return default_logger  # Avoid adding duplicate handlers
 
     # Set log level from settings
-    log_level = __get_log_level(settings.LOG_LEVEL)
+    log_level = __get_log_level(settings.logging.LOG_LEVEL)
     default_logger.setLevel(log_level)
 
     # Create formatters
@@ -83,7 +83,7 @@ def __get_logger(name: str, log_dir: str = None) -> logging.Logger:
         datefmt=settings.logging.LOG_DATE_FORMAT
     )
 
-    if settings.IS_FILE_LOGGING_ENABLED:
+    if settings.logging.IS_FILE_LOGGING_ENABLED:
         # FILE LOGGING MODE
         try:
             # Create log directory if it doesn't exist

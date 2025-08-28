@@ -7,10 +7,8 @@ import sys
 import os
 
 from src.components.config.settings import settings
-from src.components.config.logger import get_logger
+from src.components.config.logger import logger
 from src.utils.exceptions import RAGChatbotError
-
-logger = get_logger(__name__)
 
 
 class TerminalUsage:
@@ -43,7 +41,7 @@ class TerminalUsage:
 
             sys.exit(1)
 
-        if settings.IS_WEB_SEARCH_ENABLED:
+        if settings.web.IS_WEB_SEARCH_ENABLED:
             web_search_vars = ["SEARCH_API_KEY", "SEARCH_ENGINE_ID"]
 
             missing_web_vars = [var for var in web_search_vars if not os.getenv(var)]
@@ -68,9 +66,9 @@ class TerminalUsage:
 
         print("🚀 Starting RAG Chatbot")
         print("=" * 50)
-        print(f"📊 Web Search: {'✅ Enabled' if settings.IS_WEB_SEARCH_ENABLED else '❌ Disabled'}")
-        print(f"📁 Index Path: {settings.VECTOR_DB_FILE_PATH}")
-        print(f"📋 Metadata Path: {settings.METADATA_DB_FILE_PATH}")
+        print(f"📊 Web Search: {'✅ Enabled' if settings.web.IS_WEB_SEARCH_ENABLED else '❌ Disabled'}")
+        print(f"📁 Index Path: {settings.vector.VECTOR_DB_FILE_PATH}")
+        print(f"📋 Metadata Path: {settings.vector.METADATA_DB_FILE_PATH}")
         print("=" * 50)
 
     def handle_shutdown_signal(self, signum, frame):
