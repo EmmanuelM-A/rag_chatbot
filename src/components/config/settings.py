@@ -86,6 +86,8 @@ class VectorSettings(BaseSettings):
     EMBEDDING_CACHE_FILE_PATH: str = Field(
         default="../data/cache/embeddings/vector_index_cache.faiss"
     )
+    DOCUMENT: str = Field(default="document")
+    QUERY: str = Field(default="query")
     MAX_CACHE_SIZE_MB: int = Field(default=500)
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")

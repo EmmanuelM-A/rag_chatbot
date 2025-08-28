@@ -85,7 +85,7 @@ class RAGChatbotApp:
                 logger.debug(f"Processed {len(processed_documents)} documents")
 
                 # Embedd documents
-                vectors, metadata = self.embedder.create_embedded_chunks(
+                vectors, metadata = self.embedder.embed_documents(
                     processed_documents
                 )
 

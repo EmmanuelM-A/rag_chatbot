@@ -15,9 +15,6 @@ from src.utils.exceptions import VectorIndexError, FileDoesNotExist, \
 from src.utils.helper import does_file_exist
 
 
-# TODO: INCORPORATE EMBEDDER INTO CLASS
-
-
 class VectorStore:
     """
     Represents the communication service to access and store vectors.

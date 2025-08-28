@@ -352,8 +352,18 @@ class EmbeddingCacheError(EmbeddingError):
 
 
 class VectorStoreError(RAGChatbotError):
-    """Base class for vector store errors."""
-    def __init__(self, operation: str, reason: str, store_type: str = None, context: Dict[str, Any] = None, original_error: Exception = None):
+    """
+    Base class for vector store errors.
+    """
+
+    def __init__(
+        self,
+        operation: str,
+        reason: str,
+        store_type: str = None,
+        context: Dict[str, Any] = None,
+        original_error: Exception = None
+    ) -> None:
         super().__init__(
             message=f"Vector store error during {operation}: {reason}",
             error_code="VECTOR_STORE_ERROR",
@@ -366,10 +376,19 @@ class VectorStoreError(RAGChatbotError):
 
 
 class VectorIndexError(VectorStoreError):
-    """Raised when vector index operations fail."""
-    def __init__(self, operation: str, index_path: str, reason: str, original_error: Exception = None):
+    """
+    Raised when vector index operations fail.
+    """
+
+    def __init__(
+        self,
+        operation: str,
+        index_path: str,
+        reason: str,
+        original_error: Exception = None
+    ) -> None:
         super().__init__(
-            operation=f"index {operation}",
+            operation=operation,
             reason=reason,
             context={"index_path": index_path},
             original_error=original_error

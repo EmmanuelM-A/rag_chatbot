@@ -14,7 +14,7 @@ from src.components.config.logger import logger
 from src.utils.helper import generate_content_hash
 
 
-class EmbeddingCache:
+class EmbedderCache:
     """
     Manages caching of document embeddings to avoid redundant API calls.
     Uses content-based hashing for cache keys to detect document changes.
@@ -135,96 +135,83 @@ class EmbeddingCache:
         """
         return self.cache_dir / f"{content_hash}.pkl"
 
-    def get_embedding(self, content: str, source: str = None) -> Optional[List[float]]:
+    def get_embedding(
+        self,
+        content: str,
+        source: str = None,
+        kind: str = "document"
+    ) -> Optional[List[float]]:
         """
-        Retrieve embedding from cache if exists.
-
+        Retrieve embedding from cache if it exists.
         Args:
             content: Text content to check
-            source: Source identifier (filename, URL, etc.)
-
-        Returns:
-            Cached embedding vector or None if not found
+            source: Optional identifier (filename, URL, query string, etc.)
+            kind: Either "document" or "query"
         """
+
         if not settings.EMBEDDING_CACHE_ENABLED:
             return None
 
         try:
-            content_hash = generate_content_hash(content)
+            content_hash = generate_content_hash(f"{kind}:{content}")
+
             cache_file = self._get_cache_file_path(content_hash)
 
-            if content_hash in self.metadata["entries"] and cache_file.exists():
-                try:
-                    with open(cache_file, 'rb') as f:
-                        embedding = pickle.load(f)
+            if content_hash in self.metadata[
+                "entries"] and cache_file.exists():
+                with open(cache_file, 'rb') as f:
+                    embedding = pickle.load(f)
 
-                    # Update access time
-                    self.metadata["entries"][content_hash]["last_accessed"] = time.time()
-
-                    # Log with source information for better debugging
-                    cached_source = self.metadata["entries"][content_hash].get("source", "unknown")
-                    logger.debug(
-                        f"Cache hit for content from '{source or 'unknown'}' "
-                        f"(originally cached from '{cached_source}'): {content_hash[:8]}..."
-                    )
-                    return embedding
-
-                except (pickle.PickleError, EOFError) as e:
-                    logger.warning(f"Failed to load cached embedding: {e}")
-                    # Clean up corrupted cache entry
-                    self._remove_cache_entry(content_hash)
+                # Update access time
+                self.metadata["entries"][content_hash][
+                    "last_accessed"] = time.time()
+                return embedding
 
         except Exception as e:
-            logger.error(f"Error retrieving embedding from cache: {e}")
+            logger.error(f"Error retrieving {kind} embedding from cache: {e}")
 
         return None
 
-    def store_embedding(self, content: str, embedding: List[float], source: str = None):
+    def store_embedding(
+        self,
+        content: str,
+        embedding: List[float],
+        source: str = None,
+        kind: str = "document"
+    ) -> None:
         """
         Store embedding in cache.
-
         Args:
-            content: Text content
+            content: Text or query string
             embedding: Embedding vector
-            source: Source identifier (filename, URL, etc.)
+            source: Optional identifier
+            kind: Either "document" or "query"
         """
+
         if not settings.EMBEDDING_CACHE_ENABLED:
             return
 
         try:
-            content_hash = generate_content_hash(content)
+            content_hash = generate_content_hash(f"{kind}:{content}")
             cache_file = self._get_cache_file_path(content_hash)
 
-            # Save embedding
             with open(cache_file, 'wb') as f:
                 pickle.dump(embedding, f)
 
-            # Get file size
             file_size = cache_file.stat().st_size
-
-            # Update metadata
             self.metadata["entries"][content_hash] = {
                 "source": source or "unknown",
+                "type": kind,
                 "size": file_size,
                 "timestamp": time.time(),
                 "last_accessed": time.time(),
                 "embedding_file": cache_file.name
             }
-
             self.metadata["total_size"] += file_size
-
-            logger.debug(
-                f"Cached embedding for content from '{source or 'unknown'}': {content_hash[:8]}..."
-            )
-
-            # Check if cleanup is needed
-            if self._should_cleanup():
-                self._cleanup_cache()
-
             self._save_metadata()
 
         except Exception as e:
-            logger.error(f"Failed to cache embedding: {e}")
+            logger.error(f"Failed to cache {kind} embedding: {e}")
 
     def get_multiple_embeddings(self, contents: List[str], sources: List[str] = None) -> Tuple[List[Optional[List[float]]], List[str]]:
         """

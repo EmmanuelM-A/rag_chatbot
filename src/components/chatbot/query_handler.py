@@ -3,25 +3,36 @@ Responsible for handling user queries and generating their corresponding
 response.
 """
 
-from langchain_openai import OpenAIEmbeddings
 import numpy as np
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 
 from src.components.config.settings import settings
 from src.components.prompts.prompt_loader import create_prompt_template
-from src.components.config.logger import get_logger
+from src.components.config.logger import logger
+from src.components.retrieval.embedder import Embedder
 
-logger = get_logger(__name__)
 
+# TODO: INCORPORATE EMBEDDER INTO CLASS
 
 class QueryHandler:
     """
     Handles the query processing and the response generation.
     """
 
-    def __init__(self, embedding_model_name: str, llm_model_name: str) -> None:
-        self.embedding_model = OpenAIEmbeddings(model=embedding_model_name)
+    def __init__(
+            self,
+            embedder: Embedder,
+            llm_model_name: str
+    ) -> None:
+        """
+        Initializes the QueryHandler instance.
+
+        Args:
+            embedder: The class instance used to create embeddings for indexes.
+            llm_model_name: The model used to generate responses.
+        """
+        self.embedder = embedder
         self.llm_model_name = llm_model_name
 
     def search(self, query: str, index, metadata):
@@ -29,10 +40,10 @@ class QueryHandler:
         Embeds query, searches vector DB, returns top_k results.
         """
 
-        query_vector = self.embedding_model.embed_query(query)
+        query_vector = self.embedding_model.embed_query(query) # Use embedder here
 
         _, I = index.search(np.array([query_vector]).astype("float32"),
-                            settings.RETRIEVAL_TOP_K)
+                            settings.RETRIEVAL_TOP_K) # TODO: REVIEW THIS
 
         results = []
 
