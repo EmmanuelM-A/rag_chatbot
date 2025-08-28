@@ -4,25 +4,39 @@ The main entry point for the RAG Chatbot.
 
 from dotenv import load_dotenv
 
+from components.chatbot.query_handler import QueryHandler
+from components.ingestion.document_processor import DocumentProcessor
+from components.retrieval.embedder import Embedder
+from components.retrieval.vector_store import VectorStore
+from components.retrieval.web_searcher import WebSearcher
 from src.components.chatbot.rag_chatbot import RAGChatbotApp
 from src.components.chatbot.terminal_usage import TerminalUsage
 from src.components.config.settings import settings
-from src.components.config.logger import get_logger
-from src.utils.helper import does_file_exist
 
 load_dotenv("../.env")
-
-logger = get_logger(__name__)
 
 
 if __name__ == "__main__":
 
+    vector_store = VectorStore(
+        index_path=settings.vector.VECTOR_DB_FILE_PATH,
+        metadata_path=settings.vector.METADATA_DB_FILE_PATH
+    )
+    document_processor = DocumentProcessor(
+        path_to_directory=settings.app.RAW_DOCS_DIRECTORY)
+    embedder = Embedder(embedding_model_name=settings.llm.EMBEDDING_MODEL_NAME)
+    query_handler = QueryHandler(
+        embedder=embedder,
+        llm_model_name=settings.llm.LLM_MODEL_NAME
+    )
+    web_searcher = WebSearcher()
+
     chatbot = RAGChatbotApp(
-        raw_docs_directory=settings.RAW_DOCS_DIRECTORY,
-        index_path=settings.VECTOR_DB_FILE_PATH,
-        metadata_path=settings.METADATA_DB_FILE_PATH,
-        embedding_model_name=settings.EMBEDDING_MODEL_NAME,
-        llm_model_name=settings.LLM_MODEL_NAME
+        vector_store=vector_store,
+        document_processor=document_processor,
+        embedder=embedder,
+        query_handler=query_handler,
+        web_searcher=web_searcher
     )
 
     usage = TerminalUsage(app=chatbot)

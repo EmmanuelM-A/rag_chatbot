@@ -35,27 +35,19 @@ class RAGChatbotApp:
     """
 
     def __init__(
-        self, # TODO: INCORPORATE DEPENDENCY INJECTION HERE
-        raw_docs_directory: str,
-        index_path: str,
-        metadata_path: str,
-        embedding_model_name: str,
-        llm_model_name: str
+            self,
+            vector_store: VectorStore,
+            document_processor: DocumentProcessor,
+            embedder: Embedder,
+            query_handler: QueryHandler,
+            web_searcher: WebSearcher = None
     ) -> None:
-        self.index_path = index_path
-        self.metadata_path = metadata_path
-
-        # Core components
-        self.vector_store = VectorStore(index_path, metadata_path)
-        self.document_processor = DocumentProcessor(raw_docs_directory)
-        self.embedder = Embedder(embedding_model_name)
-        self.query_handler = QueryHandler( # TODO: INCORPORATE EMBEDDER INTO CLASS
-            embedding_model_name, llm_model_name
-        )
-
-        # Enhanced components
+        self.vector_store = vector_store
+        self.document_processor = document_processor
+        self.embedder = embedder
+        self.query_handler = query_handler
         self.web_searcher = (
-            WebSearcher() if settings.IS_WEB_SEARCH_ENABLED else None
+            web_searcher if settings.IS_WEB_SEARCH_ENABLED else None
         )
 
     def _search_documents(self, query: str) -> Optional[List[dict]]:
