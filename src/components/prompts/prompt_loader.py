@@ -4,7 +4,9 @@ Loads ChatPromptTemplates from YAML prompt files for use with LangChain LLMs.
 
 import yaml
 from langchain.prompts import ChatPromptTemplate
-from src.components.config.logger import logger
+from src.components.config.logger import logger, set_logger
+
+set_logger(__name__)
 
 
 def create_prompt_template(prompt_filepath):

@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix: fixing import issues and correct settings use">
+      <change afterPath="$PROJECT_DIR$/data/cache/embeddings/cache_metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/config/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/logger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +118,29 @@
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\retrieval" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.logger">
+    <configuration name="logger" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="rag_chatbot" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/components/config" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/components/config/logger.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
@@ -172,23 +200,6 @@
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_document_loader.TestDocumentLoader" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="rag_chatbot" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/unit" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_parameters" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_document_loader.TestDocumentLoader&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="pytest for test_document_loader.TestDocumentLoader.test_should_raise_an_error_whilst_reading_data" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
@@ -225,11 +236,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.logger" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.settings" />
         <item itemvalue="Python tests.pytest for test_logger.TestLogger" />
         <item itemvalue="Python tests.pytest for test_document_loader.TestDocumentLoader.test_should_raise_an_error_whilst_reading_data" />
-        <item itemvalue="Python tests.pytest for test_document_loader.TestDocumentLoader" />
       </list>
     </recent_temporary>
   </component>
@@ -248,14 +259,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00031" summary="fixed logging issue and reassigned log levels in component">
-      <option name="closed" value="true" />
-      <created>1754400963180</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1754400963180</updated>
     </task>
     <task id="LOCAL-00032" summary="updated configurations">
       <option name="closed" value="true" />
@@ -641,7 +644,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756404631479</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="fix: fixing import issues and correct settings use">
+      <option name="closed" value="true" />
+      <created>1756406660069</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1756406660069</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -669,7 +680,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="implemented tests for the document loader and fixed any issues discovered through the tests" />
     <MESSAGE value="fix: the chatbot pipeline now works again" />
     <MESSAGE value="cleaned up some code" />
     <MESSAGE value="fix: adding better exception handling" />
@@ -694,6 +704,7 @@
     <MESSAGE value="perf + refactor: added more error handling" />
     <MESSAGE value="refactor: made a bunch of changes" />
     <MESSAGE value="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use" />
+    <MESSAGE value="fix: fixing import issues and correct settings use" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: fixing import issues and correct settings use" />
   </component>
 </project>

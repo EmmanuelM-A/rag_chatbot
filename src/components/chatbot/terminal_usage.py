@@ -6,17 +6,21 @@ import signal
 import sys
 import os
 
+from components.chatbot.rag_chatbot import RAGChatbotApp
 from src.components.config.settings import settings
-from src.components.config.logger import logger
+from src.components.config.logger import logger, set_logger
 from src.utils.exceptions import RAGChatbotError
+
+set_logger(__name__)
 
 
 class TerminalUsage:
     """Handles running the application in the terminal"""
 
-    def __init__(self, app):
+    def __init__(self, app: RAGChatbotApp):
         self.app = app
 
+    @staticmethod
     def __validate_environment(self):
         """
         Validate that all required environment variables and configurations are set.
@@ -84,7 +88,7 @@ class TerminalUsage:
             signal.signal(signal.SIGINT, self.handle_shutdown_signal)
             signal.signal(signal.SIGTERM, self.handle_shutdown_signal)
 
-            self.__validate_environment()
+            self.__validate_environment(self)
 
             self.__print_startup_info()
 
@@ -93,7 +97,7 @@ class TerminalUsage:
             # Start the interactive chatbot
             logger.info("Starting interactive chatbot session")
 
-            self.app.start_interactive()
+            self.start_interactive()
 
         except KeyboardInterrupt:
             logger.info("Interrupted by user")
@@ -141,7 +145,7 @@ class TerminalUsage:
                     continue
 
                 # Process the query
-                response_data = self.process_query(query)
+                response_data = self.app.process_query(query)
 
                 # Display response
                 print(f"\n📝 Response: {response_data['answer']}")
@@ -182,6 +186,6 @@ class TerminalUsage:
             logger.info("Shutdown completed successfully")
 
         except Exception as e:
-            logger.error(f"Error during shutdown: {e}")
+            logger.error("Error during shutdown: %s", e)
 
         sys.exit(0)

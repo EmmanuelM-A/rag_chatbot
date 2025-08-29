@@ -10,9 +10,10 @@ from pathlib import Path
 import time
 
 from src.components.config.settings import settings
-from src.components.config.logger import logger
+from src.components.config.logger import logger, set_logger
 from src.utils.helper import generate_content_hash
 
+set_logger(__name__)
 
 class EmbedderCache:
     """
@@ -78,14 +79,14 @@ class EmbedderCache:
 
             # Validate metadata structure
             if not isinstance(metadata, dict) or "entries" not in metadata:
-                logger.warning("Invalid cache metadata structure, resetting")
+                logger.warning("Invalid cache metadata structure, resetting...")
                 return self._get_default_metadata()
 
             # Ensure all required keys exist
             default_metadata = self._get_default_metadata()
-            for key in default_metadata:
+            for key, value in default_metadata.items():
                 if key not in metadata:
-                    metadata[key] = default_metadata[key]
+                    metadata[key] = value
 
             logger.debug(f"Loaded cache metadata with {len(metadata['entries'])} entries")
             return metadata
@@ -149,7 +150,7 @@ class EmbedderCache:
             kind: Either "document" or "query"
         """
 
-        if not settings.EMBEDDING_CACHE_ENABLED:
+        if not settings.vector.EMBEDDING_CACHE_ENABLED:
             return None
 
         try:
@@ -188,7 +189,7 @@ class EmbedderCache:
             kind: Either "document" or "query"
         """
 
-        if not settings.EMBEDDING_CACHE_ENABLED:
+        if not settings.vector.EMBEDDING_CACHE_ENABLED:
             return
 
         try:
@@ -222,7 +223,7 @@ class EmbedderCache:
             - cached_embeddings: List with embeddings or None for cache misses
             - uncached_contents: Contents that need to be embedded
         """
-        if not settings.EMBEDDING_CACHE_ENABLED:
+        if not settings.vector.EMBEDDING_CACHE_ENABLED:
             return [None] * len(contents), contents
 
         sources = sources or [None] * len(contents)
@@ -249,7 +250,7 @@ class EmbedderCache:
         sources: List[str] = None
     ):
         """Store multiple embeddings in cache."""
-        if not settings.EMBEDDING_CACHE_ENABLED:
+        if not settings.vector.EMBEDDING_CACHE_ENABLED:
             return
 
         sources = sources or [None] * len(contents)
@@ -340,7 +341,7 @@ class EmbedderCache:
                 "total_size_mb": round(size_mb, 2),
                 "max_size_mb": self.max_cache_size_mb,
                 "cache_directory": str(self.cache_dir),
-                "enabled": settings.EMBEDDING_CACHE_ENABLED
+                "enabled": settings.vector.EMBEDDING_CACHE_ENABLED
             }
         except Exception as e:
             logger.error(f"Error getting cache stats: {e}")
@@ -349,7 +350,7 @@ class EmbedderCache:
                 "total_size_mb": 0,
                 "max_size_mb": self.max_cache_size_mb,
                 "cache_directory": str(self.cache_dir),
-                "enabled": settings.EMBEDDING_CACHE_ENABLED,
+                "enabled": settings.vector.EMBEDDING_CACHE_ENABLED,
                 "error": str(e)
             }
 

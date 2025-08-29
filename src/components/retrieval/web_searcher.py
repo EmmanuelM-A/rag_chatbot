@@ -14,7 +14,9 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from src.components.config.settings import settings
 from src.components.ingestion.document import FileDocument, \
     FileDocumentMetadata
-from src.components.config.logger import logger
+from src.components.config.logger import logger, set_logger
+
+set_logger(__name__)
 
 
 class WebSearcher:

@@ -1,0 +1,78 @@
+{
+  "entries": {
+    "e4baa4cdaf6a872fc24b0723826902c7b20f3384bf244a197f3ac62e92fcbba9": {
+      "source": "../data/raw_docs\\IT CV.docx",
+      "type": "document",
+      "size": 13842,
+      "timestamp": 1756407402.7554092,
+      "last_accessed": 1756407702.652163,
+      "embedding_file": "e4baa4cdaf6a872fc24b0723826902c7b20f3384bf244a197f3ac62e92fcbba9.pkl"
+    },
+    "3b2675caca222798baf78ab12ade2a9b50574f33aa45ce327450d2e7e9436f7e": {
+      "source": "../data/raw_docs\\IT CV.docx",
+      "type": "document",
+      "size": 13842,
+      "timestamp": 1756407402.762418,
+      "last_accessed": 1756407702.652163,
+      "embedding_file": "3b2675caca222798baf78ab12ade2a9b50574f33aa45ce327450d2e7e9436f7e.pkl"
+    },
+    "1dc564c8390fe5e589db0f0d7ca9aa27b9ec46883ced6d5558127eec60c0452d": {
+      "source": "../data/raw_docs\\IT CV.docx",
+      "type": "document",
+      "size": 13842,
+      "timestamp": 1756407402.7694144,
+      "last_accessed": 1756407702.652163,
+      "embedding_file": "1dc564c8390fe5e589db0f0d7ca9aa27b9ec46883ced6d5558127eec60c0452d.pkl"
+    },
+    "695f8e05b5bf7fde408094c55eb8fc0744e8c44db4c0f2a70d3258ef0d52ec31": {
+      "source": "../data/raw_docs\\IT CV.docx",
+      "type": "document",
+      "size": 13842,
+      "timestamp": 1756407402.7754395,
+      "last_accessed": 1756407702.6531696,
+      "embedding_file": "695f8e05b5bf7fde408094c55eb8fc0744e8c44db4c0f2a70d3258ef0d52ec31.pkl"
+    },
+    "440bd173626d818a26c8457bed06aaf64b48914670974b98afd8406086950f43": {
+      "source": "../data/raw_docs\\Role Descriptions.docx",
+      "type": "document",
+      "size": 13842,
+      "timestamp": 1756407402.7804158,
+      "last_accessed": 1756407702.6531696,
+      "embedding_file": "440bd173626d818a26c8457bed06aaf64b48914670974b98afd8406086950f43.pkl"
+    },
+    "2cfda8cb14dcd5544542da98369439702c79db74717787e111366233c7055aa1": {
+      "source": "../data/raw_docs\\Role Descriptions.docx",
+      "type": "document",
+      "size": 13842,
+      "timestamp": 1756407402.7879767,
+      "last_accessed": 1756407702.6531696,
+      "embedding_file": "2cfda8cb14dcd5544542da98369439702c79db74717787e111366233c7055aa1.pkl"
+    },
+    "0f6635a85b4f46edc617ccaf3868f06600905c8387643ef691a7fb2cafb0b44a": {
+      "source": "../data/raw_docs\\Role Descriptions.docx",
+      "type": "document",
+      "size": 13842,
+      "timestamp": 1756407402.7939823,
+      "last_accessed": 1756407702.654163,
+      "embedding_file": "0f6635a85b4f46edc617ccaf3868f06600905c8387643ef691a7fb2cafb0b44a.pkl"
+    },
+    "b63e1fe6c15444018eb29476a748788dcf9ad760d70762e5104c2bcbe452ced9": {
+      "source": "query",
+      "type": "query",
+      "size": 13842,
+      "timestamp": 1756407619.5108967,
+      "last_accessed": 1756407619.5108967,
+      "embedding_file": "b63e1fe6c15444018eb29476a748788dcf9ad760d70762e5104c2bcbe452ced9.pkl"
+    },
+    "d6996ded8769837b03dfc818d57d23147f2557f8d5a32ee9898bf70567a0b637": {
+      "source": "query",
+      "type": "query",
+      "size": 13842,
+      "timestamp": 1756407703.1966162,
+      "last_accessed": 1756407703.1966162,
+      "embedding_file": "d6996ded8769837b03dfc818d57d23147f2557f8d5a32ee9898bf70567a0b637.pkl"
+    }
+  },
+  "total_size": 124578,
+  "last_cleanup": 1756407383.5577157
+}

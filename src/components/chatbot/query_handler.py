@@ -9,8 +9,10 @@ from langchain_core.output_parsers import StrOutputParser
 
 from src.components.config.settings import settings
 from src.components.prompts.prompt_loader import create_prompt_template
-from src.components.config.logger import logger
+from src.components.config.logger import logger, set_logger
 from src.components.retrieval.embedder import Embedder
+
+set_logger(__name__)
 
 
 class QueryHandler:
@@ -33,7 +35,7 @@ class QueryHandler:
         self.embedder = embedder
         self.llm_model_name = llm_model_name
 
-    def search(self, query: str, index, metadata):
+    def search_for_vector(self, query: str, index, metadata):
         """
         Embeds query, searches vector DB, returns top_k results.
         """
@@ -41,15 +43,21 @@ class QueryHandler:
         query_vector = self.embedder.embed_query(query)
 
         _, I = index.search(np.array([query_vector]).astype("float32"),
-                            settings.vector.RETRIEVAL_TOP_K)
+                                       settings.llm.RETRIEVAL_TOP_K)
 
         results = []
 
         for i in I[0]:
             entry = metadata[i]
+            text = entry.get("text")
+            meta = entry.get("metadata")
+            if text is None or meta is None:
+                logger.error(
+                    f"Missing 'text' or 'metadata' in entry at index {i}.")
+                continue
             results.append({
-                "text": entry["text"],
-                "metadata": entry["metadata"]
+                "text": text,
+                "metadata": meta
             })
 
         if not results:

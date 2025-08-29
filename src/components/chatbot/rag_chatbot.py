@@ -17,12 +17,14 @@ from src.components.retrieval.vector_store import VectorStore
 from src.components.retrieval.web_searcher import WebSearcher
 from dotenv import load_dotenv
 
-from src.components.config.logger import logger
+from src.components.config.logger import logger, set_logger
 from src.utils.exceptions import DocumentProcessingError, EmbeddingError, \
     VectorStoreError, QueryProcessingError, RAGChatbotError, FileDoesNotExist
 from src.utils.helper import does_file_exist
 
 load_dotenv()
+
+set_logger(__name__)
 
 
 class RAGChatbotApp:
@@ -101,7 +103,7 @@ class RAGChatbotApp:
             return None
 
         try:
-            results = self.query_handler.search(query, index, metadata)
+            results = self.query_handler.search_for_vector(query, index, metadata)
 
             logger.debug(
                 f"Search returned {len(results) if results else 0} results"
@@ -270,4 +272,4 @@ class RAGChatbotApp:
                 f"Unexpected error processing query: {e}",
                 exc_info=True
             )
-            raise RAGChatbotError(f"Unexpected error in query processing: {e}")
+            raise RAGChatbotError(f"Unexpected error in query processing: {e}") from e

@@ -6,10 +6,12 @@ vectors.
 from typing import Dict, Any, List, Tuple
 
 from langchain_openai import OpenAIEmbeddings
-from src.components.config.logger import logger
+from src.components.config.logger import logger, set_logger
 from src.components.config.settings import settings
 from src.components.retrieval.embedding_cache import EmbedderCache
 from src.utils.exceptions import EmptyDocumentError, EmbeddingError
+
+set_logger(__name__)
 
 
 class Embedder:
@@ -152,7 +154,7 @@ class Embedder:
             ) from e
 
     @staticmethod
-    def _combine_embeddings(self, cached_embeddings, new_embeddings,
+    def _combine_embeddings(cached_embeddings, new_embeddings,
                             total_count) -> List[List[float]]:
         """Combine cached and new embeddings in correct order."""
         vectors = [None] * total_count
@@ -175,7 +177,7 @@ class Embedder:
         return vectors
 
     @staticmethod
-    def _create_metadata(self, documents) -> Dict[int, Dict]:
+    def _create_metadata(documents) -> Dict[int, Dict]:
         """Create metadata dictionary."""
         return {
             idx: {"text": doc.content, "meta": doc.metadata}
