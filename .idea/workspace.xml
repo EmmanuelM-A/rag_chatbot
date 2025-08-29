@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix: fixed some issues and bugs">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
-    </list>
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="perf: redid/improved caching capabilities again" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -252,22 +249,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00037" summary="restructured the application">
-      <option name="closed" value="true" />
-      <created>1754427104346</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1754427104346</updated>
-    </task>
-    <task id="LOCAL-00038" summary="implemented all document loader for the allowed file extensions">
-      <option name="closed" value="true" />
-      <created>1754429607595</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1754429607595</updated>
     </task>
     <task id="LOCAL-00039" summary="upgraded the document_processor.py to follow an OOP design and integrated the document_loader.py classes into it">
       <option name="closed" value="true" />
@@ -645,7 +626,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756479689384</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="perf: improving caching capabilities">
+      <option name="closed" value="true" />
+      <created>1756484543698</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1756484543699</updated>
+    </task>
+    <task id="LOCAL-00087" summary="perf: redid/improved caching capabilities again">
+      <option name="closed" value="true" />
+      <created>1756485030926</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1756485030926</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -673,8 +670,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix: settings now loads env variables" />
-    <MESSAGE value="fix-attempt: working on the web search feature" />
     <MESSAGE value="fix: reconfigured web search settings and it now works" />
     <MESSAGE value="feat: add the rest of the setting configs" />
     <MESSAGE value="feat(cache): implemented a cache for the document embeddings" />
@@ -698,6 +693,8 @@
     <MESSAGE value="fix(logger): fixed the issue with the logging name not being set" />
     <MESSAGE value="fix: adding more logs" />
     <MESSAGE value="fix: fixed some issues and bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: fixed some issues and bugs" />
+    <MESSAGE value="perf: improving caching capabilities" />
+    <MESSAGE value="perf: redid/improved caching capabilities again" />
+    <option name="LAST_COMMIT_MESSAGE" value="perf: redid/improved caching capabilities again" />
   </component>
 </project>
