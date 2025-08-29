@@ -20,19 +20,16 @@ class Embedder:
     embedding vectors using a specified embedding model with caching support.
     """
 
-    def __init__(self, embedding_model_name: str) -> None:
+    def __init__(self) -> None:
         """
         Initializes the embedder with a document directory.
-
-        Args:
-            embedding_model_name (str): The name of the embedding model to be used.
         """
 
         try:
-            self.embedding_model = OpenAIEmbeddings(model=embedding_model_name)
+            self.embedding_model = OpenAIEmbeddings(model=settings.llm.EMBEDDING_MODEL_NAME)
             self.cache = EmbedderCache()
             logger.debug(
-                f"Initialized embedder with the model: {embedding_model_name}")
+                f"Initialized embedder with the model: {settings.llm.EMBEDDING_MODEL_NAME}")
         except Exception as e:
             raise EmbeddingError(
                 operation="initialization",
@@ -98,7 +95,6 @@ class Embedder:
         for i, doc in enumerate(documents):
             cached = self.cache.get_embedding(
                 content=doc.content,
-                source=doc.metadata.source,
                 kind=settings.vector.DOCUMENT
             )
 
@@ -204,7 +200,6 @@ class Embedder:
             # Check cache first
             cached = self.cache.get_embedding(
                 content=query.strip(),
-                source="query",
                 kind=settings.vector.QUERY
             )
 
@@ -255,8 +250,8 @@ class Embedder:
         """Validate cache integrity."""
         return self.cache.validate_cache()
 
-    def cleanup_cache(self) -> None:
+    def cleanup_cache(self, kind: str) -> None:
         """Perform cache cleanup if needed."""
-        if self.cache._should_cleanup():
+        if self.cache.should_cleanup(kind):
             logger.info("Performing cache cleanup")
-            self.cache._cleanup_cache()
+            self.cache.cleanup_cache(kind)

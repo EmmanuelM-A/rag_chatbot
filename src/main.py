@@ -24,7 +24,7 @@ if __name__ == "__main__":
     )
     document_processor = DocumentProcessor(
         path_to_directory=settings.app.RAW_DOCS_DIRECTORY)
-    embedder = Embedder(embedding_model_name=settings.llm.EMBEDDING_MODEL_NAME)
+    embedder = Embedder()
     query_handler = QueryHandler(
         embedder=embedder,
         llm_model_name=settings.llm.LLM_MODEL_NAME

@@ -1,0 +1,22 @@
+{
+    "entries": {
+        "b63e1fe6c15444018eb29476a748788dcf9ad760d70762e5104c2bcbe452ced9": {
+            "source": "query",
+            "type": "query",
+            "size": 13842,
+            "timestamp": 1756485688.5076423,
+            "last_accessed": 1756485688.5076423,
+            "embedding_file": "b63e1fe6c15444018eb29476a748788dcf9ad760d70762e5104c2bcbe452ced9.pkl"
+        },
+        "1070d606be5874d125d628e23ed17ee5bb3cf0a699cef45b9ee483feeed7baa4": {
+            "source": "query",
+            "type": "query",
+            "size": 13842,
+            "timestamp": 1756485889.0844402,
+            "last_accessed": 1756485889.0844402,
+            "embedding_file": "1070d606be5874d125d628e23ed17ee5bb3cf0a699cef45b9ee483feeed7baa4.pkl"
+        }
+    },
+    "total_size": 27684,
+    "last_cleanup": 1756485654.4039786
+}
