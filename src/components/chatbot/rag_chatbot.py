@@ -211,7 +211,7 @@ class RAGChatbotApp:
             Dictionary containing answer, sources, and metadata
         """
 
-        logger.info(f"Processing query: {user_query}")
+        logger.info(f"Processing the query: {user_query}")
 
         try:
             # Step 1: Search documents first

@@ -40,14 +40,25 @@ class QueryHandler:
         Embeds query, searches vector DB, returns top_k results.
         """
 
+        logger.debug("Embedding queries now...")
+
         query_vector = self.embedder.embed_query(query)
 
-        _, I = index.search(np.array([query_vector]).astype("float32"),
-                                       settings.llm.RETRIEVAL_TOP_K)
+        logger.debug("Query embedded. Initialing vector search...")
+
+        # Retrieve the top-K nearest neighbor indices for the query vector
+        _, indices = index.search(
+            np.array([query_vector]).astype("float32"),
+            settings.llm.RETRIEVAL_TOP_K
+        )
+
+        if indices.any():
+            logger.error(f"No indices found for the query vector: {query_vector}")
+            return None
 
         results = []
 
-        for i in I[0]:
+        for i in indices[0]:
             entry = metadata[i]
             text = entry.get("text")
             meta = entry.get("metadata")

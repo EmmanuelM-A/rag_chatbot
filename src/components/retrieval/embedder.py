@@ -209,7 +209,7 @@ class Embedder:
             )
 
             if cached is not None:
-                logger.debug("Using cached embedding for query")
+                logger.debug("Cache hit found! Using cached data.")
                 return cached
 
             # Get new embedding
