@@ -8,10 +8,10 @@ import os
 
 from components.chatbot.rag_chatbot import RAGChatbotApp
 from src.components.config.settings import settings
-from src.components.config.logger import logger, set_logger
+from src.components.config.logger import get_logger
 from src.utils.exceptions import RAGChatbotError
 
-set_logger(__name__)
+logger = get_logger(__name__)
 
 
 class TerminalUsage:

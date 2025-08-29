@@ -10,10 +10,10 @@ from pathlib import Path
 import time
 
 from src.components.config.settings import settings
-from src.components.config.logger import logger, set_logger
+from src.components.config.logger import logger, get_logger
 from src.utils.helper import generate_content_hash
 
-set_logger(__name__)
+get_logger(__name__)
 
 class EmbedderCache:
     """

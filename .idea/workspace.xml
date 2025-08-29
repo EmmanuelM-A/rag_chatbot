@@ -4,16 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix: fixing import issues and correct settings use">
-      <change afterPath="$PROJECT_DIR$/data/cache/embeddings/cache_metadata.json" afterDir="false" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="refactor + fix: fixed issues with the caching and integrated the new logger">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/config/logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/config/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/config/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ingestion/document_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/prompts/prompt_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/prompts/prompt_loader.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/vector_store.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/web_searcher.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +120,7 @@
       <recent name="C:\Users\maduk\Documents\Programming\Personal Projects\rag_chatbot\src\components\retrieval" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.logger">
+  <component name="RunManager" selected="Python.main">
     <configuration name="logger" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="rag_chatbot" />
       <option name="ENV_FILES" value="" />
@@ -236,8 +238,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.logger" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.logger" />
         <item itemvalue="Python.settings" />
         <item itemvalue="Python tests.pytest for test_logger.TestLogger" />
         <item itemvalue="Python tests.pytest for test_document_loader.TestDocumentLoader.test_should_raise_an_error_whilst_reading_data" />
@@ -259,22 +261,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00032" summary="updated configurations">
-      <option name="closed" value="true" />
-      <created>1754413824478</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1754413824478</updated>
-    </task>
-    <task id="LOCAL-00033" summary="updated the relevance_checker.py and the vector_store.py to accommodate web searches">
-      <option name="closed" value="true" />
-      <created>1754415628766</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1754415628766</updated>
     </task>
     <task id="LOCAL-00034" summary="working on implementing web search capabilities to the rest of the application">
       <option name="closed" value="true" />
@@ -652,7 +638,23 @@
       <option name="project" value="LOCAL" />
       <updated>1756406660069</updated>
     </task>
-    <option name="localTasksCounter" value="81" />
+    <task id="LOCAL-00081" summary="feat: allowed the logger's to be dynamically changed">
+      <option name="closed" value="true" />
+      <created>1756457292265</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1756457292265</updated>
+    </task>
+    <task id="LOCAL-00082" summary="refactor + fix: fixed issues with the caching and integrated the new logger">
+      <option name="closed" value="true" />
+      <created>1756457664016</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1756457664016</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -680,8 +682,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fix: the chatbot pipeline now works again" />
-    <MESSAGE value="cleaned up some code" />
     <MESSAGE value="fix: adding better exception handling" />
     <MESSAGE value="improvement: added more exception handling to the core chatbot functionality" />
     <MESSAGE value="feat: integrated the web searcher into the rag_chatbot" />
@@ -705,6 +705,8 @@
     <MESSAGE value="refactor: made a bunch of changes" />
     <MESSAGE value="refactor: injected the core components of the RAG Chatbot into the constructor instead of direct use" />
     <MESSAGE value="fix: fixing import issues and correct settings use" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: fixing import issues and correct settings use" />
+    <MESSAGE value="feat: allowed the logger's to be dynamically changed" />
+    <MESSAGE value="refactor + fix: fixed issues with the caching and integrated the new logger" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor + fix: fixed issues with the caching and integrated the new logger" />
   </component>
 </project>

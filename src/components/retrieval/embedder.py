@@ -6,12 +6,12 @@ vectors.
 from typing import Dict, Any, List, Tuple
 
 from langchain_openai import OpenAIEmbeddings
-from src.components.config.logger import logger, set_logger
+from src.components.config.logger import get_logger
 from src.components.config.settings import settings
 from src.components.retrieval.embedding_cache import EmbedderCache
 from src.utils.exceptions import EmptyDocumentError, EmbeddingError
 
-set_logger(__name__)
+logger = get_logger(__name__)
 
 
 class Embedder:

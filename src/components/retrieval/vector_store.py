@@ -9,13 +9,13 @@ from typing import Dict, Any, Optional, Tuple
 import faiss
 import numpy as np
 
-from src.components.config.logger import logger, set_logger
+from src.components.config.logger import get_logger
 from src.utils.exceptions import VectorIndexError, FileDoesNotExist, \
     VectorStoreError, FileSystemError
 from src.utils.helper import does_file_exist
 
 
-set_logger(__name__)
+logger = get_logger(__name__)
 
 
 class VectorStore:

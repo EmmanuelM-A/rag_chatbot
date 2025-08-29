@@ -9,10 +9,10 @@ from langchain_core.output_parsers import StrOutputParser
 
 from src.components.config.settings import settings
 from src.components.prompts.prompt_loader import create_prompt_template
-from src.components.config.logger import logger, set_logger
+from src.components.config.logger import get_logger
 from src.components.retrieval.embedder import Embedder
 
-set_logger(__name__)
+logger = get_logger(__name__)
 
 
 class QueryHandler:

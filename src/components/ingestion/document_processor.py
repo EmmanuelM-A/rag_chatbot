@@ -14,11 +14,11 @@ from src.components.ingestion.document import FileDocument
 from src.components.ingestion.document_loader import PDFDocumentLoader, \
     MarkdownDocumentLoader, TxTDocumentLoader, DocxDocumentLoader, \
     DocumentLoader
-from src.components.config.logger import logger, set_logger
+from src.components.config.logger import get_logger
 from src.utils.exceptions import InvalidDirectoryError, FileSystemError, \
     DocumentLoadError, FileTypeNotSupported, FileDoesNotExist
 
-set_logger(__name__)
+logger = get_logger(__name__)
 
 
 class DocumentProcessor(ABC):

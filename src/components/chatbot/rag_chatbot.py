@@ -17,14 +17,14 @@ from src.components.retrieval.vector_store import VectorStore
 from src.components.retrieval.web_searcher import WebSearcher
 from dotenv import load_dotenv
 
-from src.components.config.logger import logger, set_logger
+from src.components.config.logger import get_logger
 from src.utils.exceptions import DocumentProcessingError, EmbeddingError, \
     VectorStoreError, QueryProcessingError, RAGChatbotError, FileDoesNotExist
 from src.utils.helper import does_file_exist
 
 load_dotenv()
 
-set_logger(__name__)
+logger = get_logger(__name__)
 
 
 class RAGChatbotApp:
