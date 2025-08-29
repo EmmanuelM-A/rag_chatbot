@@ -61,7 +61,7 @@ class RAGChatbotApp:
             List of relevant document chunks or None if no results
         """
 
-        if self.vector_store.index_exists():
+        if not self.vector_store.index_exists():
             logger.info(
                 "FAISS index or metadata not found! Creating new ones..."
             )

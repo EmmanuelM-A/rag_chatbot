@@ -6,7 +6,7 @@ import signal
 import sys
 import os
 
-from components.chatbot.rag_chatbot import RAGChatbotApp
+from src.components.chatbot.rag_chatbot import RAGChatbotApp
 from src.components.config.settings import settings
 from src.components.config.logger import get_logger
 from src.utils.exceptions import RAGChatbotError
@@ -21,7 +21,7 @@ class TerminalUsage:
         self.app = app
 
     @staticmethod
-    def __validate_environment(self):
+    def __validate_environment():
         """
         Validate that all required environment variables and configurations are set.
         """
@@ -62,15 +62,16 @@ class TerminalUsage:
 
                 print("   Web search will fall back to alternative methods.")
 
-
-    def __print_startup_info(self):
+    @staticmethod
+    def __print_startup_info():
         """
         Print startup information about the chatbot configuration.
         """
 
         print("🚀 Starting RAG Chatbot")
         print("=" * 50)
-        print(f"📊 Web Search: {'✅ Enabled' if settings.web.IS_WEB_SEARCH_ENABLED else '❌ Disabled'}")
+        print(f"📊 Web Search: {'✅ Enabled' if settings.web.IS_WEB_SEARCH_ENABLED
+                                else '❌ Disabled'}")
         print(f"📁 Index Path: {settings.vector.VECTOR_DB_FILE_PATH}")
         print(f"📋 Metadata Path: {settings.vector.METADATA_DB_FILE_PATH}")
         print("=" * 50)
@@ -88,7 +89,7 @@ class TerminalUsage:
             signal.signal(signal.SIGINT, self.handle_shutdown_signal)
             signal.signal(signal.SIGTERM, self.handle_shutdown_signal)
 
-            self.__validate_environment(self)
+            self.__validate_environment()
 
             self.__print_startup_info()
 

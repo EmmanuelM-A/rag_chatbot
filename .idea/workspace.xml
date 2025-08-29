@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix(logger): fixed the issue with the logging name not being set">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="fix: adding more logs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/embeddings/cache_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/cache/embeddings/cache_metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/rag_chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/retrieval/embedding_cache.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/terminal_usage.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,14 +255,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00035" summary="tweaking configs and example env file">
-      <option name="closed" value="true" />
-      <created>1754424359230</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1754424359230</updated>
     </task>
     <task id="LOCAL-00036" summary="restructuring application">
       <option name="closed" value="true" />
@@ -648,7 +640,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756459675112</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="fix: adding more logs">
+      <option name="closed" value="true" />
+      <created>1756461102377</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1756461102377</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -676,7 +676,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="improvement: added more exception handling to the core chatbot functionality" />
     <MESSAGE value="feat: integrated the web searcher into the rag_chatbot" />
     <MESSAGE value="fix: settings now loads env variables" />
     <MESSAGE value="fix-attempt: working on the web search feature" />
@@ -701,6 +700,7 @@
     <MESSAGE value="feat: allowed the logger's to be dynamically changed" />
     <MESSAGE value="refactor + fix: fixed issues with the caching and integrated the new logger" />
     <MESSAGE value="fix(logger): fixed the issue with the logging name not being set" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix(logger): fixed the issue with the logging name not being set" />
+    <MESSAGE value="fix: adding more logs" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: adding more logs" />
   </component>
 </project>

@@ -61,7 +61,7 @@
       "type": "query",
       "size": 13842,
       "timestamp": 1756407619.5108967,
-      "last_accessed": 1756407619.5108967,
+      "last_accessed": 1756462765.7638104,
       "embedding_file": "b63e1fe6c15444018eb29476a748788dcf9ad760d70762e5104c2bcbe452ced9.pkl"
     },
     "d6996ded8769837b03dfc818d57d23147f2557f8d5a32ee9898bf70567a0b637": {
@@ -71,8 +71,16 @@
       "timestamp": 1756407703.1966162,
       "last_accessed": 1756407703.1966162,
       "embedding_file": "d6996ded8769837b03dfc818d57d23147f2557f8d5a32ee9898bf70567a0b637.pkl"
+    },
+    "7441df8b667162c4b6abb47945edede92467a33e54ec7e188ccd57e523c29c92": {
+      "source": "query",
+      "type": "query",
+      "size": 13842,
+      "timestamp": 1756462886.9462047,
+      "last_accessed": 1756462886.9462047,
+      "embedding_file": "7441df8b667162c4b6abb47945edede92467a33e54ec7e188ccd57e523c29c92.pkl"
     }
   },
-  "total_size": 124578,
+  "total_size": 138420,
   "last_cleanup": 1756407383.5577157
 }
