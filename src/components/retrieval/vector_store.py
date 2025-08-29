@@ -9,6 +9,7 @@ from typing import Dict, Any, Optional, Tuple
 import faiss
 import numpy as np
 
+from components.config.settings import settings
 from src.components.config.logger import get_logger
 from src.utils.exceptions import VectorIndexError, FileDoesNotExist, \
     VectorStoreError, FileSystemError
@@ -23,16 +24,12 @@ class VectorStore:
     Represents the communication service to access and store vectors.
     """
 
-    def __init__(self, index_path: str, metadata_path: str) -> None:
+    def __init__(self) -> None:
         """
         Initializes the VectorStore instance.
-
-        Args:
-            index_path: The file path to the vector index file.
-            metadata_path: The file path to the metadata file.
         """
-        self.index_path = index_path
-        self.metadata_path = metadata_path
+        self.index_path = settings.vector.VECTOR_DB_FILE_PATH
+        self.metadata_path = settings.vector.METADATA_DB_FILE_PATH
 
     def save_faiss_index(
         self,

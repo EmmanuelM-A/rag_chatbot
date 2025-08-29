@@ -26,19 +26,12 @@ class DocumentProcessor(ABC):
     Prepares raw documents for indexing into the vector store.
     """
 
-    def __init__(
-            self,
-            path_to_directory: str
-    ) -> None:
+    def __init__(self) -> None:
         """
         Initializes the DocumentProcessor instance.
-
-        Args:
-            path_to_directory: The file path to the directory that contains
-                the files to be processed.
         """
 
-        self.path_to_directory = path_to_directory
+        self.path_to_directory = settings.app.RAW_DOCS_DIRECTORY
         self.documents = []
         self.documents_skipped = []
         self.document_loader_mappings = {
