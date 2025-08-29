@@ -21,30 +21,39 @@ class EmbedderCache:
     Uses content-based hashing for cache keys to detect document changes.
     """
 
-    def __init__(
-        self,
-        cache_dir: str = settings.vector.EMBEDDING_CACHE_DIR,
-        max_cache_size_mb: int = settings.vector.MAX_CACHE_SIZE_MB
-    ) -> None:
+    def __init__(self) -> None:
         """
         Initialize the embedding cache.
-
-        Args:
-            cache_dir: Directory to store cache files
-            max_cache_size_mb: Maximum cache size in MB
         """
 
-        self.cache_dir = Path(cache_dir)
-        self.max_cache_size_mb = max_cache_size_mb
+        self.base_cache_dir = Path(settings.vector.EMBEDDING_CACHE_DIR)
 
         # Create cache directory
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.base_cache_dir.mkdir(parents=True, exist_ok=True)
 
-        # Cache metadata file
-        self.metadata_file = self.cache_dir / "cache_metadata.json"
+        # Two subdirectories: documents and queries
+        self.subcaches = {
+            "document": self.base_cache_dir / "documents",
+            "query": self.base_cache_dir / "queries"
+        }
 
-        # Load existing metadata
-        self.metadata = self._load_metadata()
+        # Make sure both exist
+        for path in self.subcaches.values():
+            path.mkdir(parents=True, exist_ok=True)
+
+        # Each kind has its own metadata file
+        self.metadata_files = {
+            kind: path / "cache_metadata.json"
+            for kind, path in self.subcaches.items()
+        }
+
+        # Load metadata for both caches
+        self.metadata = {
+            kind: self._load_metadata(self.metadata_files[kind])
+            for kind in self.subcaches
+        }
+
+    # --------------------- Metadata helpers ---------------------
 
     @staticmethod
     def _get_default_metadata() -> Dict[str, Any]:
@@ -53,28 +62,23 @@ class EmbedderCache:
         """
 
         return {
-            "entries": {},
-            # hash -> {source, size, timestamp, embedding_file, last_accessed}
+            "entries": {}, # hash -> {source, size, timestamp, embedding_file, last_accessed}
             "total_size": 0,
             "last_cleanup": time.time()
         }
 
-    def _load_metadata(self) -> Dict[str, Any]:
+    def _load_metadata(self, metadata_file: Path) -> Dict[str, Any]:
         """
         Load cache metadata from disk with proper error handling.
         """
 
-        if not self.metadata_file.exists():
-            logger.debug("Cache metadata file doesn't exist! Creating new one...")
+        if not metadata_file.exists() or metadata_file.stat().st_size == 0:
+            logger.debug("Cache metadata file doesn't exist or is empty! "
+                         "Creating new one...")
             return self._get_default_metadata()
 
         try:
-            # Check if file is empty
-            if self.metadata_file.stat().st_size == 0:
-                logger.warning("Cache metadata file is empty, creating new metadata")
-                return self._get_default_metadata()
-
-            with open(self.metadata_file, 'r', encoding="utf-8") as f:
+            with open(metadata_file, 'r', encoding="utf-8") as f:
                 metadata = json.load(f)
 
             # Validate metadata structure
@@ -95,8 +99,8 @@ class EmbedderCache:
             logger.warning(f"Corrupted cache metadata file: {e}. Creating fresh metadata.")
             # Backup corrupted file
             try:
-                backup_file = self.metadata_file.with_suffix('.json.corrupted')
-                self.metadata_file.rename(backup_file)
+                backup_file = metadata_file.with_suffix('.json.corrupted')
+                metadata_file.rename(backup_file)
                 logger.info(f"Backed up corrupted metadata to {backup_file}")
             except Exception as backup_error:
                 logger.error(f"Failed to backup corrupted file: {backup_error}")
@@ -107,100 +111,80 @@ class EmbedderCache:
             logger.error(f"Unexpected error loading cache metadata: {e}")
             return self._get_default_metadata()
 
-    def _save_metadata(self):
-        """Save cache metadata to disk with atomic write."""
-        try:
-            # Write to temporary file first (atomic write)
-            temp_file = self.metadata_file.with_suffix('.tmp')
+    def _save_metadata(self, kind: str):
+        """Save metadata for a given kind (document/query) atomically."""
 
+        metadata_file = self.metadata_files[kind]
+
+        # Write to temporary file first (atomic write)
+        temp_file = metadata_file.with_suffix('.tmp')
+
+        try:
             with open(temp_file, 'w', encoding='utf-8') as f:
-                json.dump(self.metadata, f, indent=2)
+                json.dump(self.metadata[kind], f, indent=4)
 
             # Atomic move
-            temp_file.replace(self.metadata_file)
-            logger.debug("Cache metadata saved successfully")
-
+            temp_file.replace(metadata_file)
+            logger.debug(f"{kind} metadata saved in cache successfully")
         except Exception as e:
-            logger.error(f"Failed to save cache metadata: {e}")
-            # Clean up temp file if it exists
-            temp_file = self.metadata_file.with_suffix('.tmp')
+            logger.error(f"Failed to save {kind} metadata: {e}")
             if temp_file.exists():
-                try:
-                    temp_file.unlink()
-                except:
-                    pass
+                temp_file.unlink()
 
-    def _get_cache_file_path(self, content_hash: str) -> Path:
+    def _get_cache_file_path(self, kind: str, content_hash: str) -> Path:
         """
         Get cache file path for a content hash.
         """
-        return self.cache_dir / f"{content_hash}.pkl"
+
+        return self.subcaches[kind] / f"{content_hash}.pkl"
 
     def get_embedding(
         self,
+        kind: str,
         content: str,
-        source: str = None,
-        kind: str = "document"
     ) -> Optional[List[float]]:
         """
         Retrieve embedding from cache if it exists.
+
         Args:
-            content: Text content to check
-            source: Optional identifier (filename, URL, query string, etc.)
             kind: Either "document" or "query"
+            content: Text content to check
         """
 
         if not settings.vector.EMBEDDING_CACHE_ENABLED:
+            logger.warning("Embedding cache is disabled!")
             return None
 
         try:
             content_hash = generate_content_hash(f"{kind}:{content}")
+            cache_file = self._get_cache_file_path(kind, content_hash)
 
-            cache_file = self._get_cache_file_path(content_hash)
-
-            if content_hash in self.metadata[
+            if content_hash in self.metadata[kind][
                 "entries"] and cache_file.exists():
                 with open(cache_file, 'rb') as f:
                     embedding = pickle.load(f)
 
-                # Update access time
-                self.metadata["entries"][content_hash][
+                # Update last access time
+                self.metadata[kind]["entries"][content_hash][
                     "last_accessed"] = time.time()
                 return embedding
-
         except Exception as e:
             logger.error(f"Error retrieving {kind} embedding from cache: {e}")
-
         return None
 
-    def store_embedding(
-        self,
-        content: str,
-        embedding: List[float],
-        source: str = None,
-        kind: str = "document"
-    ) -> None:
-        """
-        Store embedding in cache.
-        Args:
-            content: Text or query string
-            embedding: Embedding vector
-            source: Optional identifier
-            kind: Either "document" or "query"
-        """
-
+    def store_embedding(self, kind: str, content: str, embedding: List[float],
+                        source: str = None) -> None:
         if not settings.vector.EMBEDDING_CACHE_ENABLED:
             return
-
         try:
             content_hash = generate_content_hash(f"{kind}:{content}")
-            cache_file = self._get_cache_file_path(content_hash)
+            cache_file = self._get_cache_file_path(kind, content_hash)
 
             with open(cache_file, 'wb') as f:
                 pickle.dump(embedding, f)
 
             file_size = cache_file.stat().st_size
-            self.metadata["entries"][content_hash] = {
+            self.metadata[kind]["entries"][content_hash] = {
                 "source": source or "unknown",
                 "type": kind,
                 "size": file_size,
@@ -208,208 +192,188 @@ class EmbedderCache:
                 "last_accessed": time.time(),
                 "embedding_file": cache_file.name
             }
-            self.metadata["total_size"] += file_size
-            self._save_metadata()
-
+            self.metadata[kind]["total_size"] += file_size
+            self._save_metadata(kind)
         except Exception as e:
             logger.error(f"Failed to cache {kind} embedding: {e}")
 
-    def get_multiple_embeddings(self, contents: List[str], sources: List[str] = None) -> Tuple[List[Optional[List[float]]], List[str]]:
-        """
-        Get multiple embeddings from cache.
-
-        Returns:
-            Tuple of (cached_embeddings, uncached_contents)
-            - cached_embeddings: List with embeddings or None for cache misses
-            - uncached_contents: Contents that need to be embedded
-        """
+    def get_multiple_embeddings(self, kind: str, contents: List[str],
+                                sources: List[str] = None):
         if not settings.vector.EMBEDDING_CACHE_ENABLED:
             return [None] * len(contents), contents
 
         sources = sources or [None] * len(contents)
-        cached_embeddings = []
-        uncached_contents = []
+        cached_embeddings, uncached_contents = [], []
 
         for content, source in zip(contents, sources):
-            embedding = self.get_embedding(content, source)
+            embedding = self.get_embedding(kind, content, source)
             cached_embeddings.append(embedding)
             if embedding is None:
                 uncached_contents.append(content)
 
-        cache_hits = sum(1 for e in cached_embeddings if e is not None)
-        if contents:  # Avoid division by zero
-            hit_rate = cache_hits / len(contents) * 100
-            logger.info(f"Cache hits: {cache_hits}/{len(contents)} ({hit_rate:.1f}%)")
-
         return cached_embeddings, uncached_contents
 
-    def store_multiple_embeddings(
-        self,
-        contents: List[str],
-        embeddings: List[List[float]],
-        sources: List[str] = None
-    ):
-        """Store multiple embeddings in cache."""
+    def store_multiple_embeddings(self, kind: str, contents: List[str],
+                                  embeddings: List[List[float]],
+                                  sources: List[str] = None):
         if not settings.vector.EMBEDDING_CACHE_ENABLED:
             return
 
         sources = sources or [None] * len(contents)
-
         for content, embedding, source in zip(contents, embeddings, sources):
-            self.store_embedding(content, embedding, source)
+            self.store_embedding(kind, content, embedding, source)
 
-    def _should_cleanup(self) -> bool:
-        """Check if cache cleanup is needed."""
-        size_mb = self.metadata["total_size"] / (1024 * 1024)
-        time_since_cleanup = time.time() - self.metadata.get("last_cleanup", 0)
+    def _should_cleanup(self, kind: str) -> bool:
+        """Check if cleanup is needed for a given kind."""
+        size_mb = self.metadata[kind]["total_size"] / (1024 * 1024)
+        time_since_cleanup = time.time() - self.metadata[kind].get(
+            "last_cleanup", 0)
+        return (
+                    size_mb > settings.vector.MAX_CACHE_SIZE_MB or time_since_cleanup > 86400)
 
-        return (size_mb > self.max_cache_size_mb or time_since_cleanup > 86400)  # Cleanup daily
-
-    def _cleanup_cache(self):
-        """Clean up old cache entries to maintain size limit."""
-        logger.info("Starting cache cleanup...")
-
+    def _cleanup_cache(self, kind: str):
+        """Clean up old cache entries for a given kind to maintain size limit."""
+        logger.info(f"Starting {kind} cache cleanup...")
         try:
-            # Sort entries by last access time (oldest first)
-            entries = list(self.metadata["entries"].items())
-            entries.sort(key=lambda x: x[1].get("last_accessed", 0))
+            entries = list(self.metadata[kind]["entries"].items())
+            entries.sort(
+                key=lambda x: x[1].get("last_accessed", 0))  # oldest first
 
-            target_size = self.max_cache_size_mb * 0.8 * 1024 * 1024  # 80% of max
-            current_size = self.metadata["total_size"]
-
+            target_size = settings.vector.MAX_CACHE_SIZE_MB * 0.8 * 1024 * 1024
+            current_size = self.metadata[kind]["total_size"]
             removed_count = 0
 
             for content_hash, entry in entries:
                 if current_size <= target_size:
                     break
-
-                if self._remove_cache_entry(content_hash):
+                if self._remove_cache_entry(kind, content_hash):
                     current_size -= entry.get("size", 0)
                     removed_count += 1
 
-            self.metadata["last_cleanup"] = time.time()
-            logger.info(f"Cache cleanup completed. Removed {removed_count} entries.")
-
+            self.metadata[kind]["last_cleanup"] = time.time()
+            logger.info(
+                f"{kind} cache cleanup completed. Removed {removed_count} entries.")
         except Exception as e:
-            logger.error(f"Error during cache cleanup: {e}")
+            logger.error(f"Error during {kind} cache cleanup: {e}")
 
-    def _remove_cache_entry(self, content_hash: str) -> bool:
-        """Remove a cache entry."""
+    def _remove_cache_entry(self, kind: str, content_hash: str) -> bool:
+        """Remove a cache entry for a given kind."""
         try:
-            cache_file = self._get_cache_file_path(content_hash)
+            cache_file = self._get_cache_file_path(kind, content_hash)
             if cache_file.exists():
                 cache_file.unlink()
 
-            if content_hash in self.metadata["entries"]:
-                entry_size = self.metadata["entries"][content_hash].get("size", 0)
-                del self.metadata["entries"][content_hash]
-                self.metadata["total_size"] -= entry_size
+            if content_hash in self.metadata[kind]["entries"]:
+                entry_size = self.metadata[kind]["entries"][content_hash].get(
+                    "size", 0)
+                del self.metadata[kind]["entries"][content_hash]
+                self.metadata[kind]["total_size"] -= entry_size
                 return True
-
         except Exception as e:
-            logger.error(f"Failed to remove cache entry {content_hash}: {e}")
-
+            logger.error(
+                f"Failed to remove {kind} cache entry {content_hash}: {e}")
         return False
 
-    def clear_cache(self):
-        """Clear all cache entries."""
-        logger.info("Clearing embedding cache...")
+    def clear_cache(self, kind: str = None):
+        """
+        Clear cache for one kind or all.
+        """
+        kinds = [kind] if kind else self.subcaches.keys()
+        for k in kinds:
+            logger.info(f"Clearing {k} cache...")
+            try:
+                for cache_file in self.subcaches[k].glob("*.pkl"):
+                    cache_file.unlink(missing_ok=True)
+                self.metadata[k] = self._get_default_metadata()
+                self._save_metadata(k)
+            except Exception as e:
+                logger.error(f"Failed to clear {k} cache: {e}")
 
-        try:
-            # Remove all cache files
-            for cache_file in self.cache_dir.glob("*.pkl"):
-                try:
-                    cache_file.unlink()
-                except Exception as e:
-                    logger.warning(f"Failed to remove cache file {cache_file}: {e}")
-
-            # Reset metadata
-            self.metadata = self._get_default_metadata()
-            self._save_metadata()
-            logger.info("Cache cleared successfully.")
-
-        except Exception as e:
-            logger.error(f"Failed to clear cache: {e}")
-
-    def get_cache_stats(self) -> Dict[str, Any]:
-        """Get cache statistics."""
-        try:
-            size_mb = self.metadata["total_size"] / (1024 * 1024)
-
+    def get_cache_stats(self, kind: str = None) -> Dict[str, Any]:
+        """
+        Return stats for one kind or all.
+        """
+        if kind:
+            size_mb = self.metadata[kind]["total_size"] / (1024 * 1024)
             return {
-                "total_entries": len(self.metadata["entries"]),
+                "kind": kind,
+                "total_entries": len(self.metadata[kind]["entries"]),
                 "total_size_mb": round(size_mb, 2),
                 "max_size_mb": self.max_cache_size_mb,
-                "cache_directory": str(self.cache_dir),
+                "cache_directory": str(self.subcaches[kind]),
                 "enabled": settings.vector.EMBEDDING_CACHE_ENABLED
             }
-        except Exception as e:
-            logger.error(f"Error getting cache stats: {e}")
-            return {
-                "total_entries": 0,
-                "total_size_mb": 0,
-                "max_size_mb": self.max_cache_size_mb,
-                "cache_directory": str(self.cache_dir),
-                "enabled": settings.vector.EMBEDDING_CACHE_ENABLED,
-                "error": str(e)
+        else:
+            return {k: self.get_cache_stats(k) for k in self.subcaches}
+
+    def validate_cache(self, kind: str = None) -> Dict[str, Any]:
+        """
+        Validate cache integrity for a given kind (document/query) or for all.
+        Returns a report with counts of valid, missing, corrupted, and orphaned entries.
+        """
+        kinds = [kind] if kind else self.subcaches.keys()
+        overall_report = {}
+
+        for k in kinds:
+            logger.info(f"Validating {k} cache integrity...")
+
+            report = {
+                "total_entries": len(self.metadata[k]["entries"]),
+                "valid_entries": 0,
+                "missing_files": 0,
+                "corrupted_files": 0,
+                "orphaned_files": 0
             }
 
-    def validate_cache(self) -> Dict[str, Any]:
-        """Validate cache integrity and return report."""
-        logger.info("Validating cache integrity...")
+            try:
+                valid_hashes = set()
 
-        report = {
-            "total_entries": len(self.metadata["entries"]),
-            "valid_entries": 0,
-            "invalid_entries": 0,
-            "missing_files": 0,
-            "corrupted_files": 0,
-            "orphaned_files": 0
-        }
+                # --- Check metadata entries ---
+                for content_hash, entry in list(
+                        self.metadata[k]["entries"].items()):
+                    cache_file = self._get_cache_file_path(k, content_hash)
 
-        try:
-            # Check metadata entries
-            valid_hashes = set()
-            for content_hash, entry in list(self.metadata["entries"].items()):
-                cache_file = self._get_cache_file_path(content_hash)
+                    if not cache_file.exists():
+                        logger.warning(
+                            f"[{k}] Missing file for hash {content_hash[:8]}")
+                        report["missing_files"] += 1
+                        del self.metadata[k]["entries"][content_hash]
+                        continue
 
-                if not cache_file.exists():
-                    logger.warning(f"Missing cache file for hash {content_hash[:8]}")
-                    report["missing_files"] += 1
-                    # Remove from metadata
-                    del self.metadata["entries"][content_hash]
-                    continue
-
-                try:
-                    # Try to load the embedding
-                    with open(cache_file, 'rb') as f:
-                        pickle.load(f)
-                    report["valid_entries"] += 1
-                    valid_hashes.add(content_hash)
-
-                except Exception as e:
-                    logger.warning(f"Corrupted cache file {content_hash[:8]}: {e}")
-                    report["corrupted_files"] += 1
-                    self._remove_cache_entry(content_hash)
-
-            # Check for orphaned files
-            for cache_file in self.cache_dir.glob("*.pkl"):
-                if cache_file.stem not in valid_hashes:
-                    logger.warning(f"Orphaned cache file: {cache_file.name}")
-                    report["orphaned_files"] += 1
                     try:
-                        cache_file.unlink()
+                        with open(cache_file, 'rb') as f:
+                            pickle.load(f)  # ensure it's readable
+                        report["valid_entries"] += 1
+                        valid_hashes.add(content_hash)
                     except Exception as e:
-                        logger.error(f"Failed to remove orphaned file: {e}")
+                        logger.warning(
+                            f"[{k}] Corrupted file {cache_file.name}: {e}")
+                        report["corrupted_files"] += 1
+                        self._remove_cache_entry(k, content_hash)
 
-            # Save cleaned metadata
-            if report["missing_files"] > 0 or report["corrupted_files"] > 0:
-                self._save_metadata()
+                # --- Check for orphaned files (files not in metadata) ---
+                for cache_file in self.subcaches[k].glob("*.pkl"):
+                    if cache_file.stem not in valid_hashes:
+                        logger.warning(
+                            f"[{k}] Orphaned cache file: {cache_file.name}")
+                        report["orphaned_files"] += 1
+                        try:
+                            cache_file.unlink()
+                        except Exception as e:
+                            logger.error(
+                                f"[{k}] Failed to remove orphaned file: {e}")
 
-            logger.info(f"Cache validation complete: {report}")
-            return report
+                # Save cleaned metadata if necessary
+                if report["missing_files"] > 0 or report[
+                    "corrupted_files"] > 0:
+                    self._save_metadata(k)
 
-        except Exception as e:
-            logger.error(f"Error during cache validation: {e}")
-            report["error"] = str(e)
-            return report
+                logger.info(f"[{k}] Cache validation complete: {report}")
+
+            except Exception as e:
+                logger.error(f"[{k}] Error during cache validation: {e}")
+                report["error"] = str(e)
+
+            overall_report[k] = report
+
+        return overall_report if not kind else overall_report[k]
