@@ -37,7 +37,7 @@ class LogSettings(BaseSettings):
 
     LOG_LEVEL: str = Field(default="DEBUG")
     LOG_DIRECTORY: str = Field(default="../logs")
-    LOG_FORMAT: str = Field(default="%(asctime)s [%(levelname)s]: %(message)s")
+    LOG_FORMAT: str = Field(default="%(asctime)s [%(levelname)s] (%(name)s): %(message)s")
     LOG_DATE_FORMAT: str = Field(default="%Y-%m-%d %H:%M:%S")
     LOG_WEB_SEARCHES: bool = Field(default=False)
     IS_FILE_LOGGING_ENABLED: bool = Field(default=False)
@@ -108,7 +108,7 @@ class WebSearchSettings(BaseSettings):
     Settings and configurations for the web search mechanism.
     """
 
-    IS_WEB_SEARCH_ENABLED: bool = Field(default=True)
+    IS_WEB_SEARCH_ENABLED: bool = Field(default=False)
     MAX_WEB_SEARCH_RESULTS: int = Field(default=5)
     WEB_REQUEST_TIMEOUT_SECS: int = Field(default=15)
     WEB_REQUEST_DELAY_SECS: int = Field(default=1)
