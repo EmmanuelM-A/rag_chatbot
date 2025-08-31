@@ -30,8 +30,3 @@ if __name__ == "__main__":
     usage = TerminalUsage(app=chatbot)
 
     usage.run()
-
-# TODO: REVIEW, FIX AND OPTIMIZE CODE
-# TODO: UPDATE DOCUMENTATION
-# TODO: LAYOUT PLAN FOR API CONVERSION
-# TODO: BEGIN API

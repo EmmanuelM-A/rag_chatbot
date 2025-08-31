@@ -56,7 +56,6 @@ class QueryHandler:
 
         for i in indices[0]:
             entry = metadata[i]
-            # logger.debug(entry) # TODO: REMOVE THE SOURCES TAG IN THE entry field source='../data/raw_docs\\Role Descriptions.docx'
             text = entry.get("text")
             meta = entry.get("meta")
             if text is None or meta is None:

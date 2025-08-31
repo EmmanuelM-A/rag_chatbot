@@ -40,7 +40,7 @@ class LogSettings(BaseSettings):
     LOG_FORMAT: str = Field(default="%(asctime)s [%(levelname)s] (%(name)s): %(message)s")
     LOG_DATE_FORMAT: str = Field(default="%Y-%m-%d %H:%M:%S")
     LOG_WEB_SEARCHES: bool = Field(default=False)
-    IS_FILE_LOGGING_ENABLED: bool = Field(default=False)
+    IS_FILE_LOGGING_ENABLED: bool = Field(default=True)
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
 

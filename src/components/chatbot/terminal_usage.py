@@ -79,7 +79,7 @@ class TerminalUsage:
     def handle_shutdown_signal(self, signum, frame):
         """Handles program exits via Ctrl+C or termination signals"""
 
-        self.app.shutdown()
+        self.shutdown()
 
     def run(self):
         """Runs the chatbot"""
