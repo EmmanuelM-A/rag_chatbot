@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="perf: tweaked code to improved performance" />
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="chore: cleaning up code">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FUTURE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -249,14 +253,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00045" summary="fixed some issues">
-      <option name="closed" value="true" />
-      <created>1754495058870</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1754495058870</updated>
     </task>
     <task id="LOCAL-00046" summary="attempting to fix application wide issues">
       <option name="closed" value="true" />
@@ -642,7 +638,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756659652574</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="chore: cleaning up code">
+      <option name="closed" value="true" />
+      <created>1756660340392</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1756660340392</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -670,7 +674,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="perf(settings): grouped settings and configs into separate setting classes" />
     <MESSAGE value="perf(logging): upgraded the logging mechanism so it fully relies on configs defined in settings and made a singleton instance of the logger" />
     <MESSAGE value="chore: updating some code" />
     <MESSAGE value="perf: improved the custom exceptions to cover a wider range of issues" />
@@ -695,6 +698,7 @@
     <MESSAGE value="refactor: setting configs are now passed in internally rather than through arguments" />
     <MESSAGE value="perf(query-handler): improved error handling" />
     <MESSAGE value="perf: tweaked code to improved performance" />
-    <option name="LAST_COMMIT_MESSAGE" value="perf: tweaked code to improved performance" />
+    <MESSAGE value="chore: cleaning up code" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: cleaning up code" />
   </component>
 </project>
