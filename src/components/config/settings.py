@@ -112,6 +112,7 @@ class WebSearchSettings(BaseSettings):
     MAX_WEB_SEARCH_RESULTS: int = Field(default=5)
     WEB_REQUEST_TIMEOUT_SECS: int = Field(default=15)
     WEB_REQUEST_DELAY_SECS: int = Field(default=1)
+    MAX_WEB_REQUEST_RESULTS: int = Field(default=10)
     MAX_WEB_CONTENT_LENGTH: int = Field(default=10000)
     MIN_WEB_CONTENT_LENGTH: int = Field(default=100)
 

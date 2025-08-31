@@ -34,6 +34,10 @@ class DocumentProcessor(ABC):
         self.path_to_directory = settings.app.RAW_DOCS_DIRECTORY
         self.documents = []
         self.documents_skipped = []
+        self.splitter = RecursiveCharacterTextSplitter(
+            chunk_size=settings.vector.CHUNK_SIZE,
+            chunk_overlap=settings.vector.CHUNK_OVERLAP
+        )
         self.document_loader_mappings = {
             settings.app.PDF_FILE_EXT: PDFDocumentLoader(),
             settings.app.MD_FILE_EXT: MarkdownDocumentLoader(),
@@ -98,8 +102,7 @@ class DocumentProcessor(ABC):
 
         return self.document_loader_mappings.get(file_extension.lower(), None)
 
-    @staticmethod
-    def __chunk_documents(documents):
+    def __chunk_documents(self, documents):
         """
         Splits documents into smaller chunks using a recursive character
         splitter and returns a list of chunked documents.
@@ -107,14 +110,9 @@ class DocumentProcessor(ABC):
 
         logger.debug("Chunking documents...")
 
-        splitter = RecursiveCharacterTextSplitter(
-            chunk_size=settings.vector.CHUNK_SIZE,
-            chunk_overlap=settings.vector.CHUNK_OVERLAP
-        )
-
         chunks = []
         for doc in documents:
-            for chunk in splitter.split_text(doc.content):
+            for chunk in self.splitter.split_text(doc.content):
                 if chunk.strip():
                     chunks.append(
                         FileDocument(content=chunk, metadata=doc.metadata))

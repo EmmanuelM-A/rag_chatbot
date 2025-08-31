@@ -151,7 +151,7 @@ class RAGChatbotApp:
 
             # Create embeddings for web content
             texts = [doc.content for doc in web_chunks]
-            web_vectors = self.embedder.embedding_model.embed_documents(texts)
+            web_vectors = self.embedder.embed_documents(texts)
 
             # Create metadata for web chunks
             web_metadata = {
@@ -214,7 +214,6 @@ class RAGChatbotApp:
         logger.info(f"Processing the query: {user_query}")
 
         try:
-            # Step 1: Search documents first
             document_results = self._search_documents(user_query)
 
             if document_results:
@@ -232,7 +231,7 @@ class RAGChatbotApp:
                         exc_info=True
                     )
                     raise QueryProcessingError(
-                        f"Failed to generate response: {e}")
+                        f"Failed to generate response: {e}") from e
 
             # Fall back to web search if query is relevant but no document results
             web_results = self._search_web_and_add_to_store(user_query)

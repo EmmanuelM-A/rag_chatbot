@@ -32,9 +32,11 @@ class WebSearcher:
             chunk_overlap=settings.vector.CHUNK_OVERLAP
         )
 
-    def search_web(self, query: str,
-                   num_results: int = settings.web.MAX_WEB_SEARCH_RESULTS) -> List[
-        Dict[str, Any]]:
+    def __search_web(
+            self,
+            query: str,
+            num_results: int = settings.web.MAX_WEB_SEARCH_RESULTS
+    ) -> List[Dict[str, Any]]:
         """
         Perform web search using Google Custom Search API.
 
@@ -43,7 +45,7 @@ class WebSearcher:
             num_results: Number of results to retrieve
 
         Returns:
-            List of search results with title, snippet, and url
+            List of search results with title, snippet, and url.
         """
 
         if not self.search_api_key or not self.search_engine_id:
@@ -59,10 +61,14 @@ class WebSearcher:
                 'key': self.search_api_key,
                 'cx': self.search_engine_id,
                 'q': query,
-                'num': min(num_results, 10)  # API limit is 10 per request
+                'num': min(num_results, settings.web.MAX_WEB_REQUEST_RESULTS)
             }
 
-            response = requests.get(url, params=params, timeout=10)
+            response = requests.get(
+                url,
+                params=params,
+                timeout=settings.web.WEB_REQUEST_TIMEOUT_SECS
+            )
             response.raise_for_status()
 
             data = response.json()
@@ -76,18 +82,19 @@ class WebSearcher:
                 results.append({
                     'title': item.get('title', ''),
                     'snippet': item.get('snippet', ''),
-                    'url': item.get('link', ''),
-                    'source': 'google_search'
+                    'url': item.get('link', '')
                 })
 
             logger.info(f"Retrieved {len(results)} search results")
+
             return results
 
         except Exception as e:
             logger.error(f"Error in web search: {e}")
             return self._fallback_search(query, num_results)
 
-    def _fallback_search(self, query: str, num_results: int) -> List[
+    @staticmethod
+    def _fallback_search(query: str, num_results: int) -> List[
         Dict[str, Any]]:
         """
         Fallback search using DuckDuckGo (no API key required).
@@ -101,7 +108,7 @@ class WebSearcher:
             # Simple DuckDuckGo search (note: this may not work reliably in production)
             search_url = f"https://duckduckgo.com/html/?q={quote_plus(query)}"
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'User-Agent': settings.web.WEB_USER_AGENT
             }
 
             response = requests.get(search_url, headers=headers, timeout=10)
@@ -133,7 +140,8 @@ class WebSearcher:
             logger.error(f"Error in fallback search: {e}")
             return []
 
-    def fetch_page_content(self, url: str) -> Optional[str]:
+    @staticmethod
+    def fetch_page_content(url: str) -> Optional[str]:
         """
         Fetch and extract text content from a web page.
 
@@ -146,10 +154,14 @@ class WebSearcher:
 
         try:
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'User-Agent': settings.web.WEB_USER_AGENT
             }
 
-            response = requests.get(url, headers=headers, timeout=15)
+            response = requests.get(
+                url,
+                headers=headers,
+                timeout=settings.web.WEB_REQUEST_TIMEOUT_SECS
+            )
             response.raise_for_status()
 
             soup = BeautifulSoup(response.content, 'html.parser')
@@ -194,16 +206,18 @@ class WebSearcher:
         """
         Perform web search and retrieve full content from result URLs.
         """
-        logger.info(f"Searching web and retrieving content for: {query}")
+
+        logger.debug(f"Initiating web search for the query: {query}")
 
         # Get search results
-        search_results = self.search_web(query)
+        search_results = self.__search_web(query)
 
         if not search_results:
             logger.warning("No search results to process")
             return []
 
         documents = []
+        skipped = 0
 
         for i, result in enumerate(search_results):
             try:
@@ -216,6 +230,7 @@ class WebSearcher:
                 snippet = result.get('snippet', '')
 
                 if not url:
+                    skipped += 1
                     continue
 
                 # Fetch full page content
@@ -225,7 +240,6 @@ class WebSearcher:
                     # Combine title, snippet, and content
                     full_content = f"Title: {title}\n\nSummary: {snippet}\n\nContent: {content}"
 
-                    # CHANGED: Create FileDocumentMetadata object instead of dict
                     metadata = FileDocumentMetadata(
                         filename=title or "web_content",
                         file_extension=".html",
@@ -241,7 +255,6 @@ class WebSearcher:
                     # If we can't get full content, use just the snippet
                     snippet_content = f"Title: {title}\n\nSummary: {snippet}"
 
-                    # CHANGED: Create FileDocumentMetadata object instead of dict
                     metadata = FileDocumentMetadata(
                         filename=title or "web_snippet",
                         file_extension=".html",
