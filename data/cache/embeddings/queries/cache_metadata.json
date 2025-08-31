@@ -15,8 +15,16 @@
             "timestamp": 1756485889.0844402,
             "last_accessed": 1756485889.0844402,
             "embedding_file": "1070d606be5874d125d628e23ed17ee5bb3cf0a699cef45b9ee483feeed7baa4.pkl"
+        },
+        "c0e2cbe9814db8a4e5ed465080e7e8caee610bf0660dfbe6e9411853c1051869": {
+            "source": "query",
+            "type": "query",
+            "size": 13842,
+            "timestamp": 1756487300.8288298,
+            "last_accessed": 1756487300.8288298,
+            "embedding_file": "c0e2cbe9814db8a4e5ed465080e7e8caee610bf0660dfbe6e9411853c1051869.pkl"
         }
     },
-    "total_size": 27684,
+    "total_size": 41526,
     "last_cleanup": 1756485654.4039786
 }

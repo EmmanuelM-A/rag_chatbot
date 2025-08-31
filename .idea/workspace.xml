@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="refact(embedder): integrated the new embedding cache class into the files">
+    <list default="true" id="21fb0717-eb90-4801-a84b-b39d9f17e83a" name="Changes" comment="refactor: setting configs are now passed in internally rather than through arguments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/chatbot/query_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/cache/embeddings/queries/cache_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/cache/embeddings/queries/cache_metadata.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -253,14 +253,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1748665314417</updated>
-    </task>
-    <task id="LOCAL-00042" summary="Refactored code so each class/file adheres to SRP">
-      <option name="closed" value="true" />
-      <created>1754481074463</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1754481074463</updated>
     </task>
     <task id="LOCAL-00043" summary="Refactored code so it uses the new config settings file">
       <option name="closed" value="true" />
@@ -646,7 +638,15 @@
       <option name="project" value="LOCAL" />
       <updated>1756486292485</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="refactor: setting configs are now passed in internally rather than through arguments">
+      <option name="closed" value="true" />
+      <created>1756487001344</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1756487001344</updated>
+    </task>
+    <option name="localTasksCounter" value="92" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -674,7 +674,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="feat(cache): implemented a cache for the document embeddings" />
     <MESSAGE value="perf: improved the helper methods" />
     <MESSAGE value="fix-attempt: trying to fix caching issues" />
     <MESSAGE value="perf(settings): grouped settings and configs into separate setting classes" />
@@ -699,6 +698,7 @@
     <MESSAGE value="perf: redid/improved caching capabilities again" />
     <MESSAGE value="chore: deleted unnecessary files" />
     <MESSAGE value="refact(embedder): integrated the new embedding cache class into the files" />
-    <option name="LAST_COMMIT_MESSAGE" value="refact(embedder): integrated the new embedding cache class into the files" />
+    <MESSAGE value="refactor: setting configs are now passed in internally rather than through arguments" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: setting configs are now passed in internally rather than through arguments" />
   </component>
 </project>
