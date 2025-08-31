@@ -19,7 +19,7 @@ class AppSettings(BaseSettings):
 
     ENV: str = Field(default="development", env="ENV")
     APP_NAME: str = Field(default="RAG Chatbot")
-    RAW_DOCS_DIRECTORY: str = Field(default="../data/raw_docs")
+    RAW_DOCS_DIRECTORY: str = Field(default="../data/raw_docs", env="RAW_DOCS_DIRECTORY")
     ALLOWED_FILE_EXTENSIONS: List[str] = Field(
         default=[".pdf", ".docx", ".txt", ".md"])
     MD_FILE_EXT: str = Field(default=".md")
@@ -35,12 +35,12 @@ class LogSettings(BaseSettings):
     Settings and configurations for the logging mechanism.
     """
 
-    LOG_LEVEL: str = Field(default="DEBUG")
+    LOG_LEVEL: str = Field(default="DEBUG", env="LOG_LEVEL")
     LOG_DIRECTORY: str = Field(default="../logs")
     LOG_FORMAT: str = Field(default="%(asctime)s [%(levelname)s] (%(name)s): %(message)s")
     LOG_DATE_FORMAT: str = Field(default="%Y-%m-%d %H:%M:%S")
     LOG_WEB_SEARCHES: bool = Field(default=False)
-    IS_FILE_LOGGING_ENABLED: bool = Field(default=True)
+    IS_FILE_LOGGING_ENABLED: bool = Field(default=True, env="IS_FILE_LOGGING_ENABLED")
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
 
@@ -53,10 +53,10 @@ class LLMSettings(BaseSettings):
     OPENAI_API_KEY: SecretStr = Field(
         default=..., env="OPENAI_API_KEY"
     )
-    EMBEDDING_MODEL_NAME: str = Field(default="text-embedding-3-small")
-    LLM_MODEL_NAME: str = Field(default="gpt-3.5-turbo")
-    LLM_TEMPERATURE: float = Field(default=0.7)
-    RETRIEVAL_TOP_K: int = Field(default=3)
+    EMBEDDING_MODEL_NAME: str = Field(default="text-embedding-3-small", env="EMBEDDING_MODEL_NAME")
+    LLM_MODEL_NAME: str = Field(default="gpt-3.5-turbo", env="LLM_MODEL_NAME")
+    LLM_TEMPERATURE: float = Field(default=0.7, env="LLM_TEMPERATURE")
+    RETRIEVAL_TOP_K: int = Field(default=3, env="RETRIEVAL_TOP_K")
     RESPONSE_PROMPT_FILEPATH: str = Field(
         default="../data/prompts/default_response_prompt.yaml"
     )
@@ -70,22 +70,23 @@ class VectorSettings(BaseSettings):
     """
 
     VECTOR_DB_FILE_PATH: str = Field(
-        default="../../../data/db/vector_index.faiss")
-    METADATA_DB_FILE_PATH: str = Field(default="../../../data/db/metadata.pkl")
-    CHUNK_SIZE: int = Field(default=1000)
-    CHUNK_OVERLAP: int = Field(default=20)
+        default="../data/db/vector_index.faiss", env="VECTOR_DB_FILE_PATH")
+    METADATA_DB_FILE_PATH: str = Field(
+        default="../data/db/metadata.pkl", env="METADATA_DB_FILE_PATH")
+    CHUNK_SIZE: int = Field(default=1000, env="CHUNK_SIZE")
+    CHUNK_OVERLAP: int = Field(default=20, env="CHUNK_OVERLAP")
 
     MAX_VECTORS_IN_MEMORY: int = Field(default=10000)
     VECTOR_BATCH_SIZE: int = Field(default=100)
 
-    EMBEDDING_CACHE_ENABLED: bool = Field(default=True)
+    EMBEDDING_CACHE_ENABLED: bool = Field(default=True, env="EMBEDDING_CACHE_ENABLED")
     EMBEDDING_CACHE_DIR: str = Field(default="../data/cache/embeddings")
     EMBEDDING_CACHE_FILE_PATH: str = Field(
         default="../data/cache/embeddings/vector_index_cache.faiss"
     )
     DOCUMENT: str = Field(default="document")
     QUERY: str = Field(default="query")
-    MAX_CACHE_SIZE_MB: int = Field(default=500)
+    MAX_CACHE_SIZE_MB: int = Field(default=500, env="MAX_CACHE_SIZE_MB")
 
     model_config = SettingsConfigDict(env_file=ENV_FILE, extra="ignore")
 
@@ -108,8 +109,8 @@ class WebSearchSettings(BaseSettings):
     Settings and configurations for the web search mechanism.
     """
 
-    IS_WEB_SEARCH_ENABLED: bool = Field(default=False)
-    MAX_WEB_SEARCH_RESULTS: int = Field(default=5)
+    IS_WEB_SEARCH_ENABLED: bool = Field(default=False, env="IS_WEB_SEARCH_ENABLED")
+    MAX_WEB_SEARCH_RESULTS: int = Field(default=5, env="MAX_WEB_SEARCH_RESULTS")
     WEB_REQUEST_TIMEOUT_SECS: int = Field(default=15)
     WEB_REQUEST_DELAY_SECS: int = Field(default=1)
     MAX_WEB_REQUEST_RESULTS: int = Field(default=10)
